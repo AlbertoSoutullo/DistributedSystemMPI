@@ -25,10 +25,13 @@ int main(int argc, char *argv[])
     newChild = tree->findNode(testFolder, 3);
     std::cout << newChild->getName() << std::endl;
 
+//    tree->updateChild(tree->getRoot());
+//    std::cout << tree->getRoot()->getName() << std::endl;
 
-    tree->updateChild(tree->getRoot());
-    std::cout << tree->getRoot()->getName() << std::endl;
+    tree->removeChild(testFolder2);
 
+    newChild = tree->findNode(testFolder, 3);
+    if (newChild == NULL) std::cout << "Not found" << std::endl;
 
 //	ls(tree);
 //	pwd(tree);

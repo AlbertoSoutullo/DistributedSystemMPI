@@ -154,40 +154,34 @@ void Tree :: updateChild(Node* node)
 }
 
 //delete node from tree
-//void Tree :: deleteNode(Node* node)
-//{
-
-//	if (this->root == node)
-//	{
-//		printf("root not posible to delete");
-//	}
-//	else
-//	{
-//        if (node->getOffsprings() == NULL)
-//		{
-//			Node* father = (*node).getNodeFather();
-
-//			for (int i = 0; i < father->getNumberOfOffsprings(); i++)
-//			{
-//                if (father->getOffsprings()[i]->getId() == node->getId())
-//				{
-//					father->setNumberOffsprings(-1);
-//				}
-
-//			}
-
-//			node->setFather(NULL);
-//			this->numberOfNodes--;
-//		}
-//		else
-//		{
-//			printf("Delete not posible , existence of childs for node");
-//		}
-//	}
-
-	
-
-//}
+void Tree::removeChild(Node* node)
+{
+    if(node->getId() == 0)
+    {
+        std::cout << "You cant delete root." << std::endl;
+    }
+    else
+    {
+        if(node->getNumberOfOffsprings() != 0)
+        {
+            std::cout << "You cant delete this, it's not empty." << std::endl;
+        }
+        else
+        {
+            Node* father = (*node).getNodeFather();
+            for(unsigned i = 0; i < father->getOffsprings().size(); i++)
+            {
+                if (father->getOffsprings().at(i)->getId() == node->getId())
+                {
+                    delete father->getOffsprings().at(i);
+                }
+            }
+            node->setFather(NULL);
+            father->setNumberOffsprings(-1);
+            std::cout << "Node deleted" << std::endl;
+        }
+    }
+}
 
 
 
