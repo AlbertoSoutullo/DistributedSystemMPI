@@ -21,8 +21,10 @@ Node:: Node(string node_type, Node* nodeFather, Tree* tree)
 
 	if (this->father == NULL)
 	{
+        //Check if ROOT already exists.
 		this->Id = 0;
         this->level = 0;
+        this->numberOfOffsprings = 0;
 	}
 	else
 	{

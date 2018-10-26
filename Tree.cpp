@@ -51,26 +51,39 @@ bool Tree::isFatherFolder(Node* father)
     return 1;
 }
 
+bool Tree::isAlreadyOnFather(Node* father, Node* son)
+{
+    if (father->getNumberOfOffsprings() == 0) return 0;
+    for (int i = 0; i < father->getNumberOfOffsprings(); i++)
+    {
+        Node sonToCheck = (*father->getOffspring()[i]);
+        if (sonToCheck.getName() == son->getName()) return 0;
+    }
+    return 1;
+}
+
 //EXPLICACIÓN: miramos en el 1º if si es un fichero o no en caso de fichero lo descartamos
 //si es un directorio aumentamos en nivel de nuestro nuevo nodo hijo, y miramos si el padre tiene descendencia previa
 //si no tiene se asigna el padre al hijo y el hijo al array de hijos del padre
 //si si tiene descendencia se comprueba que el hijo no este ya añadido
 // los flag sirven para modificar al final valores generales del arbol
 //FIN EXPLICACION
+
+//Check if father is a folder: DONE
+//Check if son's name is in father other sons: undone
 Node* Tree::addChild(Node* son, Node* father)
 {
 	int flag = 0;
 
-//	if ((father->getType()).compare("fichero") == 0)
-//	{
-//        printf("Not posible. Node father is a File. \n");
-//        //flag = -1;
-//        return NULL;
-//	}
-    if (!isFatherFolder(father))
-    {
-        return NULL;
-    }
+    if (!isFatherFolder(father)) return NULL;
+
+    //If father is a folder, we check if the son's name is already on it:
+
+    if (isAlreadyOnFather(father, son)) return NULL;
+
+
+
+
 	else if ((father->getType()).compare("directorio") == 0)
 	{
 		(*son).setLevel(father->getLevel() + 1);

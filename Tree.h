@@ -19,6 +19,10 @@ public:
 	void setCurrentDir(Node* newDir);
     //Utilities
     bool isFatherFolder(Node* father);
+    bool isAlreadyOnFather(Node* father, Node* son);
+
+
+
 
 	//funciones especiales
 	Node* addChild(Node* son, Node* father);
