@@ -117,44 +117,41 @@ Node* Tree::findNode(Node* father, int id)
 }
 
 //update node information
-//in case you dont want to change a name yo introduce "not" and in case of size you introduce -1.
-//void Tree :: modifyNodeProperties(Node* node)
-//{
-//	string option;
-//	node->setByteSize(2);
-//	time_t t;
-//	
-//	node->setDateLastModif(t);
-//	
-//	char name[25];
-//	cout << "Do you want to modify name?" << endl;
-//	cin >> option;
-//	if (option == "y")
-//	{
-//		cout << "introduce value:" << endl;
-//		cin >> name;
-//		node->setName(name);
-//
-//	}
-//	fflush(stdin);
-//	off_t bytes;
-//	cout << "Do you want to modify bytes?" << endl;
-//	cin >> option;
-//	if (option == "y")
-//	{
-//		int value;
-//		cout << "introduce value:" << endl;
-//		cin >> value;
-//		
-//
-//	}
-//	
-//	cin >> bytes;
-//
-//
-//
-//	
-//}
+void Tree :: updateChild(Node* node)
+{
+    string option;
+    off_t bytes;
+    string name;
+    bool changed = false;
+
+    std::cout << "Do you want to modify the name? y/n" << std::endl;
+    std::cin >> option;
+    fflush(stdin);
+    if (option == "y")
+    {
+        std::cout << "Set new name:" << std::endl;
+        std::cin >> name;
+        fflush(stdin);
+        char charName[name.size() + 1];
+        name.copy(charName, name.size() + 1);
+        charName[name.size()] = '\0';
+        node->setName(charName);
+        changed = true;
+    }
+
+//    std::cout << "Do you want to modify the size? y/n" << std::endl;
+//    std::cin >> option;
+//    if (option == "y")
+//    {
+//        std::cout << "Set new size:" << std::endl;
+//        std::cin >> bytes;
+//        fflush(stdin);
+//        node->setByteSize(bytes);
+//        changed = true;
+//    }
+
+    if (changed) node->setDateLastModif(std::time(0));
+}
 
 //delete node from tree
 //void Tree :: deleteNode(Node* node)

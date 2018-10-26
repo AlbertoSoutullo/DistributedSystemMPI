@@ -26,6 +26,9 @@ int main(int argc, char *argv[])
     std::cout << newChild->getName() << std::endl;
 
 
+    tree->updateChild(tree->getRoot());
+    std::cout << tree->getRoot()->getName() << std::endl;
+
 
 //	ls(tree);
 //	pwd(tree);

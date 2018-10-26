@@ -14,6 +14,15 @@ public:
 	
 	Tree();
 	~Tree();
+
+    //funciones especiales
+    Node* addChild(Node* son, Node* father);
+    Node* findNode(Node* father, int id);
+    void updateChild(Node* node);
+    void removeChild(Node* node);
+
+
+
 	//void setNewNode(Node* father, string type);
 	void setRoot(Node* newRoot);
 	void setCurrentDir(Node* newDir);
@@ -21,12 +30,7 @@ public:
     bool isFatherFolder(Node* father);
     bool isAlreadyOnFather(Node* father, Node* son);
 
-	//funciones especiales
-	Node* addChild(Node* son, Node* father);
-	Node* findNode(Node* father, int id);
-	void deleteNode(Node* node);
-	void modifyNodeProperties(Node* node);
-	
+
 	//void printTreeStructure();
 	Node* getCurrentDir();
 	int getSizeStructure();
