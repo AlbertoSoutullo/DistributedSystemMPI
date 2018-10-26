@@ -7,7 +7,7 @@ class Tree
 {
     Node*  root = NULL;
 	Node*  current_Dir;
-	int numberOfNodes;
+    int numberOfNodes = 0;
 	int lastNodeAdded;
 
 public:
@@ -20,9 +20,6 @@ public:
     //Utilities
     bool isFatherFolder(Node* father);
     bool isAlreadyOnFather(Node* father, Node* son);
-
-
-
 
 	//funciones especiales
 	Node* addChild(Node* son, Node* father);

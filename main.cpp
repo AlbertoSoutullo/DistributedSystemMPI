@@ -8,18 +8,21 @@ int Node::idcont = 0;
 int main(int argc, char *argv[]) 
 {
     Tree* tree = new Tree();
-	
-    //nuevo nodo a añadir
-    Node* practica = new Node("dir", tree->getRoot(), tree);
-    practica->setName("practica");
 
-    //añado practica al arbol con el nodo root como padre
-    Node* newChild = tree->addChild(practica, tree->getRoot());
-    std::cout << "Level:" << newChild->getLevel() << std::endl;
-    std::cout << "ID:" << newChild->getId() << std::endl;
-    std::cout << "Childs:" << newChild->getNumberOfOffsprings() << std::endl;
-    std::cout << "Byte Size:" << newChild->getByteSize() << std::endl;
-    std::cout << "Last time Mod:" << newChild->getDateLastModif() << std::endl;
+    //nuevo nodo a añadir
+    Node* testFolder = new Node(tree, tree->getRoot(), "testFolder", "folder");
+    Node* testFile = new Node(tree, tree->getRoot(), "testFile", "file");
+
+    std::cout << testFolder->getName() << std::endl;
+    std::cout << testFile->getName() << std::endl;
+
+//    //añado practica al arbol con el nodo root como padre
+//    Node* newChild = tree->addChild(practica, tree->getRoot());
+//    std::cout << "Level:" << newChild->getLevel() << std::endl;
+//    std::cout << "ID:" << newChild->getId() << std::endl;
+//    std::cout << "Childs:" << newChild->getNumberOfOffsprings() << std::endl;
+//    std::cout << "Byte Size:" << newChild->getByteSize() << std::endl;
+//    std::cout << "Last time Mod:" << newChild->getDateLastModif() << std::endl;
 
     //repito con tmp y con texto
 //	Node* tmp = new Node("dir", tree->getRoot(), tree);

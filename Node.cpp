@@ -43,13 +43,12 @@ Node::Node(Tree* tree, Node* nodeFather, char* name,  string node_type)
     {
         this->tree = tree;
         this->father = nodeFather;
-        strncpy(this->name, name, sizeof(name));
+        strncpy(this->name, name, strlen(name));
         this->numberOfOffsprings = 0;
         this->level = nodeFather->getLevel() + 1;
         if (isFolder(node_type)) this->isDirectory = 0;
         else this->isDirectory = 1;
         this->dateLastModif = std::time(0);
-
     }
 }
 
@@ -215,7 +214,6 @@ void Node::setByteSize(/*off_t tam*/)
 //sets last time modification
 void Node::setDateLastModif(time_t date)
 {
-
 	this->dateLastModif = date;
 	/*struct stat buffer;
 	int  status;

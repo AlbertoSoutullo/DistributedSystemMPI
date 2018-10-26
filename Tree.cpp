@@ -4,14 +4,11 @@
 
 Tree::Tree()
 {
-    Node nodo("dir", NULL, this);
-    nodo.setName("root");
-	nodo.setLevel(0);
+    Node nodo(this, NULL, "ROOT" , "dir");
 	this->root =(Node*)malloc(sizeof(Node));
 
     //Probar si sin esto funciona igual
-    (*this->root) = nodo;
-
+    *this->root = nodo;
 	//current Dir root
     this->current_Dir = this->root;
 	//size
@@ -81,6 +78,15 @@ Node* Tree::addChild(Node* son, Node* father)
 
     if (isAlreadyOnFather(father, son)) return NULL;
 
+    //If there are no repeated names, we add it:
+
+    (*son).setLevel(father->getLevel() + 1);
+    (*son).setFather(father);
+    (*father).setNewOffSpring(false, son);
+    if (father->getId() == 0)
+    {
+        this->setRoot(father);
+    }
 
 
 
