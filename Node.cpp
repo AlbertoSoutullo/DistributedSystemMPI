@@ -27,6 +27,7 @@ Node::Node(Tree* tree, Node* nodeFather, char* name,  string node_type)
             this->father = NULL;
             this->setName("ROOT");
             this->Id = 0;
+            this->idcont = 1;
             this->numberOfOffsprings = 0;
             this->level = 0;
             this->isDirectory = 1;
@@ -44,6 +45,8 @@ Node::Node(Tree* tree, Node* nodeFather, char* name,  string node_type)
         this->tree = tree;
         this->father = nodeFather;
         strncpy(this->name, name, strlen(name));
+        this->Id = this->idcont;
+        this->idcont += 1;
         this->numberOfOffsprings = 0;
         this->level = nodeFather->getLevel() + 1;
         if (isFolder(node_type)) this->isDirectory = 0;
@@ -61,7 +64,7 @@ Node :: ~Node(void)
 ////GETTERS////
 
 //returns type folder or archive
-string  Node::getType()
+string Node::getType()
 {
 	if (this->isDirectory == 0)
 	{

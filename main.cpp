@@ -13,11 +13,10 @@ int main(int argc, char *argv[])
     Node* testFolder = new Node(tree, tree->getRoot(), "testFolder", "folder");
     Node* testFile = new Node(tree, tree->getRoot(), "testFile", "file");
 
-    std::cout << testFolder->getName() << std::endl;
-    std::cout << testFile->getName() << std::endl;
-
     //añado practica al arbol con el nodo root como padre
     Node* newChild = tree->addChild(testFolder, tree->getRoot());
+    newChild = NULL;
+    newChild = tree->addChild(testFile, tree->getRoot());
 
     std::cout << newChild->getName() << std::endl;
     std::cout << newChild->getLevel() << std::endl;
@@ -27,11 +26,6 @@ int main(int argc, char *argv[])
     std::cout << newChild->getNumberOfOffsprings() << std::endl;
     std::cout << newChild->getType() << std::endl;
 
-//    std::cout << "Level:" << newChild->getLevel() << std::endl;
-//    std::cout << "ID:" << newChild->getId() << std::endl;
-//    std::cout << "Childs:" << newChild->getNumberOfOffsprings() << std::endl;
-//    std::cout << "Byte Size:" << newChild->getByteSize() << std::endl;
-//    std::cout << "Last time Mod:" << newChild->getDateLastModif() << std::endl;
 
     //repito con tmp y con texto
 //	Node* tmp = new Node("dir", tree->getRoot(), tree);

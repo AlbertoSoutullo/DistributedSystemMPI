@@ -56,15 +56,10 @@ bool Tree::isAlreadyOnFather(Node* father, Node* son)
 
     for (Node* node: offsprings)
     {
-        if (node->getName() == son->getName()) return 0;
+        if (node->getName() == son->getName()) return 1;
     }
 
-//    for (int i = 0; i < father->getNumberOfOffsprings(); i++)
-//    {
-//        Node sonToCheck = (*father->getOffsprings()[i]);
-//        if (sonToCheck.getName() == son->getName()) return 0;
-//    }
-    return 1;
+    return 0;
 }
 
 //EXPLICACIÓN: miramos en el 1º if si es un fichero o no en caso de fichero lo descartamos
@@ -78,13 +73,19 @@ bool Tree::isAlreadyOnFather(Node* father, Node* son)
 //Check if son's name is in father other sons: DONE
 Node* Tree::addChild(Node* son, Node* father)
 {
-	int flag = 0;
-
-    if (!isFatherFolder(father)) return NULL;
+    if (!isFatherFolder(father))
+    {
+        std::cout << "The father is not a folder." << std::endl;
+        return NULL;
+    }
 
     //If father is a folder, we check if the son's name is already on it:
 
-    if (isAlreadyOnFather(father, son)) return NULL;
+    if (isAlreadyOnFather(father, son))
+    {
+        std::cout << "There is already something with the same name." << std::endl;
+        return NULL;
+    }
 
     //If there are no repeated names, we add it:
 
@@ -93,14 +94,11 @@ Node* Tree::addChild(Node* son, Node* father)
     (*son).setLevel(father->getLevel() + 1);
     (*son).setDateLastModif(std::time(0));
 
+    (*father).setNewOffSpring(son);
+    (*father).setDateLastModif(std::time(0));
+    (*father).setNumberOffsprings(1);
 
-    //Waiting for vector implementation in offsprings.
-
-
-
-
-
-
+    return son;
 
 
 //    (*father).setNewOffSpring(false, son);
