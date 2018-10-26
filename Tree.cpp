@@ -56,7 +56,7 @@ bool Tree::isAlreadyOnFather(Node* father, Node* son)
 
     for (Node* node: offsprings)
     {
-        if (node->getName() == son->getName()) return 1;
+        if ((strcmp(node->getName(), son->getName())) == 0) return 1;
     }
 
     return 0;

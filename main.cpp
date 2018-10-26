@@ -12,11 +12,14 @@ int main(int argc, char *argv[])
     //nuevo nodo a añadir
     Node* testFolder = new Node(tree, tree->getRoot(), "testFolder", "folder");
     Node* testFile = new Node(tree, tree->getRoot(), "testFile", "file");
+    Node* testFolder2 = new Node(tree, tree->getRoot(), "testFolder2", "folder");
+
+    std::cout << testFolder->getType() << std::endl;
 
     //añado practica al arbol con el nodo root como padre
     Node* newChild = tree->addChild(testFolder, tree->getRoot());
     newChild = NULL;
-    newChild = tree->addChild(testFile, tree->getRoot());
+    newChild = tree->addChild(testFolder2, testFolder);
 
     std::cout << newChild->getName() << std::endl;
     std::cout << newChild->getLevel() << std::endl;
