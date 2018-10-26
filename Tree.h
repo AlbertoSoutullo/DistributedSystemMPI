@@ -5,7 +5,7 @@
 class Node;
 class Tree 
 {
-	Node*  root;
+    Node*  root = NULL;
 	Node*  current_Dir;
 	int numberOfNodes;
 	int lastNodeAdded;

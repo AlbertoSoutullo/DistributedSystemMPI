@@ -48,10 +48,12 @@ public:
 	void setType(string type);
 	void setFather(Node* father);
 	void setNewOffSpring(bool first, Node* son);
-	void setName(const char* name);
+    void setName(char* name);
 	void setByteSize(off_t t);
 	void setDateLastModif(time_t m);
 	void setLevel(int l);
 	void setNumberOffsprings(int number);
 
+    //Utilities
+    bool isFolder(string name);
 };

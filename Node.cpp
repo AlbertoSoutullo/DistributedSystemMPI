@@ -6,33 +6,51 @@
 Node::Node()
 {}
 
-Node:: Node(string node_type, Node* nodeFather, Tree* tree)
+bool Node::isFolder(string name)
 {
-    if (node_type.compare("fichero") == 0 || node_type.compare("f") == 0 || node_type.compare("file") == 0)
-	{
-		this->isDirectory = 0;
-	}
-	else if (node_type.compare("directorio") == 0 || node_type.compare("dir") == 0 || node_type.compare("folder") == 0)
-	{
-		this->isDirectory = 1;
-	}
+    if (name.compare("fichero") == 0 || name.compare("f") == 0 || name.compare("file") == 0)
+    {
+        return 0;
+    }
+    return 1;
+}
 
-	this->father = nodeFather;
-
-	if (this->father == NULL)
-	{
-        //Check if ROOT already exists.
-		this->Id = 0;
-        this->level = 0;
+Node::Node(Tree* tree, Node* nodeFather, char* name,  string node_type)
+{
+    //This note is ROOT
+    if (nodeFather == NULL)
+    {
+        //Check if ROOT already exists
+        if (tree->getRoot() == NULL)
+        {
+            this->tree = tree;
+            this->father = NULL;
+            this->setName("ROOT");
+            this->Id = 0;
+            this->numberOfOffsprings = 0;
+            this->level = 0;
+            this->isDirectory = 1;
+            this->byteSize = 4096;
+            this->dateLastModif = std::time(0);
+        }
+        else
+        {
+            std::cout << "Error: ROOT already exists." << std::endl;
+        }
+    }
+    //This note is not root
+    else
+    {
+        this->tree = tree;
+        this->father = nodeFather;
+        strncpy(this->name, name, sizeof(name));
         this->numberOfOffsprings = 0;
-	}
-	else
-	{
-		idcont = idcont+1;
-        this->Id = idcont;
         this->level = nodeFather->getLevel() + 1;
-	}
-	this->tree = tree;
+        if (isFolder(node_type)) this->isDirectory = 0;
+        else this->isDirectory = 1;
+        this->dateLastModif = std::time(0);
+
+    }
 }
 
 //destructor
@@ -175,23 +193,23 @@ void Node :: setNumberOffsprings(int number)
 }
 
 //set the new id Name of the node, max 25 characters
-void Node::setName(const char* name)
+void Node::setName(char* name)
 {
      strncpy(this->name, name, sizeof(name));
 }
 
-//set byte size , its not the same folder from file(revisar eso)
-void Node::setByteSize(off_t tam)
+//TODO: check tam if file is not a directory
+void Node::setByteSize(/*off_t tam*/)
 {
-	if (this->getType() == "directorio")
+    /*if (this->getType() == "directorio")
 	{
 		this->byteSize = 4096;
 	}
 	else
 	{
 		this->byteSize = tam;
-	}
-	
+    }*/
+    this->byteSize = 4096;
 }
 
 //sets last time modification
