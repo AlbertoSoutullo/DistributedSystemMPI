@@ -71,7 +71,6 @@ string  Node::getType()
 	{
 		return "directorio";
 	}
-
 }
 
 //return pointer Node father
@@ -87,7 +86,7 @@ int Node::getId()
 }
 
 //return offSpring
-Node** Node::getOffspring()
+vector<Node*> Node::getOffsprings()
 {
 	return this->offsprings;
 }
@@ -124,6 +123,11 @@ int Node::getNumberOfOffsprings()
 
 ////SETTERS/////
 
+void Node::setTree(Tree* tree)
+{
+    this->tree = tree;
+}
+
 //set type
 void Node::setType(string fichDire)
 {
@@ -145,37 +149,39 @@ void Node::setFather(Node* father)
 
 //creates new Node offSpring, flag first == true is the first one we save memory with malloc
 //if flag first == false is not the first one we allocate with realloc
-void Node::setNewOffSpring(bool first, Node* son)
+void Node::setNewOffSpring(/*bool first,*/ Node* son)
 {
-	if (first == true)
-	{
-		//increment number of sons
-		this->numberOfOffsprings++;
-		//save memory
-		this->offsprings = (Node**)malloc(sizeof(Node*));
-		/////////HA DADO PUNTERAXOOOOOO/////// Esta solucionado así, funciona ya bien :)
-		//this->offsprings[0] = (Node*)malloc(sizeof(Node));
-		//save value
-		this->offsprings[0] = son;
-
-	}
-	else if (first == false)
-	{
-		//increment number of sons
-		this->numberOfOffsprings++;
-		this->offsprings = (Node**)realloc(this->offsprings, sizeof(Node*)*this->numberOfOffsprings);
-		//for (int i = this->numberOfOffsprings-1; i < this->numberOfOffsprings; i++)
-		//{
-		this->offsprings[this->numberOfOffsprings - 1] = (Node*)malloc(sizeof(Node));
-
-		//}
-
-		this->offsprings[this->numberOfOffsprings - 1] = son;
-	}
+    this->offsprings.push_back(son);
 
 
 
 
+
+//	if (first == true)
+//	{
+//		//increment number of sons
+//		this->numberOfOffsprings++;
+//		//save memory
+//		this->offsprings = (Node**)malloc(sizeof(Node*));
+//		/////////HA DADO PUNTERAXOOOOOO/////// Esta solucionado así, funciona ya bien :)
+//		//this->offsprings[0] = (Node*)malloc(sizeof(Node));
+//		//save value
+//		this->offsprings[0] = son;
+
+//	}
+//	else if (first == false)
+//	{
+//		//increment number of sons
+//		this->numberOfOffsprings++;
+//		this->offsprings = (Node**)realloc(this->offsprings, sizeof(Node*)*this->numberOfOffsprings);
+//		//for (int i = this->numberOfOffsprings-1; i < this->numberOfOffsprings; i++)
+//		//{
+//		this->offsprings[this->numberOfOffsprings - 1] = (Node*)malloc(sizeof(Node));
+
+//		//}
+
+//		this->offsprings[this->numberOfOffsprings - 1] = son;
+//	}
 }
 
 //set ++ offspring or -- offsprings number
@@ -215,10 +221,6 @@ void Node::setByteSize(/*off_t tam*/)
 void Node::setDateLastModif(time_t date)
 {
 	this->dateLastModif = date;
-	/*struct stat buffer;
-	int  status;
-	status = stat(this->name, &buffer);
-	this->dateLastModif = buffer.st_mtime;*/
 }
 //set level of file or directory in tree
 void Node::setLevel(int level)

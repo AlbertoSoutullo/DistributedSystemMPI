@@ -7,6 +7,7 @@
 #include <malloc.h>
 #include "Tree.h"
 #include <ctime>
+#include <vector>
 using namespace std;
 
 class Tree;
@@ -14,10 +15,11 @@ class Node
 {
 	Tree* tree;
 	Node* father;
-	Node ** offsprings = NULL;
-	
+    //Node ** offsprings = NULL;
+    vector<Node*> offsprings;
+
     char name[25] ="";
-	int Id;
+    int Id; //It generates a new ID every time a node is created.
 	int numberOfOffsprings;
     int level;
     bool isDirectory;
@@ -38,7 +40,7 @@ public:
 	string getType();
 	Node* getNodeFather();
 	int getId();
-	Node** getOffspring();
+    vector<Node*> getOffsprings();
     char* getName();
 	off_t getByteSize();
 	time_t getDateLastModif();
@@ -48,12 +50,13 @@ public:
 	//seters
 	void setType(string type);
 	void setFather(Node* father);
-	void setNewOffSpring(bool first, Node* son);
+    void setNewOffSpring(/*bool first,*/ Node* son);
     void setName(char* name);
     void setByteSize(/*off_t t*/);
 	void setDateLastModif(time_t m);
 	void setLevel(int l);
 	void setNumberOffsprings(int number);
+    void setTree(Tree* tree);
 
     //Utilities
     bool isFolder(string name);

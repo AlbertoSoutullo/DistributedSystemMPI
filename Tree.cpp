@@ -51,11 +51,19 @@ bool Tree::isFatherFolder(Node* father)
 bool Tree::isAlreadyOnFather(Node* father, Node* son)
 {
     if (father->getNumberOfOffsprings() == 0) return 0;
-    for (int i = 0; i < father->getNumberOfOffsprings(); i++)
+
+    vector<Node*> offsprings = father->getOffsprings();
+
+    for (Node* node: offsprings)
     {
-        Node sonToCheck = (*father->getOffspring()[i]);
-        if (sonToCheck.getName() == son->getName()) return 0;
+        if (node->getName() == son->getName()) return 0;
     }
+
+//    for (int i = 0; i < father->getNumberOfOffsprings(); i++)
+//    {
+//        Node sonToCheck = (*father->getOffsprings()[i]);
+//        if (sonToCheck.getName() == son->getName()) return 0;
+//    }
     return 1;
 }
 
@@ -67,7 +75,7 @@ bool Tree::isAlreadyOnFather(Node* father, Node* son)
 //FIN EXPLICACION
 
 //Check if father is a folder: DONE
-//Check if son's name is in father other sons: undone
+//Check if son's name is in father other sons: DONE
 Node* Tree::addChild(Node* son, Node* father)
 {
 	int flag = 0;
@@ -80,72 +88,86 @@ Node* Tree::addChild(Node* son, Node* father)
 
     //If there are no repeated names, we add it:
 
-    (*son).setLevel(father->getLevel() + 1);
+    (*son).setTree(this);
     (*son).setFather(father);
-    (*father).setNewOffSpring(false, son);
-    if (father->getId() == 0)
-    {
-        this->setRoot(father);
-    }
+    (*son).setLevel(father->getLevel() + 1);
+    (*son).setDateLastModif(std::time(0));
+
+
+    //Waiting for vector implementation in offsprings.
 
 
 
-	else if ((father->getType()).compare("directorio") == 0)
-	{
-		(*son).setLevel(father->getLevel() + 1);
-		if (father->getNumberOfOffsprings() > 0)
-		{
-			for (int i = 0; i < father->getNumberOfOffsprings(); i++)
-			{
-				Node nameTmp = (*father->getOffspring()[i]);
-				if (nameTmp.getName() == son->getName())
-				{
-					flag = 0;
-					break;
-				}
-				flag = 1;
-			}
-			if (flag == 1)
-			{
-				(*son).setFather(father);
-				(*father).setNewOffSpring(false, son);
-				if (father->getId() == 0)
-				{
-					this->setRoot(father);
-				}
-			}
-		}
-		else if (father->getNumberOfOffsprings() == 0)
-		{
-			(*son).setFather(father);
-			if (father->getNumberOfOffsprings() == 0)
-			{
-				(*father).setNewOffSpring(true,son);
-			}
-			else
-			{
-				(*father).setNewOffSpring(false, son);
-			}
+
+
+
+
+
+//    (*father).setNewOffSpring(false, son);
+
+//    if (father->getId() == 0)
+//    {
+//        this->setRoot(father);
+//    }
+
+
+
+//	else if ((father->getType()).compare("directorio") == 0)
+//	{
+//		(*son).setLevel(father->getLevel() + 1);
+//		if (father->getNumberOfOffsprings() > 0)
+//		{
+//			for (int i = 0; i < father->getNumberOfOffsprings(); i++)
+//			{
+//                Node nameTmp = (*father->getOffsprings()[i]);
+//				if (nameTmp.getName() == son->getName())
+//				{
+//					flag = 0;
+//					break;
+//				}
+//				flag = 1;
+//			}
+//			if (flag == 1)
+//			{
+//				(*son).setFather(father);
+//				(*father).setNewOffSpring(false, son);
+//				if (father->getId() == 0)
+//				{
+//					this->setRoot(father);
+//				}
+//			}
+//		}
+//		else if (father->getNumberOfOffsprings() == 0)
+//		{
+//			(*son).setFather(father);
+//			if (father->getNumberOfOffsprings() == 0)
+//			{
+//				(*father).setNewOffSpring(true,son);
+//			}
+//			else
+//			{
+//				(*father).setNewOffSpring(false, son);
+//			}
 			
-			if (father->getId() == 0)
-			{
-				this->setRoot(father);
-			}
+//			if (father->getId() == 0)
+//			{
+//				this->setRoot(father);
+//			}
 			
-			flag = 1;
-		}
-	}
-	if (flag == 1)
-	{
+//			flag = 1;
+//		}
+//	}
+//	if (flag == 1)
+//	{
 		
-		this->numberOfNodes++;
-		return son;
-	}
-	else if (flag == 0)
-	{
-		printf("Not posible already existing Node for this father");
-		return NULL;
-	}
+//		this->numberOfNodes++;
+//		return son;
+//	}
+//	else if (flag == 0)
+//	{
+//		printf("Not posible already existing Node for this father");
+//		return NULL;
+//	}
 
 
 }
@@ -156,9 +178,9 @@ Node* Tree::findNode(Node* father, int id)
 	
 	for (int i = 0; i < father->getNumberOfOffsprings(); i++)
 	{
-		if (father->getOffspring()[i]->getId() == id)
+        if (father->getOffsprings()[i]->getId() == id)
 		{
-			return father->getOffspring()[i];
+            return father->getOffsprings()[i];
 		}
 	}
 	return NULL;
@@ -205,40 +227,40 @@ Node* Tree::findNode(Node* father, int id)
 //}
 
 //delete node from tree
-void Tree :: deleteNode(Node* node)
-{
+//void Tree :: deleteNode(Node* node)
+//{
 
-	if (this->root == node)
-	{
-		printf("root not posible to delete");
-	}
-	else
-	{
-		if (node->getOffspring() == NULL)
-		{
-			Node* father = (*node).getNodeFather();
+//	if (this->root == node)
+//	{
+//		printf("root not posible to delete");
+//	}
+//	else
+//	{
+//        if (node->getOffsprings() == NULL)
+//		{
+//			Node* father = (*node).getNodeFather();
 
-			for (int i = 0; i < father->getNumberOfOffsprings(); i++)
-			{
-				if (father->getOffspring()[i]->getId() == node->getId())
-				{
-					father->setNumberOffsprings(-1);
-				}
+//			for (int i = 0; i < father->getNumberOfOffsprings(); i++)
+//			{
+//                if (father->getOffsprings()[i]->getId() == node->getId())
+//				{
+//					father->setNumberOffsprings(-1);
+//				}
 
-			}
+//			}
 
-			node->setFather(NULL);
-			this->numberOfNodes--;
-		}
-		else
-		{
-			printf("Delete not posible , existence of childs for node");
-		}
-	}
+//			node->setFather(NULL);
+//			this->numberOfNodes--;
+//		}
+//		else
+//		{
+//			printf("Delete not posible , existence of childs for node");
+//		}
+//	}
 
 	
 
-}
+//}
 
 
 

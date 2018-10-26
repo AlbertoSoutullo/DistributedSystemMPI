@@ -16,8 +16,17 @@ int main(int argc, char *argv[])
     std::cout << testFolder->getName() << std::endl;
     std::cout << testFile->getName() << std::endl;
 
-//    //añado practica al arbol con el nodo root como padre
-//    Node* newChild = tree->addChild(practica, tree->getRoot());
+    //añado practica al arbol con el nodo root como padre
+    Node* newChild = tree->addChild(testFolder, tree->getRoot());
+
+    std::cout << newChild->getName() << std::endl;
+    std::cout << newChild->getLevel() << std::endl;
+    std::cout << newChild->getId() << std::endl;
+    std::cout << newChild->getDateLastModif() << std::endl;
+    std::cout << newChild->getByteSize() << std::endl;
+    std::cout << newChild->getNumberOfOffsprings() << std::endl;
+    std::cout << newChild->getType() << std::endl;
+
 //    std::cout << "Level:" << newChild->getLevel() << std::endl;
 //    std::cout << "ID:" << newChild->getId() << std::endl;
 //    std::cout << "Childs:" << newChild->getNumberOfOffsprings() << std::endl;
