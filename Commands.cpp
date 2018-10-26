@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Commands.h"
+
 //permits view of files and folders of current_directory
 void ls(Tree* tree)
 {
@@ -40,7 +41,6 @@ void lls(Tree* tree)
 void lpwd(Tree* tree)
 {
 	system("pwd");
-
 }
 
 //lcd
@@ -212,7 +212,7 @@ void cp(Tree* tree, const char * actual, const char * newOne)
 
 
 //mkdir creation of new directory in current directory
-void mkdir(Tree* tree,const char * name)
+void mkdir(Tree* tree, char * name)
 {
 	
 	//tengo que hacer lo del id automatico para que este método funcione bien y quitar el parametro id de entrada
