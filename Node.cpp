@@ -150,41 +150,9 @@ void Node::setFather(Node* father)
 	this->father = father;
 }
 
-//creates new Node offSpring, flag first == true is the first one we save memory with malloc
-//if flag first == false is not the first one we allocate with realloc
 void Node::setNewOffSpring(/*bool first,*/ Node* son)
 {
     this->offsprings.push_back(son);
-
-
-
-
-
-//	if (first == true)
-//	{
-//		//increment number of sons
-//		this->numberOfOffsprings++;
-//		//save memory
-//		this->offsprings = (Node**)malloc(sizeof(Node*));
-//		/////////HA DADO PUNTERAXOOOOOO/////// Esta solucionado así, funciona ya bien :)
-//		//this->offsprings[0] = (Node*)malloc(sizeof(Node));
-//		//save value
-//		this->offsprings[0] = son;
-
-//	}
-//	else if (first == false)
-//	{
-//		//increment number of sons
-//		this->numberOfOffsprings++;
-//		this->offsprings = (Node**)realloc(this->offsprings, sizeof(Node*)*this->numberOfOffsprings);
-//		//for (int i = this->numberOfOffsprings-1; i < this->numberOfOffsprings; i++)
-//		//{
-//		this->offsprings[this->numberOfOffsprings - 1] = (Node*)malloc(sizeof(Node));
-
-//		//}
-
-//		this->offsprings[this->numberOfOffsprings - 1] = son;
-//	}
 }
 
 //set ++ offspring or -- offsprings number
@@ -225,6 +193,7 @@ void Node::setDateLastModif(time_t date)
 {
 	this->dateLastModif = date;
 }
+
 //set level of file or directory in tree
 void Node::setLevel(int level)
 {

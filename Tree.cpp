@@ -99,89 +99,21 @@ Node* Tree::addChild(Node* son, Node* father)
     (*father).setNumberOffsprings(1);
 
     return son;
-
-
-//    (*father).setNewOffSpring(false, son);
-
-//    if (father->getId() == 0)
-//    {
-//        this->setRoot(father);
-//    }
-
-
-
-//	else if ((father->getType()).compare("directorio") == 0)
-//	{
-//		(*son).setLevel(father->getLevel() + 1);
-//		if (father->getNumberOfOffsprings() > 0)
-//		{
-//			for (int i = 0; i < father->getNumberOfOffsprings(); i++)
-//			{
-//                Node nameTmp = (*father->getOffsprings()[i]);
-//				if (nameTmp.getName() == son->getName())
-//				{
-//					flag = 0;
-//					break;
-//				}
-//				flag = 1;
-//			}
-//			if (flag == 1)
-//			{
-//				(*son).setFather(father);
-//				(*father).setNewOffSpring(false, son);
-//				if (father->getId() == 0)
-//				{
-//					this->setRoot(father);
-//				}
-//			}
-//		}
-//		else if (father->getNumberOfOffsprings() == 0)
-//		{
-//			(*son).setFather(father);
-//			if (father->getNumberOfOffsprings() == 0)
-//			{
-//				(*father).setNewOffSpring(true,son);
-//			}
-//			else
-//			{
-//				(*father).setNewOffSpring(false, son);
-//			}
-			
-//			if (father->getId() == 0)
-//			{
-//				this->setRoot(father);
-//			}
-			
-//			flag = 1;
-//		}
-//	}
-//	if (flag == 1)
-//	{
-		
-//		this->numberOfNodes++;
-//		return son;
-//	}
-//	else if (flag == 0)
-//	{
-//		printf("Not posible already existing Node for this father");
-//		return NULL;
-//	}
-
-
 }
 
-//findNode in the lisT of OFFSPRINGS
+//
 Node* Tree::findNode(Node* father, int id)
 {
-	
-	for (int i = 0; i < father->getNumberOfOffsprings(); i++)
-	{
-        if (father->getOffsprings()[i]->getId() == id)
-		{
-            return father->getOffsprings()[i];
-		}
-	}
-	return NULL;
+    if (father->getNumberOfOffsprings() == 0) return NULL;
+
+    vector<Node*> offsprings = father->getOffsprings();
+
+    for (Node* node: offsprings)
+    {
+        if (node->getId() == id) return node;
+    }
+
+    return 0;
 }
 
 //update node information

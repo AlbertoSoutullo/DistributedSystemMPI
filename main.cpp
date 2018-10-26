@@ -14,32 +14,19 @@ int main(int argc, char *argv[])
     Node* testFile = new Node(tree, tree->getRoot(), "testFile", "file");
     Node* testFolder2 = new Node(tree, tree->getRoot(), "testFolder2", "folder");
 
-    std::cout << testFolder->getType() << std::endl;
-
     //añado practica al arbol con el nodo root como padre
     Node* newChild = tree->addChild(testFolder, tree->getRoot());
     newChild = NULL;
+    newChild = tree->addChild(testFile, tree->getRoot());
+    newChild = NULL;
     newChild = tree->addChild(testFolder2, testFolder);
+    newChild = NULL;
 
+    newChild = tree->findNode(testFolder, 3);
     std::cout << newChild->getName() << std::endl;
-    std::cout << newChild->getLevel() << std::endl;
-    std::cout << newChild->getId() << std::endl;
-    std::cout << newChild->getDateLastModif() << std::endl;
-    std::cout << newChild->getByteSize() << std::endl;
-    std::cout << newChild->getNumberOfOffsprings() << std::endl;
-    std::cout << newChild->getType() << std::endl;
 
 
-    //repito con tmp y con texto
-//	Node* tmp = new Node("dir", tree->getRoot(), tree);
-//	tmp->setName("tmp");
-//	//añado practica al arbol con el nodo root como padre
-//	Node * nuevoDesc2 = tree->addNode(tmp, tree->getRoot());
-//	Node* texto = new Node("fichero", tree->getRoot(), tree);
-//	texto->setName("texto.txt");
-//	//añado practica al arbol con el nodo root como padre
-//	Node * nuevoDesc3 = tree->addNode(texto, tree->getRoot());
-	
+
 //	ls(tree);
 //	pwd(tree);
 //	//mkdir(tree, "creadoNuevo");
