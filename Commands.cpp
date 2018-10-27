@@ -159,6 +159,31 @@ void rmdir(Tree* tree, string name)
 
 
 
+//rm deletes files
+void rm(Tree* tree, string name)
+{
+    Node* nodeToDelete = tree->findNodeByName(name);
+
+    if (nodeToDelete != NULL)
+    {
+        if (!nodeToDelete->getIsDirectory())
+        {
+            tree->removeChild(nodeToDelete);
+        }
+        else
+        {
+            std::cout << "The name does not correspond with a File." << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "There is no file with that name in the current directory." << std::endl;
+    }
+}
+
+
+
+
 
 
 //void lpwd(Tree* tree)
@@ -243,28 +268,6 @@ void rmdir(Tree* tree, string name)
 
 
 
-
-
-////rm deletes files // falta probarlo
-//void rm(Tree* tree, const char * name)
-//{
-//	/*for (int i = 0; i < tree->getCurrentDir()->getNumberOfOffsprings(); i++)
-//	{
-//		if (strcmp(tree->getCurrentDir()->getOffspring()[i]->getName(), name) == 0)
-//		{*/
-//	Node * nodeAux = findNodeByName(tree, name);
-//			if (nodeAux->getType() == "fichero")
-//			{
-//				tree->deleteNode(findNodeByName(tree, name));
-//			}
-
-//	/*	}
-//	}*/
-
-//}
-
-
-////lcd :
 
 
 

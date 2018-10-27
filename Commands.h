@@ -28,13 +28,13 @@ void cp(Tree* tree, const char * actual, const char * newOne);
 //Create a new folder.
 void mkdir(Tree* tree, string name);
 
-//Undone
+//DONE
 //Deletes an empty folder
 void rmdir(Tree* tree, string name);
 
 //Undone
 //Delete a file
-void rm(Tree* tree, const char * name);
+void rm(Tree* tree, string name);
 
 //Undone
 //Print real content of actual directory

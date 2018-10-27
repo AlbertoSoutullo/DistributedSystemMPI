@@ -39,12 +39,10 @@ int main(int argc, char *argv[])
     //mv(tree, "testFolder2", "aaabbbbc");
     mkdir(tree, "MKDIR");
     //rmdir(tree, "MKDIR");
+    cd(tree, "/");
+    //rm(tree, "testFile");
     ls(tree);
 
-//	ls(tree);
-//	pwd(tree);
-//	//mkdir(tree, "creadoNuevo");
-	
 
 
 }
