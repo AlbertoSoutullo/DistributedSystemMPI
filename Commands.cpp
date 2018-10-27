@@ -62,7 +62,49 @@ void cd(Tree* tree, string name)
     }
 }
 
+void mv(Tree* tree, string oldName, string newNameString)
+{
+    char newName[newNameString.size() + 1];
+    strcpy(newName, newNameString.c_str());
+    Node* nodeToChange = NULL;
 
+    nodeToChange = tree->findNodeByName(oldName, true);
+
+    if (nodeToChange != NULL)
+    {
+        nodeToChange->setName(newName);
+    }
+    else
+    {
+        nodeToChange = tree->findNodeByName(oldName, false);
+        if (nodeToChange != NULL)
+        {
+            nodeToChange->setName(newName);
+        }
+        else
+        {
+            std::cout << "That name is not in this directory." << std::endl;
+        }
+    }
+}
+
+//void cp(Tree* tree, const char * actual, const char * newOne)
+//{
+//    string fichero("fichero");
+//    string directorio("directorio");
+//    findNodeByName(tree, actual)->getType();
+//    findNodeByName(tree, newOne)->getType();
+//    if (findNodeByName(tree, actual)->getType().compare(fichero) == 0 && findNodeByName(tree, newOne)->getType().compare(fichero) == 0
+//        || findNodeByName(tree, actual)->getType().compare(fichero) == 0 && findNodeByName(tree, newOne)->getType().compare(directorio) == 0
+//        || findNodeByName(tree, actual)->getType().compare(directorio) == 0 && findNodeByName(tree, newOne)->getType().compare(directorio) == 0)
+//    {
+//        findNodeByName(tree, newOne)->setName(actual);
+//    }
+//    else
+//    {
+//        printf("Couldnt copy");
+//    }
+//}
 
 //void lpwd(Tree* tree)
 //{
@@ -142,54 +184,6 @@ void cd(Tree* tree, string name)
 
 
 
-
-////permits view of files and folders of current_directory
-//void ls(Tree* tree)
-//{
-
-//	if (tree->getCurrentDir()->getOffspring() == NULL)
-//	{
-//		printf("ups there are no offsprings");
-//	}
-//	else
-//	{
-//		for (int i = 0; i < tree->getCurrentDir()->getNumberOfOffsprings(); i++)
-//		{
-
-//			std::cout << tree->getCurrentDir()->getOffspring()[i]->getName() << " ";
-
-//		}
-//	}
-
-//}
-
-
-//	return NULL;
-//}
-
-
-////Preguntar si esto es busqueda en profundidad o solo cambiar un nodo
-//void mv(Tree* tree, const char* oldName, const char* newName)
-//{
-//	findNodeByName(tree, newName)->setName(newName);
-//}
-
-//void cp(Tree* tree, const char * actual, const char * newOne)
-//{
-//	string fichero("fichero");
-//	string directorio("directorio");
-//	findNodeByName(tree, actual)->getType();
-//	findNodeByName(tree, newOne)->getType();
-//	if (findNodeByName(tree, actual)->getType().compare(fichero) == 0 && findNodeByName(tree, newOne)->getType().compare(fichero) == 0
-//		|| findNodeByName(tree, actual)->getType().compare(fichero) == 0 && findNodeByName(tree, newOne)->getType().compare(directorio) == 0
-//		|| findNodeByName(tree, actual)->getType().compare(directorio) == 0 && findNodeByName(tree, newOne)->getType().compare(directorio) == 0)
-//	{
-//		findNodeByName(tree, newOne)->setName(actual);
-//	}
-//	else
-//	{
-//		printf("Couldnt copy");
-//	}
 
 
 

@@ -191,6 +191,7 @@ void Node :: setNumberOffsprings(int number)
 void Node::setName(char* name)
 {
      strncpy(this->name, name, sizeof(name));
+     this->name[sizeof(name)] = '\0';
 }
 
 //TODO: check tam if file is not a directory

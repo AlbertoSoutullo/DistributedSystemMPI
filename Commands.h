@@ -9,13 +9,13 @@ void ls(Tree* tree);
 //Print actual path
 void pwd(Tree* tree);
 
-//Undone
+//DONE
 //Change directory, accepts .. and /
 void cd(Tree* tree, string name);
 
 //Undone
 //Change name of a folder/file
-void mv(Tree* tree, char* oldName, char* newName);
+void mv(Tree* tree, string oldName, string newName);
 
 //Undone
 //Copy: origin-destination.

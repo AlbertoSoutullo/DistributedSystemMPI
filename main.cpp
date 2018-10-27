@@ -33,10 +33,11 @@ int main(int argc, char *argv[])
     newChild = tree->findNode(testFolder, 3);
     if (newChild == NULL) std::cout << "Not found" << std::endl;
 
-    ls(tree);
     cd(tree, "testFolder");
-    pwd(tree);
-
+    //pwd(tree);
+    //ls(tree);
+    mv(tree, "testFolder2", "aaabbbbc");
+    ls(tree);
 
 
 
