@@ -126,6 +126,38 @@ void mkdir(Tree* tree, string name)
     if (result == NULL) std::cout << "A new Folder was not possible to create." << std::endl;
 }
 
+//mkdir creation of new directory in current directory
+void rmdir(Tree* tree, string name)
+{
+    Node* nodeToDelete = tree->findNodeByName(name);
+
+    if (nodeToDelete != NULL)
+    {
+        if (nodeToDelete->getIsDirectory())
+        {
+            int numberOfOffsprings = nodeToDelete->getNumberOfOffsprings();
+            if (numberOfOffsprings == 0)
+            {
+                tree->removeChild(nodeToDelete);
+            }
+            else
+            {
+                std::cout << "The folder has content, it needs to be empty." << std::endl;
+            }
+        }
+        else
+        {
+            std::cout << "The name does not correspond with a Folder." << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "There is no folder with that name in the current directory." << std::endl;
+    }
+}
+
+
+
 
 
 
@@ -212,22 +244,6 @@ void mkdir(Tree* tree, string name)
 
 
 
-
-////mkdir creation of new directory in current directory
-//void rmdir(Tree* tree, const char * name)
-//{
-//	//for (int i = 0; i < tree->getCurrentDir()->getNumberOfOffsprings(); i++)
-//	//{
-//	//	if (strcmp(tree->getCurrentDir()->getOffspring()[i]->getName(), name)==0)
-//	//	{
-//		Node * auxNode = findNodeByName(tree,name);
-//			if (auxNode->getOffspring() == NULL)
-//			{
-//				tree->deleteNode(findNodeByName(tree, name));
-//			}
-//	//	}
-//	//}
-//}
 
 ////rm deletes files // falta probarlo
 //void rm(Tree* tree, const char * name)

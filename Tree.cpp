@@ -64,13 +64,6 @@ bool Tree::isAlreadyOnFather(Node* father, Node* son)
     return 0;
 }
 
-//EXPLICACIÓN: miramos en el 1º if si es un fichero o no en caso de fichero lo descartamos
-//si es un directorio aumentamos en nivel de nuestro nuevo nodo hijo, y miramos si el padre tiene descendencia previa
-//si no tiene se asigna el padre al hijo y el hijo al array de hijos del padre
-//si si tiene descendencia se comprueba que el hijo no este ya añadido
-// los flag sirven para modificar al final valores generales del arbol
-//FIN EXPLICACION
-
 //Check if father is a folder: DONE
 //Check if son's name is in father other sons: DONE
 Node* Tree::addChild(Node* son, Node* father)
@@ -180,7 +173,6 @@ void Tree::removeChild(Node* node)
             }
             node->setFather(NULL);
             father->setNumberOffsprings(-1);
-            std::cout << "Node deleted" << std::endl;
         }
     }
 }

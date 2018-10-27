@@ -24,13 +24,13 @@ void mv(Tree* tree, string oldName, string newName);
 //folder ->folder(copy) (it does copy content)
 void cp(Tree* tree, const char * actual, const char * newOne);
 
-//Undone
+//DONE
 //Create a new folder.
 void mkdir(Tree* tree, string name);
 
 //Undone
 //Deletes an empty folder
-void rmdir(Tree* tree, const char * name);
+void rmdir(Tree* tree, string name);
 
 //Undone
 //Delete a file
