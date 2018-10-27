@@ -32,7 +32,7 @@ public:
     static int idcont; //varaible to count number of nodes created
 
 	//constructor
-    Node(Tree* tree, Node* nodeFather, char* name,  string node_type);
+    Node(Tree* tree, Node* nodeFather, string name,  string node_type);
 	Node();
 	~Node(void);
 
@@ -52,7 +52,7 @@ public:
 	void setType(string type);
 	void setFather(Node* father);
     void setNewOffSpring(/*bool first,*/ Node* son);
-    void setName(char* name);
+    void setName(string name);
     void setByteSize(/*off_t t*/);
 	void setDateLastModif(time_t m);
 	void setLevel(int l);

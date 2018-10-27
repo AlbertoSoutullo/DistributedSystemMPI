@@ -37,9 +37,8 @@ int main(int argc, char *argv[])
     //pwd(tree);
     //ls(tree);
     mv(tree, "testFolder2", "aaabbbbc");
+    mkdir(tree, "MKDIR");
     ls(tree);
-
-
 
 //	ls(tree);
 //	pwd(tree);

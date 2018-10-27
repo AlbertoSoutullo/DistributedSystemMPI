@@ -4,7 +4,9 @@
 
 Tree::Tree()
 {
-    Node nodo(this, NULL, "ROOT" , "dir");
+    std::string root = "ROOT";
+    std::string type = "dir";
+    Node nodo(this, NULL, root , type);
 	this->root =(Node*)malloc(sizeof(Node));
 
     //Probar si sin esto funciona igual
@@ -183,7 +185,7 @@ void Tree::removeChild(Node* node)
     }
 }
 
-Node* Tree::findNodeByName(string name, bool isFolder)
+Node* Tree::findNodeByName(string name)
 {
     if (this->getCurrentDir()->getNumberOfOffsprings() == 0) return NULL;
 
@@ -191,20 +193,7 @@ Node* Tree::findNodeByName(string name, bool isFolder)
 
     for (Node* node: offsprings)
     {
-        if (isFolder)
-        {
-            if (node->getIsDirectory())
-            {
-                if (std::string(node->getName()) == name) return node;
-            }
-        }
-        else
-        {
-            if (!node->getIsDirectory())
-            {
-                if (std::string(node->getName()) == name) return node;
-            }
-        }
+        if (std::string(node->getName()) == name) return node;
     }
     return NULL;
 }

@@ -55,10 +55,17 @@ void cd(Tree* tree, string name)
     }
     else
     {
-        bool isFolder = true;
-        Node* newDirectory = tree->findNodeByName(name, isFolder);
+        Node* newDirectory = tree->findNodeByName(name);
         if (newDirectory == NULL) std::cout << "That directory does not exists." << std::endl;
-        tree->setCurrentDir(newDirectory);
+        else
+        {
+            bool isFolder = newDirectory->getIsDirectory();
+            if (isFolder)
+            {
+                tree->setCurrentDir(newDirectory);
+            }
+            else std::cout << "Destination is not a Folder." << std::endl;
+        }
     }
 }
 
@@ -68,7 +75,7 @@ void mv(Tree* tree, string oldName, string newNameString)
     strcpy(newName, newNameString.c_str());
     Node* nodeToChange = NULL;
 
-    nodeToChange = tree->findNodeByName(oldName, true);
+    nodeToChange = tree->findNodeByName(oldName);
 
     if (nodeToChange != NULL)
     {
@@ -76,35 +83,51 @@ void mv(Tree* tree, string oldName, string newNameString)
     }
     else
     {
-        nodeToChange = tree->findNodeByName(oldName, false);
-        if (nodeToChange != NULL)
-        {
-            nodeToChange->setName(newName);
-        }
-        else
-        {
-            std::cout << "That name is not in this directory." << std::endl;
-        }
+        std::cout << "That name is not in this directory." << std::endl;
     }
 }
 
-//void cp(Tree* tree, const char * actual, const char * newOne)
-//{
-//    string fichero("fichero");
-//    string directorio("directorio");
-//    findNodeByName(tree, actual)->getType();
-//    findNodeByName(tree, newOne)->getType();
-//    if (findNodeByName(tree, actual)->getType().compare(fichero) == 0 && findNodeByName(tree, newOne)->getType().compare(fichero) == 0
-//        || findNodeByName(tree, actual)->getType().compare(fichero) == 0 && findNodeByName(tree, newOne)->getType().compare(directorio) == 0
-//        || findNodeByName(tree, actual)->getType().compare(directorio) == 0 && findNodeByName(tree, newOne)->getType().compare(directorio) == 0)
-//    {
-//        findNodeByName(tree, newOne)->setName(actual);
-//    }
-//    else
-//    {
-//        printf("Couldnt copy");
-//    }
-//}
+//TODO - Recursive Copy
+void cp(Tree* tree, string original, string copy)
+{
+    Node* nodeToCopy = tree->findNodeByName(original);
+    Node* nodeDestination = tree->findNodeByName(copy);
+
+    if (nodeToCopy != NULL)
+    {
+        if (nodeDestination != NULL) //If destination is not null, it must be a folder.
+        {
+            if(nodeDestination->getIsDirectory()) //We copy nodeToCopy to destination
+            {
+
+            }
+            else
+            {
+                std::cout << "Destination exists, but is not a folder." << std::endl;
+            }
+        }
+        else //If destination is null, you want to clone the node.
+        {
+
+        }
+    }
+    else
+    {
+        std::cout << "That name is not in this directory." << std::endl;
+    }
+}
+
+//mkdir creation of new directory in current directory
+void mkdir(Tree* tree, string name)
+{
+    Node* newDirectory = new Node(tree, tree->getCurrentDir(), name, "Folder");
+    Node* result = NULL;
+    result = tree->addChild(newDirectory, tree->getCurrentDir());
+    if (result == NULL) std::cout << "A new Folder was not possible to create." << std::endl;
+}
+
+
+
 
 //void lpwd(Tree* tree)
 //{
@@ -188,17 +211,7 @@ void mv(Tree* tree, string oldName, string newNameString)
 
 
 
-////mkdir creation of new directory in current directory
-//void mkdir(Tree* tree, char * name)
-//{
 
-//	//tengo que hacer lo del id automatico para que este método funcione bien y quitar el parametro id de entrada
-//	Node* dir = new Node("dir", tree->getCurrentDir(),tree);
-//	dir->setName(name);
-
-//	tree->addNode(dir, tree->getCurrentDir());
-
-//}
 
 ////mkdir creation of new directory in current directory
 //void rmdir(Tree* tree, const char * name)

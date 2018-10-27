@@ -35,6 +35,6 @@ public:
 	Node* getRoot();
 
     //Utilities
-    Node* findNodeByName(std::string name, bool isFolder);
+    Node* findNodeByName(std::string name);
 };
 

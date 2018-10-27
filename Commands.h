@@ -13,7 +13,7 @@ void pwd(Tree* tree);
 //Change directory, accepts .. and /
 void cd(Tree* tree, string name);
 
-//Undone
+//DONE
 //Change name of a folder/file
 void mv(Tree* tree, string oldName, string newName);
 
@@ -26,7 +26,7 @@ void cp(Tree* tree, const char * actual, const char * newOne);
 
 //Undone
 //Create a new folder.
-void mkdir(Tree* tree, char * name);
+void mkdir(Tree* tree, string name);
 
 //Undone
 //Deletes an empty folder

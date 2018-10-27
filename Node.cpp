@@ -15,7 +15,7 @@ bool Node::isFolder(string name)
     return 1;
 }
 
-Node::Node(Tree* tree, Node* nodeFather, char* name,  string node_type)
+Node::Node(Tree* tree, Node* nodeFather, string name,  string node_type)
 {
     //This note is ROOT
     if (nodeFather == NULL)
@@ -44,7 +44,7 @@ Node::Node(Tree* tree, Node* nodeFather, char* name,  string node_type)
     {
         this->tree = tree;
         this->father = nodeFather;
-        strncpy(this->name, name, strlen(name));
+        strncpy(this->name, name.c_str(), sizeof(name));
         this->Id = this->idcont;
         this->idcont += 1;
         this->numberOfOffsprings = 0;
@@ -188,9 +188,9 @@ void Node :: setNumberOffsprings(int number)
 }
 
 //set the new id Name of the node, max 25 characters
-void Node::setName(char* name)
+void Node::setName(string name)
 {
-     strncpy(this->name, name, sizeof(name));
+     strncpy(this->name, name.c_str(), sizeof(name));
      this->name[sizeof(name)] = '\0';
 }
 
