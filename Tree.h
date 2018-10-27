@@ -21,8 +21,6 @@ public:
     void updateChild(Node* node);
     void removeChild(Node* node);
 
-
-
 	//void setNewNode(Node* father, string type);
 	void setRoot(Node* newRoot);
 	void setCurrentDir(Node* newDir);

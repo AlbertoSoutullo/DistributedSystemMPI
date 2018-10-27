@@ -23,15 +23,17 @@ int main(int argc, char *argv[])
     newChild = NULL;
 
     newChild = tree->findNode(testFolder, 3);
-    std::cout << newChild->getName() << std::endl;
 
+//Doesn't work in QT
 //    tree->updateChild(tree->getRoot());
 //    std::cout << tree->getRoot()->getName() << std::endl;
 
-    tree->removeChild(testFolder2);
+    //tree->removeChild(testFolder2);
 
     newChild = tree->findNode(testFolder, 3);
     if (newChild == NULL) std::cout << "Not found" << std::endl;
+
+    ls(tree);
 
 
 

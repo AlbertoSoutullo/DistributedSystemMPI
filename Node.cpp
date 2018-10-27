@@ -49,8 +49,16 @@ Node::Node(Tree* tree, Node* nodeFather, char* name,  string node_type)
         this->idcont += 1;
         this->numberOfOffsprings = 0;
         this->level = nodeFather->getLevel() + 1;
-        if (isFolder(node_type)) this->isDirectory = 1;
-        else this->isDirectory = 0;
+        if (isFolder(node_type))
+        {
+            this->byteSize = 4096;
+            this->isDirectory = 1;
+        }
+        else
+        {
+            this->byteSize = 0;
+            this->isDirectory = 0;
+        }
         this->dateLastModif = std::time(0);
     }
 }
