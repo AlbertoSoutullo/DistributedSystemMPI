@@ -51,9 +51,9 @@ public:
 	//seters
 	void setType(string type);
 	void setFather(Node* father);
-    void setNewOffSpring(/*bool first,*/ Node* son);
+    void setNewOffSpring(Node* son);
     void setName(string name);
-    void setByteSize(/*off_t t*/);
+    void setByteSize(off_t t);
 	void setDateLastModif(time_t m);
 	void setLevel(int l);
 	void setNumberOffsprings(int number);

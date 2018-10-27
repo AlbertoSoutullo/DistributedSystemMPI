@@ -8,7 +8,7 @@ Node::Node()
 
 bool Node::isFolder(string name)
 {
-    if (name.compare("fichero") == 0 || name.compare("f") == 0 || name.compare("file") == 0)
+    if (name.compare("fichero") == 0 || name.compare("f") == 0 || name.compare("file") == 0 || name.compare("File") == 0)
     {
         return 0;
     }
@@ -195,17 +195,17 @@ void Node::setName(string name)
 }
 
 //TODO: check tam if file is not a directory
-void Node::setByteSize(/*off_t tam*/)
+void Node::setByteSize(off_t tam)
 {
-    /*if (this->getType() == "directorio")
-	{
-		this->byteSize = 4096;
-	}
-	else
-	{
-		this->byteSize = tam;
-    }*/
-    this->byteSize = 4096;
+    if (this->getIsDirectory())
+    {
+        this->byteSize = 4096;
+    }
+    else
+    {
+        this->byteSize = tam;
+    }
+
 }
 
 //sets last time modification

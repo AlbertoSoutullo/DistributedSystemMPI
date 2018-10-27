@@ -45,5 +45,6 @@ int main(int argc, char *argv[])
     lcd("..");
     //lls();
     //lpwd();
-    upload(tree, "Debug");
+    upload(tree, "README.md");
+    ls(tree);
 }

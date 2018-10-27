@@ -232,27 +232,23 @@ bool uploadIsDirectory(struct stat fileInfo)
     else return false; //It could be more things but on our scope its not neccesary to check all.
 }
 
+
 void upload(Tree* tree, string name)
 {
     //fileInfo.st_size para el tamaño
     //fileInfo.st_mtime para la fecha de modificacion
 
     struct stat fileInfo = getFileInfo(name);
-    if (uploadIsDirectory(fileInfo)) std::cout << "it is";
+    if (uploadIsDirectory(fileInfo))  //Upload recursivo
+    {
 
-
-
-
-
-
+    }
+    else //Upload a file
+    {
+        Node* newFile = new Node(tree, tree->getCurrentDir(), name, "File");
+        newFile->setByteSize(fileInfo.st_size);
+        newFile->setDateLastModif(fileInfo.st_mtime);
+        Node* result = tree->addChild(newFile, tree->getCurrentDir());
+        if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
+    }
 }
-
-
-
-
-
-
-
-
-
-
