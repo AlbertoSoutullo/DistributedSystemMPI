@@ -1,7 +1,7 @@
 #include "Tree.h"
 
 class Tree;
-//Undone
+//DONE
 //Print nodes in current directory
 void ls(Tree* tree);
 

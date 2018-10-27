@@ -34,6 +34,9 @@ int main(int argc, char *argv[])
     if (newChild == NULL) std::cout << "Not found" << std::endl;
 
     ls(tree);
+    tree->setCurrentDir(newChild);
+    pwd(tree);
+
 
 
 

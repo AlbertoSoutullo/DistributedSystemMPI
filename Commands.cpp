@@ -26,8 +26,32 @@ void ls(Tree* tree)
     std::cout << std::endl;
     std::cout << numberOfElements << " elements in remote directory " <<
                  currentDirectory->getName() << " with size of " << totalSize << std::endl;
-
 }
+
+//prints path from current directory
+void pwd(Tree* tree)
+{
+    std::string path = "";
+    Node* node = tree->getCurrentDir();
+
+    while (node->getId() != 0)
+    {
+        path = "/" + std::string(node->getName())  + path;
+        node = node->getNodeFather();
+    }
+    std::cout << path << std::endl;
+}
+
+
+
+
+
+//void lpwd(Tree* tree)
+//{
+//	system("pwd");
+//}
+
+
 
 //lls command
 //void lls(Tree* tree)
@@ -44,10 +68,6 @@ void ls(Tree* tree)
 //}
 
 
-//void lpwd(Tree* tree)
-//{
-//	system("pwd");
-//}
 
 ////lcd
 //void lcd(Tree* tree, const char * name)
@@ -146,33 +166,6 @@ void ls(Tree* tree)
 //	}
 
 //}
-
-////prints path from current directory
-//void pwd(Tree* tree)
-//{
-	
-//	string path[150];
-//	int steps=0;
-//	Node* node = tree->getCurrentDir();
-//	while (node->getId() != 0)
-//	{
-
-//		path[steps] = std:: string(node->getName());
-//		node = node->getNodeFather();
-//		steps++;
-
-
-//	}
-//	path[steps] = node->getName();
-
-//	for (int i = steps + 1; i > 0; i--)
-//	{
-//		cout << "/" << path[i - 1] << "/";
-		
-//	}
-//	cout << endl;
-//}
-
 
 //Node * findNodeByName(Tree* tree, const char * name)
 //{
