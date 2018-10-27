@@ -39,16 +39,20 @@ void rm(Tree* tree, string name);
 
 //DONE
 //Print real content of actual directory
-void lls(Tree* tree);
+void lls();
 
-//Undone
+//DONE
 //cd in real path. Accepts .. and /
-void lcd(Tree* tree, string name);
+void lcd(string name);
 
-//Undone
+//DONE
 //Show real path
-void lpwd(Tree* tree);
+void lpwd();
 
 //Undone
 //Upload a file or a folder. It uploads recursive content.
-void upload(Tree* tree, const char* name);
+void upload(Tree* tree, string name);
+
+//Utilities for upload
+struct stat getFileInfo(string name);
+bool uploadIsDirectory(struct stat fileInfo);

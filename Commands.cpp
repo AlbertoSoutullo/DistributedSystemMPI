@@ -180,13 +180,13 @@ void rm(Tree* tree, string name)
 
 
 //lls command
-void lls(Tree* tree)
+void lls()
 {
     system("ls -l");
 }
 
 //lcd
-void lcd(Tree* tree, string name)
+void lcd(string name)
 {
 
     if (name == "/")
@@ -199,54 +199,53 @@ void lcd(Tree* tree, string name)
     }
     else
     {
-        char newDirectory[sizeof(name)];
+        char newDirectory[name.size()];
         strncpy(newDirectory, name.c_str(), sizeof(name));
         chdir(newDirectory);
     }
 }
 
 
-
-//void lpwd(Tree* tree)
-//{
-//	system("pwd");
-//}
-
+void lpwd()
+{
+    system("pwd");
+}
 
 
 
+struct stat getFileInfo(string name)
+{
+    struct stat fileInfo;
+    char fileName[name.size()];
+    strncpy(fileName, name.c_str(), name.size());
+    stat(fileName, &fileInfo);
+    return fileInfo;
+}
+
+//https://stackoverflow.com/questions/146924/how-can-i-tell-if-a-given-path-is-a-directory-or-a-file-c-c
+bool uploadIsDirectory(struct stat fileInfo)
+{
+    if(fileInfo.st_mode & S_IFDIR)
+    {
+        return true;
+    }
+    else return false; //It could be more things but on our scope its not neccesary to check all.
+}
+
+void upload(Tree* tree, string name)
+{
+    //fileInfo.st_size para el tamaño
+    //fileInfo.st_mtime para la fecha de modificacion
+
+    struct stat fileInfo = getFileInfo(name);
+    if (uploadIsDirectory(fileInfo)) std::cout << "it is";
 
 
 
 
-//void upload(Tree* tree,const char* name)
-//{
-//	string nameDF;
-//	cout << "fichero (f)  o directorio (d)" << endl;
-//	cin >> nameDF;
-//	Node* node;
-//	if (nameDF.compare(string("f")))
-//	{
-//		node = new Node("fichero", tree->getCurrentDir(), tree);
-//		Node * nodeAdded = tree->addNode(node, tree->getCurrentDir());
-//		string nameFD = nodeAdded->getName();
-//		string total = "cat " + nameFD+".txt";
-//		system(total.c_str());
-//	}
-//	else if(nameDF.compare(string("d")))
-//	{
-//		node = new Node("directorio", tree->getCurrentDir(), tree);
-//		Node * nodeAdded = tree->addNode(node, tree->getCurrentDir());
-//		string nameFD = nodeAdded->getName();
-//		//falta hacer de manera recursiva que se vaya subiendo todo
-//	}
-//	else
-//	{
-//		cout << "Error type" << endl;
-//	}
 
-	
-//}
+
+}
 
 
 

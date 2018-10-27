@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
     cd(tree, "/");
     //rm(tree, "testFile");
 
-    lcd(tree, "..");
-    lls(tree);
-
+    lcd("..");
+    //lls();
+    //lpwd();
+    upload(tree, "Debug");
 }
