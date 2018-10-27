@@ -5,7 +5,7 @@ class Tree;
 //Print nodes in current directory
 void ls(Tree* tree);
 
-//Undone
+//DONE
 //Print actual path
 void pwd(Tree* tree);
 

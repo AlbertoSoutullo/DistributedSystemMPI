@@ -183,6 +183,33 @@ void Tree::removeChild(Node* node)
     }
 }
 
+Node* Tree::findNodeByName(string name, bool isFolder)
+{
+    if (this->getCurrentDir()->getNumberOfOffsprings() == 0) return NULL;
+
+    vector<Node*> offsprings = this->getCurrentDir()->getOffsprings();
+
+    for (Node* node: offsprings)
+    {
+        if (isFolder)
+        {
+            if (node->getIsDirectory())
+            {
+                if (std::string(node->getName()) == name) return node;
+            }
+        }
+        else
+        {
+            if (!node->getIsDirectory())
+            {
+                if (std::string(node->getName()) == name) return node;
+            }
+        }
+    }
+    return NULL;
+}
+
+
 
 
 ////GETTERS////

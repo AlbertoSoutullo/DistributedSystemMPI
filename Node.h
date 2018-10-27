@@ -46,6 +46,7 @@ public:
 	time_t getDateLastModif();
 	int getLevel();
 	int getNumberOfOffsprings();
+    bool getIsDirectory();
 
 	//seters
 	void setType(string type);
@@ -57,6 +58,7 @@ public:
 	void setLevel(int l);
 	void setNumberOffsprings(int number);
     void setTree(Tree* tree);
+    void setIsDirectory(bool isDirectory);
 
     //Utilities
     bool isFolder(string name);

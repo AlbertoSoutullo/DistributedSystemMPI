@@ -126,6 +126,11 @@ int Node::getLevel()
 	return this->level;
 }
 
+bool Node::getIsDirectory()
+{
+    return this->isDirectory;
+}
+
 //get number of offsprings
 int Node::getNumberOfOffsprings()
 {
@@ -138,6 +143,12 @@ void Node::setTree(Tree* tree)
 {
     this->tree = tree;
 }
+
+void Node::setIsDirectory(bool isDirectory)
+{
+    this->isDirectory = isDirectory;
+}
+
 
 //set type
 void Node::setType(string fichDire)

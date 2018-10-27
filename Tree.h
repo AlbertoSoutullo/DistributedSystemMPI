@@ -28,11 +28,13 @@ public:
     bool isFatherFolder(Node* father);
     bool isAlreadyOnFather(Node* father, Node* son);
 
-
 	//void printTreeStructure();
 	Node* getCurrentDir();
 	int getSizeStructure();
 	int getLastNodeId();
 	Node* getRoot();
+
+    //Utilities
+    Node* findNodeByName(string name, bool isFolder);
 };
 
