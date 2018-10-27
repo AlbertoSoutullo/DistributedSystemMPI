@@ -185,6 +185,25 @@ void lls(Tree* tree)
     system("ls -l");
 }
 
+//lcd
+void lcd(Tree* tree, string name)
+{
+
+    if (name == "/")
+    {
+        chdir("/");
+    }
+    else if (name == "..")
+    {
+        chdir("..");
+    }
+    else
+    {
+        char newDirectory[sizeof(name)];
+        strncpy(newDirectory, name.c_str(), sizeof(name));
+        chdir(newDirectory);
+    }
+}
 
 
 
@@ -198,29 +217,7 @@ void lls(Tree* tree)
 
 
 
-////lcd
-//void lcd(Tree* tree, const char * name)
-//{
-//	if (strcmp(name, "/"))
-//	{
-//		string nameRoot = std::string(tree->getRoot()->getName());
-//		string total = "cd" + nameRoot;
-//		system(total.c_str());
-//	}
-//	else if (strcmp(name, ".."))
-//	{
 
-//		string nameRoot = std::string(tree->getRoot()->getNodeFather()->getName());
-//		string total = "cd" + nameRoot;
-//		system(total.c_str());
-//	}
-//	else
-//	{
-//		string name = std::string(name);
-//		string total = "cd" + name;
-//		system(name.c_str());
-//	}
-//}
 
 //void upload(Tree* tree,const char* name)
 //{

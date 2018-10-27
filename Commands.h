@@ -1,4 +1,5 @@
 #include "Tree.h"
+#include <unistd.h>
 
 class Tree;
 //DONE
@@ -36,13 +37,13 @@ void rmdir(Tree* tree, string name);
 //Delete a file
 void rm(Tree* tree, string name);
 
-//Undone
+//DONE
 //Print real content of actual directory
 void lls(Tree* tree);
 
 //Undone
 //cd in real path. Accepts .. and /
-void lcd(Tree* tree, const char * name);
+void lcd(Tree* tree, string name);
 
 //Undone
 //Show real path
