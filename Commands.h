@@ -32,7 +32,7 @@ void mkdir(Tree* tree, string name);
 //Deletes an empty folder
 void rmdir(Tree* tree, string name);
 
-//Undone
+//DONE
 //Delete a file
 void rm(Tree* tree, string name);
 

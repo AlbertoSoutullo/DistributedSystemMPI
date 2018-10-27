@@ -156,9 +156,6 @@ void rmdir(Tree* tree, string name)
     }
 }
 
-
-
-
 //rm deletes files
 void rm(Tree* tree, string name)
 {
@@ -182,6 +179,11 @@ void rm(Tree* tree, string name)
 }
 
 
+//lls command
+void lls(Tree* tree)
+{
+    system("ls -l");
+}
 
 
 
@@ -193,19 +195,6 @@ void rm(Tree* tree, string name)
 
 
 
-//lls command
-//void lls(Tree* tree)
-//{
-//    if (tree->getCurrentDir()->getOffsprings() == NULL)
-//	{
-//		printf("ups there are no offsprings");
-//	}
-//	else
-//	{
-//		system("ls");
-//	}
-
-//}
 
 
 

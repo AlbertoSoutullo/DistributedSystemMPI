@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     //rmdir(tree, "MKDIR");
     cd(tree, "/");
     //rm(tree, "testFile");
-    ls(tree);
+    lls(tree);
 
 
 
