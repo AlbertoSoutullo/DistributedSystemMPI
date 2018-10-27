@@ -11,7 +11,7 @@ void pwd(Tree* tree);
 
 //Undone
 //Change directory, accepts .. and /
-void cd(Tree* tree, const char * name);
+void cd(Tree* tree, string name);
 
 //Undone
 //Change name of a folder/file

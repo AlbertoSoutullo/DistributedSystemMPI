@@ -42,7 +42,25 @@ void pwd(Tree* tree)
     std::cout << path << std::endl;
 }
 
-
+//cd
+void cd(Tree* tree, string name)
+{
+    if (name == "/")
+    {
+        tree->setCurrentDir(tree->getRoot());
+    }
+    else if (name == "..")
+    {
+        tree->setCurrentDir(tree->getCurrentDir()->getNodeFather());
+    }
+    else
+    {
+        bool isFolder = true;
+        Node* newDirectory = tree->findNodeByName(name, isFolder);
+        if (newDirectory == NULL) std::cout << "That directory does not exists." << std::endl;
+        tree->setCurrentDir(newDirectory);
+    }
+}
 
 
 
@@ -123,29 +141,7 @@ void pwd(Tree* tree)
 //}
 
 
-////cd
-//void cd(Tree* tree, const char * name)
-//{
-//	if (strcmp(name, "/"))
-//	{
-//		tree->setCurrentDir(tree->getRoot());
-//	}
-//	else if (strcmp(name, ".."))
-//	{
-//		tree->setCurrentDir(tree->getCurrentDir()->getNodeFather());
-//	}
-//	else
-//	{
-//		/*for (int i = 0; i < tree->getCurrentDir()->getNumberOfOffsprings(); i++)
-//		{
-//			if (strcmp(tree->getCurrentDir()->getOffspring()[i]->getName(), name) == 0)
-//			{*/
-//				tree->setCurrentDir(findNodeByName(tree, name));
-//		/*	}
-//		}*/
 
-//	}
-//}
 
 ////permits view of files and folders of current_directory
 //void ls(Tree* tree)
@@ -167,16 +163,7 @@ void pwd(Tree* tree)
 
 //}
 
-//Node * findNodeByName(Tree* tree, const char * name)
-//{
-//	for (int i = 0; i < tree->getCurrentDir()->getNumberOfOffsprings(); i++)
-//	{
-//		if (strcmp(tree->getCurrentDir()->getOffspring()[i]->getName(), name) == 0)
-//		{
-//			return tree->getCurrentDir()->getOffspring()[i];
-//		}
-//	}
-	
+
 //	return NULL;
 //}
 
