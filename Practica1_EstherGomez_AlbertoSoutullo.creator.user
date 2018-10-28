@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.5.2, 2018-10-27T16:44:04. -->
+<!-- Written by QtCreator 4.5.2, 2018-10-28T04:46:35. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -169,6 +169,7 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Arguments"></value>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.Executable">/home/distribuido/Desktop/FilesSystem-master/FilesSystem-master/main</value>
+    <value type="bool" key="ProjectExplorer.CustomExecutableRunConfiguration.UseTerminal">true</value>
     <value type="QString" key="ProjectExplorer.CustomExecutableRunConfiguration.WorkingDirectory">%{buildDir}</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Run /home/distribuido/Desktop/FilesSystem-master/FilesSystem-master/main</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>

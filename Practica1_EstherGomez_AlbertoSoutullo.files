@@ -3,6 +3,8 @@ Commands.h
 Makefile
 Node.cpp
 Node.h
+Terminal.cpp
+Terminal.h
 Tree.cpp
 Tree.h
 main.cpp

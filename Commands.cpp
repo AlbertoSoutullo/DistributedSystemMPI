@@ -31,7 +31,7 @@ void ls(Tree* tree)
 //prints path from current directory
 void pwd(Tree* tree)
 {
-    std::string path = "";
+    std::string path = "/root";
     Node* node = tree->getCurrentDir();
 
     while (node->getId() != 0)
@@ -39,7 +39,7 @@ void pwd(Tree* tree)
         path = "/" + std::string(node->getName())  + path;
         node = node->getNodeFather();
     }
-    std::cout << path << std::endl;
+    std::cout << path;
 }
 
 //cd
