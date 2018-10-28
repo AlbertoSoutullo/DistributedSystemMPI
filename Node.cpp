@@ -77,11 +77,11 @@ string Node::getType()
 {
 	if (this->isDirectory == 0)
 	{
-		return "fichero";
+        return "File";
 	}
 	else
 	{
-		return "directorio";
+        return "Folder";
 	}
 }
 

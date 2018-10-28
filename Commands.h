@@ -24,7 +24,7 @@ void mv(Tree* tree, string oldName, string newName);
 //file1 -> file1(Copy)
 //file -> dict
 //folder ->folder(copy) (it does copy content)
-void cp(Tree* tree, const char * actual, const char * newOne);
+void cp(Tree* tree, string actual, string newOne);
 
 //DONE
 //Create a new folder.
@@ -50,7 +50,7 @@ void lcd(string name);
 //Show real path
 void lpwd();
 
-//Undone
+//DONE
 //Upload a file or a folder. It uploads recursive content.
 void upload(Tree* tree, string name);
 
@@ -59,3 +59,8 @@ struct stat getFileInfo(string name);
 bool uploadIsDirectory(struct stat fileInfo);
 void uploadFile(Tree* tree, string name, struct stat fileInfo);
 void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo);
+
+//utilities for copy
+void cpCloneFile(Tree* tree, string original, string copy);
+void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSize);
+void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination);

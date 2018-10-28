@@ -93,9 +93,8 @@ void Terminal::executeCommand(Tree* tree, string command, string firstParam, str
     }
     if (command == "cp")
     {
-        std::cout << "Not implemented yet." << std::endl;
+        cp(tree, firstParam, secondParam);
         executed = true;
-        //cp();
     }
     if (command == "mkdir")
     {

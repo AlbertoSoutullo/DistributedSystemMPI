@@ -110,6 +110,44 @@ void mv(Tree* tree, string oldName, string newNameString)
     }
 }
 
+void cpCloneFile(Tree* tree, string original, string copy)
+{
+    if (copy == "")
+    {
+        copy = original + "_copy";
+        Node* node = new Node(tree, tree->getCurrentDir(), copy, "File");
+        tree->addChild(node, tree->getCurrentDir());
+    }
+    else
+    {
+        Node* node = new Node(tree, tree->getCurrentDir(), copy, "File");
+        tree->addChild(node, tree->getCurrentDir());
+    }
+}
+
+void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSize)
+{
+    Node* node = new Node(tree, tree->getCurrentDir(), original, "File");
+    node->setByteSize(byteSize);
+    tree->addChild(node, father);
+}
+
+
+
+
+void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
+{
+
+    Node* node = new Node(tree, nodeDestination, nodeToCopy->getName(), "Folder");
+    tree->addChild(node, nodeDestination);
+    vector<Node*>* sons = nodeToCopy->getOffsprings();
+
+    for (int i=0; i < sons->size(); i++ )
+    {
+        cpCloneFolder(tree, sons->at(i), node);
+    }
+}
+
 //TODO - Recursive Copy
 void cp(Tree* tree, string original, string copy)
 {
@@ -122,7 +160,14 @@ void cp(Tree* tree, string original, string copy)
         {
             if(nodeDestination->getIsDirectory()) //We copy nodeToCopy to destination
             {
-
+                if (!nodeToCopy->getIsDirectory()) //file in directory
+                {
+                    cpCloneFileInFolder(tree, nodeDestination, original, nodeToCopy->getByteSize());
+                }
+                else
+                {
+                    cpCloneFolder(tree, nodeToCopy, nodeDestination);
+                }
             }
             else
             {
@@ -131,7 +176,24 @@ void cp(Tree* tree, string original, string copy)
         }
         else //If destination is null, you want to clone the node.
         {
-
+            //Si directorio
+            if (nodeToCopy->getType() == "File")
+            {
+                cpCloneFile(tree, original, copy);
+            }
+            else //clone folder
+            {
+                if (copy == "")
+                {
+                    std::cout << "Insert a name please." << std::endl;
+                }
+                else
+                {
+                    Node* asd = new Node(tree, tree->getCurrentDir(), copy, "Folder");
+                    tree->addChild(asd, tree->getCurrentDir());
+                    cpCloneFolder(tree, nodeToCopy, asd);
+                }
+            }
         }
     }
     else
@@ -286,12 +348,10 @@ void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo)
                 stat(ent->d_name, &fileInfo);
                 //if fichero
                 if (S_IFDIR & (fileInfo.st_mode))
-                //if (!S_ISREG(fileInfo.st_mode))  //Upload recursivo
                 {
                     Node* newFolder = new Node(tree, node, ent->d_name, "Folder");
                     Node* result = tree->addChild(newFolder, node);
                     if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
-                    //chdir(name.c_str());
                     uploadFolder(tree, newFolder, ent->d_name, fileInfo);
                     chdir("..");
                 }
@@ -321,11 +381,7 @@ void upload(Tree* tree, string name)
         Node* newFolder = new Node(tree, tree->getCurrentDir(), name, "Folder");
         Node* result = tree->addChild(newFolder, tree->getCurrentDir());
         if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
-        //chdir(name.c_str());
-        //cd(tree, name);
         uploadFolder(tree, newFolder, name, fileInfo);
-        //cd(tree, "..");
-        //chdir("..");
     }
     else //Upload a file
     {
@@ -333,58 +389,3 @@ void upload(Tree* tree, string name)
         uploadFile(tree, tree->getCurrentDir(), name, fileInfo);
     }
 }
-
-
-
-
-
-
-
-/*
-uploadfolder:
-    open dir actual
-        while end = readdir
-            upload()
-
-
-
-upload:
-    saca info de ese archivo
-    si directorio
-        se crea nodo, se entra
-        uploadfolder()
-    si archivo
-        uploadFile()
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
