@@ -54,11 +54,12 @@ bool Tree::isAlreadyOnFather(Node* father, Node* son)
 {
     if (father->getNumberOfOffsprings() == 0) return 0;
 
-    vector<Node*> offsprings = father->getOffsprings();
+    vector<Node*>* offsprings = father->getOffsprings();
 
-    for (Node* node: offsprings)
+    for (Node* node: *offsprings)
     {
-        if ((strcmp(node->getName(), son->getName())) == 0) return 1;
+        //if ((strcmp(node->getName(), son->getName())) == 0) return 1;
+        if (node->getName() == son->getName()) return 1;
     }
 
     return 0;
@@ -101,9 +102,9 @@ Node* Tree::findNode(Node* father, int id)
 {
     if (father->getNumberOfOffsprings() == 0) return NULL;
 
-    vector<Node*> offsprings = father->getOffsprings();
+    vector<Node*>* offsprings = father->getOffsprings();
 
-    for (Node* node: offsprings)
+    for (Node* node: *offsprings)
     {
         if (node->getId() == id) return node;
     }
@@ -163,12 +164,16 @@ void Tree::removeChild(Node* node)
         }
         else
         {
-            Node* father = (*node).getNodeFather();
-            for(unsigned i = 0; i < father->getOffsprings().size(); i++)
+            Node* father = node->getNodeFather();
+            for(int i = 0; i < father->getNumberOfOffsprings(); i++)
             {
-                if (father->getOffsprings().at(i)->getId() == node->getId())
+                if (father->getOffsprings()->at(i)->getId() == node->getId())
                 {
-                    delete father->getOffsprings().at(i);
+//                    delete elements[i];
+//                    elements.erase(elements.begin()+i);
+                    //delete *father->getOffsprings()[i];
+                    //vector<Node*>* sons = father->getOffsprings();
+                    father->getOffsprings()->erase(father->getOffsprings()->begin() + i);
                 }
             }
             node->setFather(NULL);
@@ -181,9 +186,9 @@ Node* Tree::findNodeByName(string name)
 {
     if (this->getCurrentDir()->getNumberOfOffsprings() == 0) return NULL;
 
-    vector<Node*> offsprings = this->getCurrentDir()->getOffsprings();
+    vector<Node*>* offsprings = this->getCurrentDir()->getOffsprings();
 
-    for (Node* node: offsprings)
+    for (Node* node: *offsprings)
     {
         if (std::string(node->getName()) == name) return node;
     }

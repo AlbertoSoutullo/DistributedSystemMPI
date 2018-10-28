@@ -44,7 +44,8 @@ Node::Node(Tree* tree, Node* nodeFather, string name,  string node_type)
     {
         this->tree = tree;
         this->father = nodeFather;
-        strncpy(this->name, name.c_str(), name.size());
+        //strncpy(this->name, name.c_str(), name.size());
+        this->name = name;
         this->Id = this->idcont;
         this->idcont += 1;
         this->numberOfOffsprings = 0;
@@ -97,13 +98,13 @@ int Node::getId()
 }
 
 //return offSpring
-vector<Node*> Node::getOffsprings()
+vector<Node*>* Node::getOffsprings()
 {
-	return this->offsprings;
+    return &this->offsprings;
 }
 
 //return name
-char* Node::getName()
+string Node::getName()
 {
 	return this->name;
 }
@@ -169,9 +170,11 @@ void Node::setFather(Node* father)
 	this->father = father;
 }
 
-void Node::setNewOffSpring(/*bool first,*/ Node* son)
+void Node::setNewOffSpring(Node* son)
 {
-    this->offsprings.push_back(son);
+    vector<Node*>* sons = this->getOffsprings();
+    sons->push_back(son);
+    //this->offsprings.push_back(son);
 }
 
 //set ++ offspring or -- offsprings number
@@ -190,8 +193,9 @@ void Node :: setNumberOffsprings(int number)
 //set the new id Name of the node, max 25 characters
 void Node::setName(string name)
 {
-     strncpy(this->name, name.c_str(), name.size());
-     this->name[sizeof(name)] = '\0';
+     //strncpy(this->name, name.c_str(), name.size());
+     //this->name[sizeof(name)] = '\0';
+    this->name = name;
 }
 
 //TODO: check tam if file is not a directory
@@ -205,7 +209,6 @@ void Node::setByteSize(off_t tam)
     {
         this->byteSize = tam;
     }
-
 }
 
 //sets last time modification

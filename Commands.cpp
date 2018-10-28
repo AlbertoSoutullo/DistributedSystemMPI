@@ -9,7 +9,7 @@ void ls(Tree* tree)
 
     Node* currentDirectory = tree->getCurrentDir();
     int numberOfElements = currentDirectory->getNumberOfOffsprings();
-    vector<Node*> elements = currentDirectory->getOffsprings();
+    vector<Node*>* elements = currentDirectory->getOffsprings();
     time_t time;
     struct tm* timeSt;
     //todo add total size in ls
@@ -17,12 +17,12 @@ void ls(Tree* tree)
 
     for (int i = 0; i < numberOfElements; i++)
     {
-        time = elements.at(i)->getDateLastModif();
+        time = elements->at(i)->getDateLastModif();
         timeSt = localtime(&time);
-        std::cout << elements.at(i)->getType() << " " << elements.at(i)->getName() << " ";
-        std::cout << " with ID: " << elements.at(i)->getId() << ", ";
-        std::cout << elements.at(i)->getByteSize() << " " << asctime(timeSt);
-        totalSize += elements.at(i)->getByteSize();
+        std::cout << elements->at(i)->getType() << " " << elements->at(i)->getName() << " ";
+        std::cout << " with ID: " << elements->at(i)->getId() << ", ";
+        std::cout << elements->at(i)->getByteSize() << " " << asctime(timeSt);
+        totalSize += elements->at(i)->getByteSize();
     }
     std::cout << std::endl;
     std::cout << numberOfElements << " elements in remote directory " <<
@@ -32,15 +32,21 @@ void ls(Tree* tree)
 //prints path from current directory
 void pwd(Tree* tree)
 {
-    std::string path = "/root";
+    vector<string> path;
     Node* node = tree->getCurrentDir();
 
     while (node->getId() != 0)
     {
-        path = path + "/" + std::string(node->getName())  ;
-        node = node->getNodeFather();
+       path.push_back(node->getName());
+       path.push_back("/");
+       node = node->getNodeFather();
     }
-    std::cout << path;
+    path.push_back("/root");
+
+    for (int i = path.size()-1; i >= 0; --i)
+    {
+        std::cout << path.at(i);
+    }
 }
 
 //cd
@@ -79,17 +85,19 @@ void cd(Tree* tree, string name)
 
 void mv(Tree* tree, string oldName, string newNameString)
 {
-    char newName[newNameString.size() + 1];
-    strcpy(newName, newNameString.c_str());
+    //char newName[newNameString.size() + 1];
+    //strcpy(newName, newNameString.c_str());
     Node* nodeToChange = NULL;
+    Node* exists = NULL;
 
     nodeToChange = tree->findNodeByName(oldName);
+    exists = tree->findNodeByName(newNameString);
 
     if (nodeToChange != NULL)
     {
-        if (!tree->isAlreadyOnFather(tree->getCurrentDir(), nodeToChange))
+        if (exists == NULL)
         {
-            nodeToChange->setName(newName);
+            nodeToChange->setName(newNameString);
         }
         else
         {

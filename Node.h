@@ -15,10 +15,9 @@ class Node
 {
 	Tree* tree;
 	Node* father;
-    //Node ** offsprings = NULL;
     vector<Node*> offsprings;
 
-    char name[25] ="";
+    string name = "";
     int Id; //It generates a new ID every time a node is created.
 	int numberOfOffsprings;
     int level;
@@ -40,8 +39,8 @@ public:
 	string getType();
 	Node* getNodeFather();
 	int getId();
-    vector<Node*> getOffsprings();
-    char* getName();
+    vector<Node*>* getOffsprings();
+    string getName();
 	off_t getByteSize();
 	time_t getDateLastModif();
 	int getLevel();
@@ -63,3 +62,4 @@ public:
     //Utilities
     bool isFolder(string name);
 };
+
