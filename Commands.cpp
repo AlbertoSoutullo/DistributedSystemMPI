@@ -52,7 +52,14 @@ void cd(Tree* tree, string name)
     }
     else if (name == "..")
     {
-        tree->setCurrentDir(tree->getCurrentDir()->getNodeFather());
+        if (tree->getCurrentDir()->getId() == 0)
+        {
+            std::cout << "You can't go back in Root." << std::endl;
+        }
+        else
+        {
+             tree->setCurrentDir(tree->getCurrentDir()->getNodeFather());
+        }
     }
     else
     {
@@ -80,7 +87,14 @@ void mv(Tree* tree, string oldName, string newNameString)
 
     if (nodeToChange != NULL)
     {
-        nodeToChange->setName(newName);
+        if (!tree->isAlreadyOnFather(tree->getCurrentDir(), nodeToChange))
+        {
+            nodeToChange->setName(newName);
+        }
+        else
+        {
+            std::cout << "There exists something with that name already." << std::endl;
+        }
     }
     else
     {
