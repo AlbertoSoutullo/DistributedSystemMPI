@@ -20,6 +20,7 @@ void ls(Tree* tree)
         time = elements.at(i)->getDateLastModif();
         timeSt = localtime(&time);
         std::cout << elements.at(i)->getType() << " " << elements.at(i)->getName() << " ";
+        std::cout << " with ID: " << elements.at(i)->getId() << ", ";
         std::cout << elements.at(i)->getByteSize() << " " << asctime(timeSt);
         totalSize += elements.at(i)->getByteSize();
     }
@@ -36,7 +37,7 @@ void pwd(Tree* tree)
 
     while (node->getId() != 0)
     {
-        path = "/" + std::string(node->getName())  + path;
+        path = path + "/" + std::string(node->getName())  ;
         node = node->getNodeFather();
     }
     std::cout << path;
@@ -120,10 +121,17 @@ void cp(Tree* tree, string original, string copy)
 //mkdir creation of new directory in current directory
 void mkdir(Tree* tree, string name)
 {
-    Node* newDirectory = new Node(tree, tree->getCurrentDir(), name, "Folder");
-    Node* result = NULL;
-    result = tree->addChild(newDirectory, tree->getCurrentDir());
-    if (result == NULL) std::cout << "A new Folder was not possible to create." << std::endl;
+    if (name != "")
+    {
+        Node* newDirectory = new Node(tree, tree->getCurrentDir(), name, "Folder");
+        Node* result = NULL;
+        result = tree->addChild(newDirectory, tree->getCurrentDir());
+        if (result == NULL) std::cout << "A new Folder was not possible to create." << std::endl;
+    }
+    else
+    {
+        std::cout << "Please, enter a name for the new Folder." << std::endl;
+    }
 }
 
 //mkdir creation of new directory in current directory
@@ -200,7 +208,7 @@ void lcd(string name)
     else
     {
         char newDirectory[name.size()];
-        strncpy(newDirectory, name.c_str(), sizeof(name));
+        strncpy(newDirectory, name.c_str(), name.size());
         chdir(newDirectory);
     }
 }

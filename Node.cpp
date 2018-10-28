@@ -44,7 +44,7 @@ Node::Node(Tree* tree, Node* nodeFather, string name,  string node_type)
     {
         this->tree = tree;
         this->father = nodeFather;
-        strncpy(this->name, name.c_str(), sizeof(name));
+        strncpy(this->name, name.c_str(), name.size());
         this->Id = this->idcont;
         this->idcont += 1;
         this->numberOfOffsprings = 0;
@@ -190,7 +190,7 @@ void Node :: setNumberOffsprings(int number)
 //set the new id Name of the node, max 25 characters
 void Node::setName(string name)
 {
-     strncpy(this->name, name.c_str(), sizeof(name));
+     strncpy(this->name, name.c_str(), name.size());
      this->name[sizeof(name)] = '\0';
 }
 

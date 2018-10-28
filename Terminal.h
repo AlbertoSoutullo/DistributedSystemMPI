@@ -13,6 +13,10 @@ public:
     Terminal(Tree* tree);
     void Initiate(Tree* tree);
     string ReadInput(Tree* tree);
-    vector<string> Tokenize(string option);
+    void Tokenize(vector<string>& tokens, string option);
+    string filterCommand(vector<string> tokens);
+    string filterFirstParam(vector<string> tokens);
+    string filterSecondParam(vector<string> tokens);
+    void executeCommand(Tree* tree, string command, string firstParam, string secondParam);
 };
 

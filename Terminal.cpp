@@ -32,9 +32,8 @@ string Terminal::ReadInput(Tree* tree)
     return input;
 }
 
-vector<string> Terminal::Tokenize(string option)
+void Terminal::Tokenize(vector<string> &tokens, string option)
 {
-    vector<string> tokens;
     stringstream ss(option);
     string token = "";
 
@@ -42,6 +41,97 @@ vector<string> Terminal::Tokenize(string option)
     {
         tokens.push_back(token);
     }
-    return tokens;
 }
 
+string Terminal::filterCommand(vector<string> tokens)
+{
+    string firstToken = "";
+    firstToken = tokens.at(0);
+
+    return firstToken;
+}
+
+string Terminal::filterFirstParam(vector<string> tokens)
+{
+    string firstParam = "";
+    firstParam = tokens.at(1);
+
+    return firstParam;
+}
+
+string Terminal::filterSecondParam(vector<string> tokens)
+{
+    string secondParam = "";
+    secondParam = tokens.at(2);
+
+    return secondParam;
+}
+
+
+void Terminal::executeCommand(Tree* tree, string command, string firstParam, string secondParam)
+{
+    bool executed = false;
+    if (command == "ls")
+    {
+        ls(tree);
+        executed = true;
+    }
+    if (command == "pwd")
+    {
+        pwd(tree);
+        executed = true;
+    }
+    if (command == "cd")
+    {
+        cd(tree, firstParam);
+        executed = true;
+    }
+    if (command == "mv")
+    {
+        mv(tree, firstParam, secondParam);
+        executed = true;
+    }
+    if (command == "cp")
+    {
+        std::cout << "Not implemented yet." << std::endl;
+        executed = true;
+        //cp();
+    }
+    if (command == "mkdir")
+    {
+        mkdir(tree, firstParam);
+        executed = true;
+    }
+    if (command == "rmdir")
+    {
+        rmdir(tree, firstParam);
+        executed = true;
+    }
+    if (command == "rm")
+    {
+        rm(tree, firstParam);
+        executed = true;
+    }
+    if (command == "lls")
+    {
+        lls();
+        executed = true;
+    }
+    if (command == "lcd")
+    {
+        lcd(firstParam);
+        executed = true;
+    }
+    if (command == "lpwd")
+    {
+        lpwd();
+        executed = true;
+    }
+    if (command == "upload")
+    {
+        upload(tree, firstParam);
+        executed = true;
+    }
+    if(!executed) std::cout << "Command "<< command << " not found." << std::endl;
+    else std::cout << std::endl;
+}
