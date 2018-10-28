@@ -1,5 +1,6 @@
 #include "Tree.h"
 #include <unistd.h>
+#include <dirent.h>
 
 class Tree;
 //DONE
@@ -56,3 +57,5 @@ void upload(Tree* tree, string name);
 //Utilities for upload
 struct stat getFileInfo(string name);
 bool uploadIsDirectory(struct stat fileInfo);
+void uploadFile(Tree* tree, string name, struct stat fileInfo);
+void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo);

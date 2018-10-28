@@ -42,9 +42,11 @@ int main(int argc, char *argv[])
     cd(tree, "/");
     //rm(tree, "testFile");
 
-    lcd("..");
+    //lcd("..");
     //lls();
     //lpwd();
-    upload(tree, "README.md");
+    upload(tree, ".");
+
+    cd(tree, ".");
     ls(tree);
 }

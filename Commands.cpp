@@ -216,22 +216,69 @@ void lpwd()
 struct stat getFileInfo(string name)
 {
     struct stat fileInfo;
-    char fileName[name.size()];
-    strncpy(fileName, name.c_str(), name.size());
-    stat(fileName, &fileInfo);
+    //char fileName[name.size()];
+    //strncpy(fileName, name.c_str(), name.size());
+    stat(name.c_str(), &fileInfo);
     return fileInfo;
 }
 
 //https://stackoverflow.com/questions/146924/how-can-i-tell-if-a-given-path-is-a-directory-or-a-file-c-c
 bool uploadIsDirectory(struct stat fileInfo)
 {
-    if(fileInfo.st_mode & S_IFDIR)
+    if(!S_ISREG(fileInfo.st_mode) /*& S_IFDIR*/)
     {
         return true;
     }
     else return false; //It could be more things but on our scope its not neccesary to check all.
 }
 
+void uploadFile(Tree* tree,Node* node, string name, struct stat fileInfo)
+{
+    Node* newFile = new Node(tree, node, name, "File");
+    newFile->setByteSize(fileInfo.st_size);
+    newFile->setDateLastModif(fileInfo.st_mtime);
+    Node* result = tree->addChild(newFile, node);
+    if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
+}
+//if( strcmp(sName,Student.name) == 0 )
+void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo)
+{
+    DIR* dir;
+    struct dirent* ent;
+
+    if ((dir = opendir(name.c_str())) != NULL)
+    {
+        chdir(name.c_str());
+        while ((ent = readdir(dir)) != NULL)
+        {
+            if ((strcmp(".", ent->d_name) != 0 ) & ((strcmp("..", ent->d_name) != 0 )))
+            {
+                stat(ent->d_name, &fileInfo);
+                //if fichero
+                if (S_IFDIR & (fileInfo.st_mode))
+                //if (!S_ISREG(fileInfo.st_mode))  //Upload recursivo
+                {
+                    Node* newFolder = new Node(tree, node, ent->d_name, "Folder");
+                    Node* result = tree->addChild(newFolder, node);
+                    if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
+                    //chdir(name.c_str());
+                    uploadFolder(tree, newFolder, ent->d_name, fileInfo);
+                    chdir("..");
+                }
+                else //Upload a file
+                {
+                    std::cout << "Uploading " << ent->d_name << std::endl;
+                    uploadFile(tree, node, ent->d_name, fileInfo);
+                }
+            }
+        }
+        closedir (dir);
+    }
+    else
+    {
+      std::cout << "File " << name << " can not be oppened." << std::endl;
+    }
+}
 
 void upload(Tree* tree, string name)
 {
@@ -241,14 +288,73 @@ void upload(Tree* tree, string name)
     struct stat fileInfo = getFileInfo(name);
     if (uploadIsDirectory(fileInfo))  //Upload recursivo
     {
-
+        Node* newFolder = new Node(tree, tree->getCurrentDir(), name, "Folder");
+        Node* result = tree->addChild(newFolder, tree->getCurrentDir());
+        if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
+        //chdir(name.c_str());
+        //cd(tree, name);
+        uploadFolder(tree, newFolder, name, fileInfo);
+        //cd(tree, "..");
+        //chdir("..");
     }
     else //Upload a file
     {
-        Node* newFile = new Node(tree, tree->getCurrentDir(), name, "File");
-        newFile->setByteSize(fileInfo.st_size);
-        newFile->setDateLastModif(fileInfo.st_mtime);
-        Node* result = tree->addChild(newFile, tree->getCurrentDir());
-        if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
+        std::cout << "Uploading " << name << std::endl;
+        uploadFile(tree, tree->getCurrentDir(), name, fileInfo);
     }
 }
+
+
+
+
+
+
+
+/*
+uploadfolder:
+    open dir actual
+        while end = readdir
+            upload()
+
+
+
+upload:
+    saca info de ese archivo
+    si directorio
+        se crea nodo, se entra
+        uploadfolder()
+    si archivo
+        uploadFile()
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
