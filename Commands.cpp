@@ -90,24 +90,28 @@ void mv(Tree* tree, string oldName, string newNameString)
     Node* nodeToChange = NULL;
     Node* exists = NULL;
 
-    nodeToChange = tree->findNodeByName(oldName);
-    exists = tree->findNodeByName(newNameString);
-
-    if (nodeToChange != NULL)
+    if ((newNameString != "") && (newNameString != ".") && (newNameString != "..") && (newNameString != "/"))
     {
-        if (exists == NULL)
+        nodeToChange = tree->findNodeByName(oldName);
+        exists = tree->findNodeByName(newNameString);
+
+        if (nodeToChange != NULL)
         {
-            nodeToChange->setName(newNameString);
+            if (exists == NULL)
+            {
+                nodeToChange->setName(newNameString);
+            }
+            else
+            {
+                std::cout << "There exists something with that name already." << std::endl;
+            }
         }
         else
         {
-            std::cout << "There exists something with that name already." << std::endl;
+            std::cout << "That name is not in this directory." << std::endl;
         }
     }
-    else
-    {
-        std::cout << "That name is not in this directory." << std::endl;
-    }
+    else std::cout << "Please, enter a valid name." << std::endl;
 }
 
 void cpCloneFile(Tree* tree, string original, string copy)
@@ -133,8 +137,6 @@ void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSi
 }
 
 
-
-
 void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
 {
     Node* node = new Node(tree, nodeDestination, nodeToCopy->getName(), "Folder");
@@ -150,61 +152,66 @@ void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
 //TODO - Recursive Copy
 void cp(Tree* tree, string original, string copy)
 {
-    Node* nodeToCopy = tree->findNodeByName(original);
-    Node* nodeDestination = tree->findNodeByName(copy);
+    if ((copy != "") && (copy != ".") && (copy != "..") && (copy != "/"))
+    {
+        Node* nodeToCopy = tree->findNodeByName(original);
+        Node* nodeDestination = tree->findNodeByName(copy);
 
-    if (nodeToCopy != NULL)
-    {
-        if (nodeDestination != NULL) //If destination is not null, it must be a folder.
+        if (nodeToCopy != NULL)
         {
-            if(nodeDestination->getIsDirectory()) //We copy nodeToCopy to destination
+            if (nodeDestination != NULL) //If destination is not null, it must be a folder.
             {
-                if (!nodeToCopy->getIsDirectory()) //file in directory
+                if(nodeDestination->getIsDirectory()) //We copy nodeToCopy to destination
                 {
-                    cpCloneFileInFolder(tree, nodeDestination, original, nodeToCopy->getByteSize());
+                    if (!nodeToCopy->getIsDirectory()) //file in directory
+                    {
+                        cpCloneFileInFolder(tree, nodeDestination, original, nodeToCopy->getByteSize());
+                    }
+                    else
+                    {
+                        cpCloneFolder(tree, nodeToCopy, nodeDestination);
+                    }
                 }
                 else
                 {
-                    cpCloneFolder(tree, nodeToCopy, nodeDestination);
+                    std::cout << "Destination exists, but is not a folder." << std::endl;
                 }
             }
-            else
+            else //If destination is null, you want to clone the node.
             {
-                std::cout << "Destination exists, but is not a folder." << std::endl;
+                //Si directorio
+                if (nodeToCopy->getType() == "File")
+                {
+                    cpCloneFile(tree, original, copy);
+                }
+                else //clone folder
+                {
+                    if (copy == "")
+                    {
+                        std::cout << "Insert a name please." << std::endl;
+                    }
+                    else
+                    {
+                        Node* asd = new Node(tree, tree->getCurrentDir(), copy, "Folder");
+                        tree->addChild(asd, tree->getCurrentDir());
+                        cpCloneFolder(tree, nodeToCopy, asd);
+                    }
+                }
             }
         }
-        else //If destination is null, you want to clone the node.
+        else
         {
-            //Si directorio
-            if (nodeToCopy->getType() == "File")
-            {
-                cpCloneFile(tree, original, copy);
-            }
-            else //clone folder
-            {
-                if (copy == "")
-                {
-                    std::cout << "Insert a name please." << std::endl;
-                }
-                else
-                {
-                    Node* asd = new Node(tree, tree->getCurrentDir(), copy, "Folder");
-                    tree->addChild(asd, tree->getCurrentDir());
-                    cpCloneFolder(tree, nodeToCopy, asd);
-                }
-            }
+            std::cout << "That name is not in this directory." << std::endl;
         }
     }
-    else
-    {
-        std::cout << "That name is not in this directory." << std::endl;
-    }
+    else std::cout << "Please, enter a valid name." << std::endl;
+
 }
 
 //mkdir creation of new directory in current directory
 void mkdir(Tree* tree, string name)
 {
-    if (name != "")
+    if ((name != "") && (name != ".") && (name != "..") && (name != "/"))
     {
         Node* newDirectory = new Node(tree, tree->getCurrentDir(), name, "Folder");
         Node* result = NULL;
@@ -213,7 +220,7 @@ void mkdir(Tree* tree, string name)
     }
     else
     {
-        std::cout << "Please, enter a name for the new Folder." << std::endl;
+        std::cout << "Please, enter a valid name for the new Folder." << std::endl;
     }
 }
 
@@ -301,7 +308,6 @@ void lpwd()
 {
     system("pwd");
 }
-
 
 
 struct stat getFileInfo(string name)
