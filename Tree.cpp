@@ -95,6 +95,7 @@ Node* Tree::addChild(Node* son, Node* father)
     (*father).setDateLastModif(std::time(0));
     (*father).setNumberOffsprings(1);
     this->numberOfNodes++;
+    this->lastNodeAdded = son->getId();
 
     return son;
 }
@@ -172,6 +173,7 @@ void Tree::removeChild(Node* node)
                 if (father->getOffsprings()->at(i)->getId() == node->getId())
                 {
                     father->getOffsprings()->erase(father->getOffsprings()->begin() + i);
+                    break;
                 }
             }
             node->setFather(NULL);
@@ -210,31 +212,72 @@ void Tree::WriteBinaryFile()
 void Tree::saveTreeRecursive(Node* nodeToSave, ofstream &of)
 {
     int id = nodeToSave->getId();
+    int idFather = nodeToSave->getNodeFather()->getId();
 
     string name = nodeToSave->getName();
     char nameChar[20];
     strcpy(nameChar, name.c_str());
 
+    char node_type_char[20];
     string node_type = "";
-    if (nodeToSave->getIsDirectory()) node_type = "File";
-    else node_type = "Folder";
+    if (nodeToSave->getIsDirectory())
+    {
+        node_type = "Folder";
+        strcpy(node_type_char, node_type.c_str());
+    }
+    else
+    {
+        node_type = "File";
+        strcpy(node_type_char, node_type.c_str());
+    }
 
     off_t size = nodeToSave->getByteSize();
     time_t lastModification = nodeToSave->getDateLastModif();
 
+    of.write((char*)&idFather, sizeof(idFather));
     of.write((char*)&id, sizeof(id));
     of.write((char*)&nameChar, sizeof(nameChar));
-    of.write((char*)&node_type, sizeof(node_type));
+    of.write((char*)&node_type_char, sizeof(node_type_char));
     of.write((char*)&size, sizeof(size));
     of.write((char*)&lastModification, sizeof(lastModification));
 
-    vector<Node*>* elements = this->getRoot()->getOffsprings();
-    for (int i = 0; i < this->getRoot()->getNumberOfOffsprings(); i++)
+    vector<Node*>* elements = nodeToSave->getOffsprings();
+    for (int i = 0; i < nodeToSave->getNumberOfOffsprings(); i++)
     {
         Node* nodeToSave = elements->at(i);
         saveTreeRecursive(nodeToSave, of);
     }
 }
+
+
+Node* Tree::searchByIdRecursive(Node* nodeToSearch, int id)
+{
+    if (nodeToSearch->getId() == id)
+    {
+        return nodeToSearch;
+    }
+    else
+    {
+        Node* result = NULL;
+        vector<Node*>* elements = nodeToSearch->getOffsprings();
+        for (int i = 0; i < nodeToSearch->getNumberOfOffsprings(); i++)
+        {
+            Node* nodeToSearch = elements->at(i);
+            result = searchByIdRecursive(nodeToSearch, id);
+            if (result != NULL) return result;
+        }
+        return result;
+    }
+}
+
+
+Node* Tree::searchById(int id)
+{
+    Node* result = NULL;
+    result = searchByIdRecursive(this->getRoot(), id);
+    return result;
+}
+
 
 
 //id nodo y padre,
@@ -270,17 +313,41 @@ void Tree::loadTree()
 
     int numberNodes = 0;
     int lastNode = -1;
-    char name[20];
+
+    binaryFile.read((char*)&numberNodes, sizeof(numberNodes));
+    binaryFile.read((char*)&lastNode, sizeof(lastNode));
+
+
     while(binaryFile.tellg() < size)
     {
-        binaryFile.read((char*)&numberNodes, sizeof(numberNodes));
-        binaryFile.read((char*)&lastNode, sizeof(lastNode));
+        //saco datos y creo nodo
+        int idFather = -1;
+        binaryFile.read((char*)&idFather, sizeof(idFather));
+        int id = -1;
+        binaryFile.read((char*)&id, sizeof(id));
+        char name [20];
         binaryFile.read((char*)&name, sizeof(name));
-    }
-    std::cout << "The number of nodes are: " << numberNodes << std::endl;
-    std::cout << "Last node added is: " << lastNode << std::endl;
-    std::cout << "Name is: " << name << std::endl;
+        string nameString = string(name);
+        char node_type [20];
+        binaryFile.read((char*)&node_type, sizeof(node_type));
+        string node_typeString = string(node_type);
+        off_t size = -1;
+        binaryFile.read((char*)&size, sizeof(size));
+        time_t lastModification;
+        binaryFile.read((char*)&lastModification, sizeof(lastModification));
 
+        //busco padre
+        Node* father = searchById(idFather);
+        if (father == NULL) std::cout << "Father not found, error in data" << std::endl;
+        else //asigno
+        {
+            Node* nodeToInsert = new Node(this, father, nameString, node_typeString);
+            nodeToInsert->setID(id);
+            nodeToInsert->setByteSize(size);
+            nodeToInsert->setDateLastModif(lastModification);
+            this->addChild(nodeToInsert, father);
+        }
+    }
     binaryFile.close();
 }
 

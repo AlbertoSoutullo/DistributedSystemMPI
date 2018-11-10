@@ -223,3 +223,9 @@ void Node::setLevel(int level)
 	this->level = level;
 }
 
+void Node::setID(int id)
+{
+    this->Id = id;
+    this->idcont = id + 1;
+}
+

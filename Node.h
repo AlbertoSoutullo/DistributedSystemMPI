@@ -8,6 +8,7 @@
 #include "Tree.h"
 #include <ctime>
 #include <vector>
+
 using namespace std;
 
 class Tree;
@@ -58,6 +59,7 @@ public:
 	void setNumberOffsprings(int number);
     void setTree(Tree* tree);
     void setIsDirectory(bool isDirectory);
+    void setID(int id);
 
     //Utilities
     bool isFolder(string name);

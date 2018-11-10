@@ -35,9 +35,11 @@ public:
 	Node* getRoot();
 
     //Save Structure
-    void saveTreeRecursive(Node* nodeToSave, ofstream &of);
+    Node* searchByIdRecursive(Node* nodeToSearch, int id);
+    Node* searchById(int id);
+    void saveTreeRecursive(Node* nodeToSave, std::ofstream &of);
     void WriteBinaryFile();
-    void saveTree(ofstream &of);
+    void saveTree(std::ofstream &of);
     void loadTree();
 
 

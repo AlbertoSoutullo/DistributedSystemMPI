@@ -9,6 +9,9 @@ int Node::idcont = 0;
 
 int main(int argc, char *argv[]) 
 {
+    char cwd[PATH_MAX];
+    getcwd(cwd, sizeof(cwd));
+
     string options = "";
     string command = "";
     string firstParameter = "";
@@ -16,6 +19,8 @@ int main(int argc, char *argv[])
     vector<string> tokens;
     Tree* tree = new Tree();
     Terminal* terminal = new Terminal(tree);
+
+    tree->loadTree();
 
     terminal->Initiate(tree);
     while(options != "exit")
@@ -40,6 +45,7 @@ int main(int argc, char *argv[])
             }
         }
     }
+    chdir(cwd);
     tree->WriteBinaryFile();
-//    tree->loadTree();
+
 }
