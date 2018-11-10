@@ -137,7 +137,6 @@ void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSi
 
 void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
 {
-
     Node* node = new Node(tree, nodeDestination, nodeToCopy->getName(), "Folder");
     tree->addChild(node, nodeDestination);
     vector<Node*>* sons = nodeToCopy->getOffsprings();

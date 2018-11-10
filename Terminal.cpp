@@ -37,10 +37,14 @@ void Terminal::Tokenize(vector<string> &tokens, string option)
     stringstream ss(option);
     string token = "";
 
-    while(getline(ss, token, ' '))
+    if (option != "")
     {
-        tokens.push_back(token);
+        while(getline(ss, token, ' '))
+        {
+            tokens.push_back(token);
+        }
     }
+
 }
 
 string Terminal::filterCommand(vector<string> tokens)

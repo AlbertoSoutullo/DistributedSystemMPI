@@ -22,16 +22,19 @@ int main(int argc, char *argv[])
     {
         options = terminal->ReadInput(tree);
         terminal->Tokenize(tokens, options);
-        command = terminal->filterCommand(tokens);
-        if (tokens.size() > 1)
+        if (tokens.size() != 0)
         {
-            firstParameter = terminal->filterFirstParam(tokens);
+            command = terminal->filterCommand(tokens);
+            if (tokens.size() > 1)
+            {
+                firstParameter = terminal->filterFirstParam(tokens);
+            }
+            if (tokens.size() > 2)
+            {
+                secondParameter = terminal->filterSecondParam(tokens);
+            }
+            terminal->executeCommand(tree, command, firstParameter, secondParameter);
+            tokens.clear();
         }
-        if (tokens.size() > 2)
-        {
-            secondParameter = terminal->filterSecondParam(tokens);
-        }
-        terminal->executeCommand(tree, command, firstParameter, secondParameter);
-        tokens.clear();
     }
 }

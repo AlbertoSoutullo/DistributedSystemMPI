@@ -17,7 +17,7 @@ class Node
 	Node* father;
     vector<Node*> offsprings;
 
-    string name = "";
+    char name[20];
     int Id; //It generates a new ID every time a node is created.
 	int numberOfOffsprings;
     int level;
