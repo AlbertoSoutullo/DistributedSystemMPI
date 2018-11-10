@@ -169,10 +169,6 @@ void Tree::removeChild(Node* node)
             {
                 if (father->getOffsprings()->at(i)->getId() == node->getId())
                 {
-//                    delete elements[i];
-//                    elements.erase(elements.begin()+i);
-                    //delete *father->getOffsprings()[i];
-                    //vector<Node*>* sons = father->getOffsprings();
                     father->getOffsprings()->erase(father->getOffsprings()->begin() + i);
                 }
             }
@@ -194,8 +190,6 @@ Node* Tree::findNodeByName(string name)
     }
     return NULL;
 }
-
-
 
 
 ////GETTERS////

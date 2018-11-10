@@ -337,7 +337,7 @@ void uploadFile(Tree* tree,Node* node, string name, struct stat fileInfo)
     Node* result = tree->addChild(newFile, node);
     if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
 }
-//if( strcmp(sName,Student.name) == 0 )
+
 void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo)
 {
     DIR* dir;
@@ -380,17 +380,22 @@ void upload(Tree* tree, string name)
     //fileInfo.st_size para el tamaño
     //fileInfo.st_mtime para la fecha de modificacion
 
-    struct stat fileInfo = getFileInfo(name);
-    if (uploadIsDirectory(fileInfo))  //Upload recursivo
+    if ((name != "") && (name != ".") && (name != "..") && (name != "/"))
     {
-        Node* newFolder = new Node(tree, tree->getCurrentDir(), name, "Folder");
-        Node* result = tree->addChild(newFolder, tree->getCurrentDir());
-        if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
-        uploadFolder(tree, newFolder, name, fileInfo);
+        struct stat fileInfo = getFileInfo(name);
+        if (uploadIsDirectory(fileInfo))  //Upload recursivo
+        {
+            Node* newFolder = new Node(tree, tree->getCurrentDir(), name, "Folder");
+            Node* result = tree->addChild(newFolder, tree->getCurrentDir());
+            if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
+            uploadFolder(tree, newFolder, name, fileInfo);
+        }
+        else //Upload a file
+        {
+            std::cout << "Uploading " << name << std::endl;
+            uploadFile(tree, tree->getCurrentDir(), name, fileInfo);
+        }
     }
-    else //Upload a file
-    {
-        std::cout << "Uploading " << name << std::endl;
-        uploadFile(tree, tree->getCurrentDir(), name, fileInfo);
-    }
+    else std::cout << "Please, enter a valid name to upload." << std::endl;
+
 }
