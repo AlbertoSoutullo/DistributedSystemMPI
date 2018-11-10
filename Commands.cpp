@@ -286,7 +286,6 @@ void lls()
 //lcd
 void lcd(string name)
 {
-
     if (name == "/")
     {
         chdir("/");
@@ -297,9 +296,7 @@ void lcd(string name)
     }
     else
     {
-        char newDirectory[name.size()];
-        strncpy(newDirectory, name.c_str(), name.size());
-        chdir(newDirectory);
+        chdir(name.c_str());
     }
 }
 

@@ -217,6 +217,7 @@ void Tree::saveTreeRecursive(Node* nodeToSave, ofstream &of)
     string name = nodeToSave->getName();
     char nameChar[20];
     strcpy(nameChar, name.c_str());
+    nameChar[19] = '\0';
 
     char node_type_char[20];
     string node_type = "";
