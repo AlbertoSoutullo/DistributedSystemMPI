@@ -21,20 +21,25 @@ int main(int argc, char *argv[])
     while(options != "exit")
     {
         options = terminal->ReadInput(tree);
-        terminal->Tokenize(tokens, options);
-        if (tokens.size() != 0)
+        if (options != "exit")
         {
-            command = terminal->filterCommand(tokens);
-            if (tokens.size() > 1)
+            terminal->Tokenize(tokens, options);
+            if (tokens.size() != 0)
             {
-                firstParameter = terminal->filterFirstParam(tokens);
+                command = terminal->filterCommand(tokens);
+                if (tokens.size() > 1)
+                {
+                    firstParameter = terminal->filterFirstParam(tokens);
+                }
+                if (tokens.size() > 2)
+                {
+                    secondParameter = terminal->filterSecondParam(tokens);
+                }
+                terminal->executeCommand(tree, command, firstParameter, secondParameter);
+                tokens.clear();
             }
-            if (tokens.size() > 2)
-            {
-                secondParameter = terminal->filterSecondParam(tokens);
-            }
-            terminal->executeCommand(tree, command, firstParameter, secondParameter);
-            tokens.clear();
         }
     }
+    tree->WriteBinaryFile();
+//    tree->loadTree();
 }

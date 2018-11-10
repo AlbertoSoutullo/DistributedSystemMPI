@@ -30,9 +30,16 @@ public:
 
 	//void printTreeStructure();
 	Node* getCurrentDir();
-	int getSizeStructure();
+    int getNumberOfNodes();
 	int getLastNodeId();
 	Node* getRoot();
+
+    //Save Structure
+    void saveTreeRecursive(Node* nodeToSave, ofstream &of);
+    void WriteBinaryFile();
+    void saveTree(ofstream &of);
+    void loadTree();
+
 
     //Utilities
     Node* findNodeByName(std::string name);

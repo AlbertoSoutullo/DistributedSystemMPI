@@ -32,8 +32,7 @@ string Terminal::ReadInput(Tree* tree)
     return input;
 }
 
-void Terminal::Tokenize(vector<string> &tokens, string option)
-{
+void Terminal::Tokenize(vector<string> &tokens, string option){
     stringstream ss(option);
     string token = "";
 
