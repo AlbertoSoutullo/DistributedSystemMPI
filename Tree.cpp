@@ -280,9 +280,6 @@ Node* Tree::searchById(int id)
 }
 
 
-
-//id nodo y padre,
-//block root, then childrens.
 //do save after upload, cp, mv, mdkir, rmdir and rm
 void Tree::saveTree(ofstream &of)
 {

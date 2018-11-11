@@ -100,6 +100,7 @@ void mv(Tree* tree, string oldName, string newNameString)
             if (exists == NULL)
             {
                 nodeToChange->setName(newNameString);
+                tree->WriteBinaryFile();
             }
             else
             {
@@ -152,7 +153,7 @@ void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
 //TODO - Recursive Copy
 void cp(Tree* tree, string original, string copy)
 {
-    if ((copy != "") && (copy != ".") && (copy != "..") && (copy != "/"))
+    if ((copy != "") && (copy != ".") && (copy != "..") && (copy != "/") && (original != copy))
     {
         Node* nodeToCopy = tree->findNodeByName(original);
         Node* nodeDestination = tree->findNodeByName(copy);
@@ -166,10 +167,12 @@ void cp(Tree* tree, string original, string copy)
                     if (!nodeToCopy->getIsDirectory()) //file in directory
                     {
                         cpCloneFileInFolder(tree, nodeDestination, original, nodeToCopy->getByteSize());
+                        tree->WriteBinaryFile();
                     }
                     else
                     {
                         cpCloneFolder(tree, nodeToCopy, nodeDestination);
+                        tree->WriteBinaryFile();
                     }
                 }
                 else
@@ -183,6 +186,7 @@ void cp(Tree* tree, string original, string copy)
                 if (nodeToCopy->getType() == "File")
                 {
                     cpCloneFile(tree, original, copy);
+                    tree->WriteBinaryFile();
                 }
                 else //clone folder
                 {
@@ -195,6 +199,7 @@ void cp(Tree* tree, string original, string copy)
                         Node* asd = new Node(tree, tree->getCurrentDir(), copy, "Folder");
                         tree->addChild(asd, tree->getCurrentDir());
                         cpCloneFolder(tree, nodeToCopy, asd);
+                        tree->WriteBinaryFile();
                     }
                 }
             }
@@ -216,6 +221,7 @@ void mkdir(Tree* tree, string name)
         Node* newDirectory = new Node(tree, tree->getCurrentDir(), name, "Folder");
         Node* result = NULL;
         result = tree->addChild(newDirectory, tree->getCurrentDir());
+        tree->WriteBinaryFile();
         if (result == NULL) std::cout << "A new Folder was not possible to create." << std::endl;
     }
     else
@@ -237,6 +243,7 @@ void rmdir(Tree* tree, string name)
             if (numberOfOffsprings == 0)
             {
                 tree->removeChild(nodeToDelete);
+                tree->WriteBinaryFile();
             }
             else
             {
@@ -264,6 +271,7 @@ void rm(Tree* tree, string name)
         if (!nodeToDelete->getIsDirectory())
         {
             tree->removeChild(nodeToDelete);
+            tree->WriteBinaryFile();
         }
         else
         {
@@ -386,11 +394,13 @@ void upload(Tree* tree, string name)
             Node* result = tree->addChild(newFolder, tree->getCurrentDir());
             if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
             uploadFolder(tree, newFolder, name, fileInfo);
+            tree->WriteBinaryFile();
         }
         else //Upload a file
         {
             std::cout << "Uploading " << name << std::endl;
             uploadFile(tree, tree->getCurrentDir(), name, fileInfo);
+            tree->WriteBinaryFile();
         }
     }
     else std::cout << "Please, enter a valid name to upload." << std::endl;
