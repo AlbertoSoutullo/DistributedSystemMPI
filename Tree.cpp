@@ -6,6 +6,9 @@
 
 Tree::Tree()
 {
+    getcwd(this->cwd, sizeof(cwd));
+
+
     std::string root = "ROOT";
     std::string type = "dir";
     Node nodo(this, NULL, root , type);
@@ -202,7 +205,10 @@ Node* Tree::findNodeByName(string name)
 void Tree::WriteBinaryFile()
 {
     ofstream fs;
-    fs.open("tree.dat", ios::out | ios::binary | ios::trunc);
+    string string_cwd = string(this->cwd);
+    string_cwd += "/tree.dat";
+
+    fs.open(string_cwd, ios::out | ios::binary | ios::trunc);
     if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
     else saveTree(fs);
     fs.close();
@@ -340,10 +346,10 @@ void Tree::loadTree()
         else //asigno
         {
             Node* nodeToInsert = new Node(this, father, nameString, node_typeString);
+            this->addChild(nodeToInsert, father);
             nodeToInsert->setID(id);
             nodeToInsert->setByteSize(size);
             nodeToInsert->setDateLastModif(lastModification);
-            this->addChild(nodeToInsert, father);
         }
     }
     binaryFile.close();

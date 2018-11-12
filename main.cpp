@@ -9,9 +9,6 @@ int Node::idcont = 0;
 
 int main(int argc, char *argv[]) 
 {
-    char cwd[PATH_MAX];
-    getcwd(cwd, sizeof(cwd));
-
     string options = "";
     string command = "";
     string firstParameter = "";
@@ -45,7 +42,6 @@ int main(int argc, char *argv[])
             }
         }
     }
-    chdir(cwd);
     tree->WriteBinaryFile();
 
 }

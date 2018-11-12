@@ -1,6 +1,9 @@
 #pragma once
 
 #include "Node.h"
+#include <unistd.h>
+#define PATH_MAX        4096    /* # chars in a path name including nul */
+
 
 class Node;
 class Tree 
@@ -9,6 +12,7 @@ class Tree
 	Node*  current_Dir;
     int numberOfNodes = 0;
 	int lastNodeAdded;
+    char cwd[PATH_MAX];
 
 public:
 	
