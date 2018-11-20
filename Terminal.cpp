@@ -137,3 +137,10 @@ void Terminal::executeCommand(Tree* tree, string command, string firstParam, str
     if(!executed) std::cout << "Command "<< command << " not found." << std::endl;
     else std::cout << std::endl;
 }
+
+void Terminal::format()
+{
+
+
+
+}

@@ -19,9 +19,9 @@ void ls(Tree* tree)
     {
         time = elements->at(i)->getDateLastModif();
         timeSt = localtime(&time);
-        std::cout << elements->at(i)->getType() << " " << elements->at(i)->getName() << " ";
-        std::cout << " with ID: " << elements->at(i)->getId() << ", ";
-        std::cout << elements->at(i)->getByteSize() << " " << asctime(timeSt);
+        std::cout <<elements->at(i)->getType() << "\t" << elements->at(i)->getName() << "\t";
+        std::cout << " with ID: " << elements->at(i)->getId() << ",\t";
+        std::cout << elements->at(i)->getByteSize() << "\t" << asctime(timeSt);
         totalSize += elements->at(i)->getByteSize();
     }
     std::cout << std::endl;

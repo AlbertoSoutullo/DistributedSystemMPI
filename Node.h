@@ -11,6 +11,13 @@
 
 using namespace std;
 
+/*
+Entrega Parte 3:
+-Si un fichero no es múltiplo, los bytes restantes se ponen a cero.
+-Array de identificadores de boques en orden.
+-Tamaño bloques usados.
+*/
+
 class Tree;
 class Node
 {
@@ -26,6 +33,10 @@ class Node
 
 	off_t byteSize;
 	time_t dateLastModif;
+
+    ///Segunda Iteracion///
+    //Vector de bloques que tenga identificadores de sectores del disco donde está guardado. Tan largo como el fichero, pero no más que el tamaó total del disco.
+    //numBLoques: Cuantos bloques se han usado.
 
 	
 public:

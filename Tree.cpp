@@ -8,7 +8,6 @@ Tree::Tree()
 {
     getcwd(this->cwd, sizeof(cwd));
 
-
     std::string root = "ROOT";
     std::string type = "dir";
     Node nodo(this, NULL, root , type);

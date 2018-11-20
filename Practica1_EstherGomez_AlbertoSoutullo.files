@@ -1,3 +1,5 @@
+harddisk.cpp
+harddisk.h
 treebackup.h
 Commands.cpp
 Commands.h
