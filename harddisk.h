@@ -28,7 +28,7 @@ public:
 };
 
 
-
+/*
 /**
  * Los nodos tienen un array de indices que guardan los sectores del disco.
  *
@@ -40,3 +40,4 @@ public:
  *
  * Los indices de los bloques se incorporan a los nodos.
  * /
+*/
