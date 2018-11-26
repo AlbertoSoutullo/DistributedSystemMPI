@@ -1,7 +1,7 @@
 #pragma once
 #include "Tree.h"
 #include "Commands.h"
-#include <fstream>
+
 
 #define PATH_MAX        4096    /* chars in a path name including nul */
 
@@ -25,13 +25,12 @@ public:
     //Part 3:
     //crea archivos de sectores y disco inicializados a vacio.
     //size is size of hdd in sectors.
-
+    bool checkIfExistsHDD(int numberOfDisks);
     void format(int numberOfDisks, int size);
 
 private:
     void formatDisk(int size);
     void formatSectors(int numberOfDisks, int size);
-
 };
 
 

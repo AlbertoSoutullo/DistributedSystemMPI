@@ -115,6 +115,7 @@ void mv(Tree* tree, string oldName, string newNameString)
     else std::cout << "Please, enter a valid name." << std::endl;
 }
 
+///////////////////////////CP METHODS///////////////////////////////////
 void cpCloneFile(Tree* tree, string original, string copy)
 {
     if (copy == "")
@@ -137,7 +138,6 @@ void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSi
     tree->addChild(node, father);
 }
 
-
 void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
 {
     Node* node = new Node(tree, nodeDestination, nodeToCopy->getName(), "Folder");
@@ -150,7 +150,6 @@ void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
     }
 }
 
-//TODO - Recursive Copy
 void cp(Tree* tree, string original, string copy)
 {
     if ((copy != "") && (copy != ".") && (copy != "..") && (copy != "/") && (original != copy))
@@ -210,10 +209,10 @@ void cp(Tree* tree, string original, string copy)
         }
     }
     else std::cout << "Please, enter a valid name." << std::endl;
-
 }
+///////////////////////////CP METHODS///////////////////////////////////
 
-//mkdir creation of new directory in current directory
+
 void mkdir(Tree* tree, string name)
 {
     if ((name != "") && (name != ".") && (name != "..") && (name != "/"))
@@ -230,7 +229,6 @@ void mkdir(Tree* tree, string name)
     }
 }
 
-//mkdir creation of new directory in current directory
 void rmdir(Tree* tree, string name)
 {
     Node* nodeToDelete = tree->findNodeByName(name);
@@ -261,7 +259,6 @@ void rmdir(Tree* tree, string name)
     }
 }
 
-//rm deletes files
 void rm(Tree* tree, string name)
 {
     Node* nodeToDelete = tree->findNodeByName(name);
@@ -314,7 +311,7 @@ void lpwd()
     system("pwd");
 }
 
-
+///////////////////////////UPLOADS METHODS///////////////////////////////////
 struct stat getFileInfo(string name)
 {
     struct stat fileInfo;
@@ -334,12 +331,23 @@ bool uploadIsDirectory(struct stat fileInfo)
     else return false; //It could be more things but on our scope its not neccesary to check all.
 }
 
+int checkHDDEmpy()
+{
+
+}
+
+
 void uploadFile(Tree* tree,Node* node, string name, struct stat fileInfo)
 {
     Node* newFile = new Node(tree, node, name, "File");
     newFile->setByteSize(fileInfo.st_size);
     newFile->setDateLastModif(fileInfo.st_mtime);
     Node* result = tree->addChild(newFile, node);
+
+
+
+
+
     if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
 }
 
@@ -406,3 +414,4 @@ void upload(Tree* tree, string name)
     else std::cout << "Please, enter a valid name to upload." << std::endl;
 
 }
+///////////////////////////UPLOADS METHODS///////////////////////////////////

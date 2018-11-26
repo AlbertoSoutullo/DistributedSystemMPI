@@ -2,12 +2,19 @@
 disco1.dat
 Cada vez que se haga upload o cp se pone en el disco duro también.
 Tener en cuenta borrar.
-
 */
+
+#include <fstream>
+#include <iostream>
+#include <bits/stdc++.h>
+#include <string>
+#include <unistd.h>
+
+#define NUMBER_DISKS 4
 
 class HardDisk
 {
-
+    char cwd[PATH_MAX];
     //Los sectores libres se guardan en "freeSectors1.dat".
 
 public:
@@ -25,6 +32,11 @@ public:
     //readFile: función que lee con readBlock todos los bloques de un fichero mediante su bloque índice y lo reconstruye en el orden adecuado.
     void readFile();
 
+private:
+    void formatDisk(int numberOfDisks);
+    void formatSectors(int numberOfDisks, int size);
+    bool checkIfExistsHDD(int numberOfDisks);
+    void format(int numberOfDisks, int size);
 };
 
 

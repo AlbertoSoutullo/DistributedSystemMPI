@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Terminal.h"
+#include "harddisk.h"
 #include <bits/stdc++.h>
 
 int Node::idcont = 0;
@@ -20,14 +21,7 @@ int main(int argc, char *argv[])
     tree->loadTree();
 
     terminal->Initiate(tree);
-    if (FILE *file = fopen("disk0.dat".c_str(), "r"))
-    {
-        std::cout << "Loading Hard Drives..." << std::endl;
-    }
-    else
-    {
-        terminal->format(4, 32000);
-    }
+    HardDisk();
     while(options != "exit")
     {
         options = terminal->ReadInput(tree);
