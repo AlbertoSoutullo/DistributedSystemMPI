@@ -33,10 +33,11 @@ public:
     void readFile();
 
 private:
-    void formatDisk(int numberOfDisks);
-    void formatSectors(int numberOfDisks, int size);
-    bool checkIfExistsHDD(int numberOfDisks);
-    void format(int numberOfDisks, int size);
+    void formatDisk();
+    void formatSectors(int size);
+    bool checkIfExistsHDD();
+    void format(int size);
+    int checkHDDEmpy();
 };
 
 

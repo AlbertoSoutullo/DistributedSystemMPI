@@ -3,7 +3,6 @@
 #include <string>
 
 #include "Terminal.h"
-#include "harddisk.h"
 #include <bits/stdc++.h>
 
 int Node::idcont = 0;
@@ -21,7 +20,7 @@ int main(int argc, char *argv[])
     tree->loadTree();
 
     terminal->Initiate(tree);
-    HardDisk();
+
     while(options != "exit")
     {
         options = terminal->ReadInput(tree);

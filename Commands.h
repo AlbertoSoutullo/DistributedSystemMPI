@@ -1,69 +1,67 @@
 #include "Tree.h"
+#include "HardDisk.h"
 #include <unistd.h>
 #include <dirent.h>
 
 class Tree;
+class HardDisk;
 
-//Print nodes in current directory
-void ls(Tree* tree);
+class Commands
+{
+    HardDisk* HDDs;
 
+public:
+    Commands();
 
-//Print actual path
-void pwd(Tree* tree);
+    //Print nodes in current directory
+    void ls(Tree* tree);
 
+    //Print actual path
+    void pwd(Tree* tree);
 
-//Change directory, accepts .. and /
-void cd(Tree* tree, string name);
+    //Change directory, accepts .. and /
+    void cd(Tree* tree, string name);
 
+    //Change name of a folder/file
+    void mv(Tree* tree, string oldName, string newName);
 
-//Change name of a folder/file
-void mv(Tree* tree, string oldName, string newName);
+    //Copy: origin-destination.
+    //file1 -> file1(Copy)
+    //file -> dict
+    //folder ->folder(copy) (it does copy content)
+    void cp(Tree* tree, string actual, string newOne);
 
+    //Create a new folder.
+    void mkdir(Tree* tree, string name);
 
-//Copy: origin-destination.
-//file1 -> file1(Copy)
-//file -> dict
-//folder ->folder(copy) (it does copy content)
-void cp(Tree* tree, string actual, string newOne);
+    //Deletes an empty folder
+    void rmdir(Tree* tree, string name);
 
+    //Delete a file
+    void rm(Tree* tree, string name);
 
-//Create a new folder.
-void mkdir(Tree* tree, string name);
+    //Print real content of actual directory
+    void lls();
 
+    //cd in real path. Accepts .. and /
+    void lcd(string name);
 
-//Deletes an empty folder
-void rmdir(Tree* tree, string name);
+    //Show real path
+    void lpwd();
 
+    //Upload a file or a folder. It uploads recursive content.
+    void upload(Tree* tree, string name);
 
-//Delete a file
-void rm(Tree* tree, string name);
+    //Utilities for upload
+    struct stat getFileInfo(string name);
+    bool uploadIsDirectory(struct stat fileInfo);
 
+    void uploadFile(Tree* tree,Node* node, string name, struct stat fileInfo);
+    void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo);
 
-//Print real content of actual directory
-void lls();
+    //utilities for copy
+    void cpCloneFile(Tree* tree, string original, string copy);
+    void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSize);
+    void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination);
 
-
-//cd in real path. Accepts .. and /
-void lcd(string name);
-
-
-//Show real path
-void lpwd();
-
-
-//Upload a file or a folder. It uploads recursive content.
-void upload(Tree* tree, string name);
-
-//Utilities for upload
-struct stat getFileInfo(string name);
-bool uploadIsDirectory(struct stat fileInfo);
-
-int checkHDDEmpy();
-
-void uploadFile(Tree* tree, string name, struct stat fileInfo);
-void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo);
-
-//utilities for copy
-void cpCloneFile(Tree* tree, string original, string copy);
-void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSize);
-void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination);
+};

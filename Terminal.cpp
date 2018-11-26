@@ -7,6 +7,7 @@ Terminal::Terminal(Tree* tree)
 {
     this->tree = tree;
     getcwd(this->cwd, sizeof(cwd));
+    this->commandManager = new Commands();
 }
 
 void Terminal::Initiate(Tree* tree)
@@ -14,11 +15,11 @@ void Terminal::Initiate(Tree* tree)
     std::system("clear");
     std::cout << "Welcome to the Distribute File System" << std::endl;
     std::cout << "Actual remote directory is: " << std::endl;
-    pwd(tree);
+    this->commandManager->pwd(tree);
     std::cout << std::endl;
 
     std::cout << "Actual local directory is: " << std::endl;
-    lpwd();
+    this->commandManager->lpwd();
     std::cout << std::endl;
 
     std::cout << "If you want to leave, please write <exit>." << std::endl;
@@ -27,7 +28,7 @@ void Terminal::Initiate(Tree* tree)
 string Terminal::ReadInput(Tree* tree)
 {
     string input = "";
-    pwd(tree);
+    this->commandManager->pwd(tree);
     std::cout << ">";
     std::getline (std::cin, input);
     return input;
@@ -77,62 +78,62 @@ void Terminal::executeCommand(Tree* tree, string command, string firstParam, str
     bool executed = false;
     if (command == "ls")
     {
-        ls(tree);
+        this->commandManager->ls(tree);
         executed = true;
     }
     if (command == "pwd")
     {
-        pwd(tree);
+        this->commandManager->pwd(tree);
         executed = true;
     }
     if (command == "cd")
     {
-        cd(tree, firstParam);
+        this->commandManager->cd(tree, firstParam);
         executed = true;
     }
     if (command == "mv")
     {
-        mv(tree, firstParam, secondParam);
+        this->commandManager->mv(tree, firstParam, secondParam);
         executed = true;
     }
     if (command == "cp")
     {
-        cp(tree, firstParam, secondParam);
+        this->commandManager->cp(tree, firstParam, secondParam);
         executed = true;
     }
     if (command == "mkdir")
     {
-        mkdir(tree, firstParam);
+        this->commandManager->mkdir(tree, firstParam);
         executed = true;
     }
     if (command == "rmdir")
     {
-        rmdir(tree, firstParam);
+        this->commandManager->rmdir(tree, firstParam);
         executed = true;
     }
     if (command == "rm")
     {
-        rm(tree, firstParam);
+        this->commandManager->rm(tree, firstParam);
         executed = true;
     }
     if (command == "lls")
     {
-        lls();
+        this->commandManager->lls();
         executed = true;
     }
     if (command == "lcd")
     {
-        lcd(firstParam);
+        this->commandManager->lcd(firstParam);
         executed = true;
     }
     if (command == "lpwd")
     {
-        lpwd();
+        this->commandManager->lpwd();
         executed = true;
     }
     if (command == "upload")
     {
-        upload(tree, firstParam);
+        this->commandManager->upload(tree, firstParam);
         executed = true;
     }
     if(!executed) std::cout << "Command "<< command << " not found." << std::endl;

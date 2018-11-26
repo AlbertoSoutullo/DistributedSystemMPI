@@ -2,8 +2,14 @@
 #include <string>
 #include "Commands.h"
 
+
+Commands::Commands()
+{
+    this->HDDs = new HardDisk();
+}
+
 //permits view of files and folders of current_directory
-void ls(Tree* tree)
+void Commands::ls(Tree* tree)
 {
     if (tree->getRoot() == NULL) std::cout << "Root not initialized" << std::endl;
 
@@ -30,7 +36,7 @@ void ls(Tree* tree)
 }
 
 //prints path from current directory
-void pwd(Tree* tree)
+void Commands::pwd(Tree* tree)
 {
     vector<string> path;
     Node* node = tree->getCurrentDir();
@@ -50,7 +56,7 @@ void pwd(Tree* tree)
 }
 
 //cd
-void cd(Tree* tree, string name)
+void Commands::cd(Tree* tree, string name)
 {
     if (name == "/")
     {
@@ -83,7 +89,7 @@ void cd(Tree* tree, string name)
     }
 }
 
-void mv(Tree* tree, string oldName, string newNameString)
+void Commands::mv(Tree* tree, string oldName, string newNameString)
 {
     //char newName[newNameString.size() + 1];
     //strcpy(newName, newNameString.c_str());
@@ -116,7 +122,7 @@ void mv(Tree* tree, string oldName, string newNameString)
 }
 
 ///////////////////////////CP METHODS///////////////////////////////////
-void cpCloneFile(Tree* tree, string original, string copy)
+void Commands::cpCloneFile(Tree* tree, string original, string copy)
 {
     if (copy == "")
     {
@@ -131,14 +137,14 @@ void cpCloneFile(Tree* tree, string original, string copy)
     }
 }
 
-void cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSize)
+void Commands::cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSize)
 {
     Node* node = new Node(tree, tree->getCurrentDir(), original, "File");
     node->setByteSize(byteSize);
     tree->addChild(node, father);
 }
 
-void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
+void Commands::cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
 {
     Node* node = new Node(tree, nodeDestination, nodeToCopy->getName(), "Folder");
     tree->addChild(node, nodeDestination);
@@ -150,7 +156,7 @@ void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
     }
 }
 
-void cp(Tree* tree, string original, string copy)
+void Commands::cp(Tree* tree, string original, string copy)
 {
     if ((copy != "") && (copy != ".") && (copy != "..") && (copy != "/") && (original != copy))
     {
@@ -213,7 +219,7 @@ void cp(Tree* tree, string original, string copy)
 ///////////////////////////CP METHODS///////////////////////////////////
 
 
-void mkdir(Tree* tree, string name)
+void Commands::mkdir(Tree* tree, string name)
 {
     if ((name != "") && (name != ".") && (name != "..") && (name != "/"))
     {
@@ -229,7 +235,7 @@ void mkdir(Tree* tree, string name)
     }
 }
 
-void rmdir(Tree* tree, string name)
+void Commands::rmdir(Tree* tree, string name)
 {
     Node* nodeToDelete = tree->findNodeByName(name);
 
@@ -259,7 +265,7 @@ void rmdir(Tree* tree, string name)
     }
 }
 
-void rm(Tree* tree, string name)
+void Commands::rm(Tree* tree, string name)
 {
     Node* nodeToDelete = tree->findNodeByName(name);
 
@@ -283,13 +289,13 @@ void rm(Tree* tree, string name)
 
 
 //lls command
-void lls()
+void Commands::lls()
 {
     system("ls -l");
 }
 
 //lcd
-void lcd(string name)
+void Commands::lcd(string name)
 {
     if (name == "/")
     {
@@ -306,13 +312,13 @@ void lcd(string name)
 }
 
 
-void lpwd()
+void Commands::lpwd()
 {
     system("pwd");
 }
 
 ///////////////////////////UPLOADS METHODS///////////////////////////////////
-struct stat getFileInfo(string name)
+struct stat Commands::getFileInfo(string name)
 {
     struct stat fileInfo;
     //char fileName[name.size()];
@@ -322,7 +328,7 @@ struct stat getFileInfo(string name)
 }
 
 //https://stackoverflow.com/questions/146924/how-can-i-tell-if-a-given-path-is-a-directory-or-a-file-c-c
-bool uploadIsDirectory(struct stat fileInfo)
+bool Commands::uploadIsDirectory(struct stat fileInfo)
 {
     if(!S_ISREG(fileInfo.st_mode) /*& S_IFDIR*/)
     {
@@ -331,27 +337,17 @@ bool uploadIsDirectory(struct stat fileInfo)
     else return false; //It could be more things but on our scope its not neccesary to check all.
 }
 
-int checkHDDEmpy()
-{
-
-}
-
-
-void uploadFile(Tree* tree,Node* node, string name, struct stat fileInfo)
+void Commands::uploadFile(Tree* tree,Node* node, string name, struct stat fileInfo)
 {
     Node* newFile = new Node(tree, node, name, "File");
     newFile->setByteSize(fileInfo.st_size);
     newFile->setDateLastModif(fileInfo.st_mtime);
     Node* result = tree->addChild(newFile, node);
 
-
-
-
-
     if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
 }
 
-void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo)
+void Commands::uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo)
 {
     DIR* dir;
     struct dirent* ent;
@@ -388,9 +384,9 @@ void uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo)
     }
 }
 
-void upload(Tree* tree, string name)
+void Commands::upload(Tree* tree, string name)
 {
-    //fileInfo.st_size para el tamaño
+    //fileInfo.st_size para el tama?o
     //fileInfo.st_mtime para la fecha de modificacion
 
     if ((name != "") && (name != ".") && (name != "..") && (name != "/"))

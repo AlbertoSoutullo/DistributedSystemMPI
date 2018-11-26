@@ -1,4 +1,4 @@
-#include "harddisk.h"
+#include "HardDisk.h"
 
 
 HardDisk::HardDisk()
@@ -10,15 +10,15 @@ HardDisk::HardDisk()
     }
     else
     {
-        format(4, 32000);
+        format(32000);
     }
 }
 
 
-void HardDisk::formatDisk(int numberOfDisks)
+void HardDisk::formatDisk()
 {
     std::ofstream diskFile;
-    for (int i = 0; i < numberOfDisks; i++)
+    for (int i = 0; i < NUMBER_DISKS; i++)
     {
         std::string string_cwd = std::string(this->cwd);
         string_cwd += "/disk";
@@ -29,10 +29,10 @@ void HardDisk::formatDisk(int numberOfDisks)
     }
 }
 
-void HardDisk::formatSectors(int numberOfDisks, int size)
+void HardDisk::formatSectors(int size)
 {
     std::ofstream sectorsFile;
-    for (int i = 0; i < numberOfDisks; i++)
+    for (int i = 0; i < NUMBER_DISKS; i++)
     {
         std::string string_cwd = std::string(this->cwd);
         string_cwd += "/freeSectors";
@@ -47,9 +47,9 @@ void HardDisk::formatSectors(int numberOfDisks, int size)
     }
 }
 
-bool HardDisk::checkIfExistsHDD(int numberOfDisks)
+bool HardDisk::checkIfExistsHDD()
 {
-    for(int i = 0; i < numberOfDisks; i++)
+    for(int i = 0; i < NUMBER_DISKS; i++)
     {
         std::string string_cwd = std::string(this->cwd);
         string_cwd += "/disk";
@@ -64,9 +64,9 @@ bool HardDisk::checkIfExistsHDD(int numberOfDisks)
     return true;
 }
 
-void HardDisk::format(int numberOfDisks, int size)
+void HardDisk::format(int size)
 {
     std::cout << "Formatting Hard Drives..." << std::endl;
-    formatDisk(numberOfDisks);
-    formatSectors(numberOfDisks, size);
+    formatDisk();
+    formatSectors(size);
 }
