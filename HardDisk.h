@@ -30,11 +30,10 @@ public:
 
 private:
     //función que escribe un bloque de datos en formato binario en un sector libre del disco.
-    void writeBlock();
+    void writeBlock(char* data);
 
     //función que lee un bloque de datos de un sector del disco duro.
     void readBlock();
-
 
     void formatDisk();
     void formatSectors(int size);

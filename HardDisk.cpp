@@ -1,5 +1,5 @@
 #include "HardDisk.h"
-
+#include "Node.h"
 
 HardDisk::HardDisk()
 {
@@ -14,14 +14,35 @@ HardDisk::HardDisk()
     }
 }
 
+
+void HardDisk::writeBlock(char* data)
+{
+
+}
+
 void HardDisk::writeFile(Node* fileNode)
 {
     //dividir el archivo en bloques (restante a cero)
-
-
+    off_t fileSize = fileNode->getByteSize();
+    int numberOfBlocks = (fileSize % static_cast<off_t>(1024)) + 1;
 
     //en un for, por cada bloque leer esa parte, mirar que disco está vacio, escribir
+    for (int i = 0; i < numberOfBlocks; i++)
+    {
+        std::ofstream fs;
+        char* binaryData = (char*)malloc(sizeof(char)*1024);
+        //Open File and Check size
+        fs.open(string_cwd, std::ios::in | std::ios::binary);
+        if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
 
+        fs.read((char*)&binaryData, sizeof(binaryData));
+
+        writeBlock(data);
+
+
+        fs.close();
+        free(binaryData);
+    }
 
 
 }
