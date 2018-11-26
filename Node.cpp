@@ -6,7 +6,7 @@
 Node::Node()
 {}
 
-bool Node::isFolder(string name)
+bool Node::isFolder(std::string name)
 {
     if (name.compare("fichero") == 0 || name.compare("f") == 0 || name.compare("file") == 0 || name.compare("File") == 0)
     {
@@ -15,7 +15,7 @@ bool Node::isFolder(string name)
     return 1;
 }
 
-Node::Node(Tree* tree, Node* nodeFather, string name,  string node_type)
+Node::Node(Tree* tree, Node* nodeFather, std::string name,  std::string node_type)
 {
     //This note is ROOT
     if (nodeFather == NULL)
@@ -73,7 +73,7 @@ Node :: ~Node(void)
 ////GETTERS////
 
 //returns type folder or archive
-string Node::getType()
+std::string Node::getType()
 {
 	if (this->isDirectory == 0)
 	{
@@ -98,13 +98,13 @@ int Node::getId()
 }
 
 //return offSpring
-vector<Node*>* Node::getOffsprings()
+std::vector<Node*>* Node::getOffsprings()
 {
     return &this->offsprings;
 }
 
 //return name
-string Node::getName()
+std::string Node::getName()
 {
 	return this->name;
 }
@@ -152,7 +152,7 @@ void Node::setIsDirectory(bool isDirectory)
 
 
 //set type
-void Node::setType(string fichDire)
+void Node::setType(std::string fichDire)
 {
 	if (fichDire.compare("fichero") == 0 || fichDire.compare("f") == 0 || fichDire.compare("file") == 0)
 	{
@@ -172,7 +172,7 @@ void Node::setFather(Node* father)
 
 void Node::setNewOffSpring(Node* son)
 {
-    vector<Node*>* sons = this->getOffsprings();
+    std::vector<Node*>* sons = this->getOffsprings();
     sons->push_back(son);
     //this->offsprings.push_back(son);
 }
@@ -191,7 +191,7 @@ void Node :: setNumberOffsprings(int number)
 }
 
 //set the new id Name of the node, max 25 characters
-void Node::setName(string name)
+void Node::setName(std::string name)
 {
      //strncpy(this->name, name.c_str(), name.size());
      //this->name[sizeof(name)] = '\0';

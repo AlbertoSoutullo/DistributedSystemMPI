@@ -15,7 +15,7 @@ void Commands::ls(Tree* tree)
 
     Node* currentDirectory = tree->getCurrentDir();
     int numberOfElements = currentDirectory->getNumberOfOffsprings();
-    vector<Node*>* elements = currentDirectory->getOffsprings();
+    std::vector<Node*>* elements = currentDirectory->getOffsprings();
     time_t time;
     struct tm* timeSt;
     //todo add total size in ls
@@ -38,7 +38,7 @@ void Commands::ls(Tree* tree)
 //prints path from current directory
 void Commands::pwd(Tree* tree)
 {
-    vector<string> path;
+    std::vector<std::string> path;
     Node* node = tree->getCurrentDir();
 
     while (node->getId() != 0)
@@ -56,7 +56,7 @@ void Commands::pwd(Tree* tree)
 }
 
 //cd
-void Commands::cd(Tree* tree, string name)
+void Commands::cd(Tree* tree, std::string name)
 {
     if (name == "/")
     {
@@ -89,7 +89,7 @@ void Commands::cd(Tree* tree, string name)
     }
 }
 
-void Commands::mv(Tree* tree, string oldName, string newNameString)
+void Commands::mv(Tree* tree, std::string oldName, std::string newNameString)
 {
     //char newName[newNameString.size() + 1];
     //strcpy(newName, newNameString.c_str());
@@ -122,7 +122,7 @@ void Commands::mv(Tree* tree, string oldName, string newNameString)
 }
 
 ///////////////////////////CP METHODS///////////////////////////////////
-void Commands::cpCloneFile(Tree* tree, string original, string copy)
+void Commands::cpCloneFile(Tree* tree, std::string original, std::string copy)
 {
     if (copy == "")
     {
@@ -137,7 +137,7 @@ void Commands::cpCloneFile(Tree* tree, string original, string copy)
     }
 }
 
-void Commands::cpCloneFileInFolder(Tree* tree, Node* father, string original, off_t byteSize)
+void Commands::cpCloneFileInFolder(Tree* tree, Node* father, std::string original, off_t byteSize)
 {
     Node* node = new Node(tree, tree->getCurrentDir(), original, "File");
     node->setByteSize(byteSize);
@@ -148,7 +148,7 @@ void Commands::cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination
 {
     Node* node = new Node(tree, nodeDestination, nodeToCopy->getName(), "Folder");
     tree->addChild(node, nodeDestination);
-    vector<Node*>* sons = nodeToCopy->getOffsprings();
+    std::vector<Node*>* sons = nodeToCopy->getOffsprings();
 
     for (int i=0; i < sons->size(); i++ )
     {
@@ -156,7 +156,7 @@ void Commands::cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination
     }
 }
 
-void Commands::cp(Tree* tree, string original, string copy)
+void Commands::cp(Tree* tree, std::string original, std::string copy)
 {
     if ((copy != "") && (copy != ".") && (copy != "..") && (copy != "/") && (original != copy))
     {
@@ -219,7 +219,7 @@ void Commands::cp(Tree* tree, string original, string copy)
 ///////////////////////////CP METHODS///////////////////////////////////
 
 
-void Commands::mkdir(Tree* tree, string name)
+void Commands::mkdir(Tree* tree, std::string name)
 {
     if ((name != "") && (name != ".") && (name != "..") && (name != "/"))
     {
@@ -235,7 +235,7 @@ void Commands::mkdir(Tree* tree, string name)
     }
 }
 
-void Commands::rmdir(Tree* tree, string name)
+void Commands::rmdir(Tree* tree, std::string name)
 {
     Node* nodeToDelete = tree->findNodeByName(name);
 
@@ -265,7 +265,7 @@ void Commands::rmdir(Tree* tree, string name)
     }
 }
 
-void Commands::rm(Tree* tree, string name)
+void Commands::rm(Tree* tree, std::string name)
 {
     Node* nodeToDelete = tree->findNodeByName(name);
 
@@ -295,7 +295,7 @@ void Commands::lls()
 }
 
 //lcd
-void Commands::lcd(string name)
+void Commands::lcd(std::string name)
 {
     if (name == "/")
     {
@@ -318,7 +318,7 @@ void Commands::lpwd()
 }
 
 ///////////////////////////UPLOADS METHODS///////////////////////////////////
-struct stat Commands::getFileInfo(string name)
+struct stat Commands::getFileInfo(std::string name)
 {
     struct stat fileInfo;
     //char fileName[name.size()];
@@ -337,17 +337,17 @@ bool Commands::uploadIsDirectory(struct stat fileInfo)
     else return false; //It could be more things but on our scope its not neccesary to check all.
 }
 
-void Commands::uploadFile(Tree* tree,Node* node, string name, struct stat fileInfo)
+void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat fileInfo)
 {
     Node* newFile = new Node(tree, node, name, "File");
     newFile->setByteSize(fileInfo.st_size);
     newFile->setDateLastModif(fileInfo.st_mtime);
     Node* result = tree->addChild(newFile, node);
-
+    this->HDDs->writeFile(node);
     if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
 }
 
-void Commands::uploadFolder(Tree* tree, Node* node, string name, struct stat fileInfo)
+void Commands::uploadFolder(Tree* tree, Node* node, std::string name, struct stat fileInfo)
 {
     DIR* dir;
     struct dirent* ent;
@@ -384,7 +384,7 @@ void Commands::uploadFolder(Tree* tree, Node* node, string name, struct stat fil
     }
 }
 
-void Commands::upload(Tree* tree, string name)
+void Commands::upload(Tree* tree, std::string name)
 {
     //fileInfo.st_size para el tama?o
     //fileInfo.st_mtime para la fecha de modificacion

@@ -15,12 +15,12 @@ public:
     Terminal();
     Terminal(Tree* tree);
     void Initiate(Tree* tree);
-    string ReadInput(Tree* tree);
-    void Tokenize(vector<string>& tokens, string option);
-    string filterCommand(vector<string> tokens);
-    string filterFirstParam(vector<string> tokens);
-    string filterSecondParam(vector<string> tokens);
-    void executeCommand(Tree* tree, string command, string firstParam, string secondParam);
+    std::string ReadInput(Tree* tree);
+    void Tokenize(std::vector<std::string>& tokens, std::string option);
+    std::string filterCommand(std::vector<std::string> tokens);
+    std::string filterFirstParam(std::vector<std::string> tokens);
+    std::string filterSecondParam(std::vector<std::string> tokens);
+    void executeCommand(Tree* tree, std::string command, std::string firstParam, std::string secondParam);
 
     //Part 3:
     //crea archivos de sectores y disco inicializados a vacio.

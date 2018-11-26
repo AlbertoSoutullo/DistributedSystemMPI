@@ -25,22 +25,22 @@ void Terminal::Initiate(Tree* tree)
     std::cout << "If you want to leave, please write <exit>." << std::endl;
 }
 
-string Terminal::ReadInput(Tree* tree)
+std::string Terminal::ReadInput(Tree* tree)
 {
-    string input = "";
+    std::string input = "";
     this->commandManager->pwd(tree);
     std::cout << ">";
     std::getline (std::cin, input);
     return input;
 }
 
-void Terminal::Tokenize(vector<string> &tokens, string option){
-    stringstream ss(option);
-    string token = "";
+void Terminal::Tokenize(std::vector<std::string> &tokens, std::string option){
+    std::stringstream ss(option);
+    std::string token = "";
 
     if (option != "")
     {
-        while(getline(ss, token, ' '))
+        while(std::getline(ss, token, ' '))
         {
             tokens.push_back(token);
         }
@@ -48,32 +48,32 @@ void Terminal::Tokenize(vector<string> &tokens, string option){
 
 }
 
-string Terminal::filterCommand(vector<string> tokens)
+std::string Terminal::filterCommand(std::vector<std::string> tokens)
 {
-    string firstToken = "";
+    std::string firstToken = "";
     firstToken = tokens.at(0);
 
     return firstToken;
 }
 
-string Terminal::filterFirstParam(vector<string> tokens)
+std::string Terminal::filterFirstParam(std::vector<std::string> tokens)
 {
-    string firstParam = "";
+    std::string firstParam = "";
     firstParam = tokens.at(1);
 
     return firstParam;
 }
 
-string Terminal::filterSecondParam(vector<string> tokens)
+std::string Terminal::filterSecondParam(std::vector<std::string> tokens)
 {
-    string secondParam = "";
+    std::string secondParam = "";
     secondParam = tokens.at(2);
 
     return secondParam;
 }
 
 
-void Terminal::executeCommand(Tree* tree, string command, string firstParam, string secondParam)
+void Terminal::executeCommand(Tree* tree, std::string command, std::string firstParam, std::string secondParam)
 {
     bool executed = false;
     if (command == "ls")

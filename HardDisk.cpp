@@ -10,9 +10,23 @@ HardDisk::HardDisk()
     }
     else
     {
-        format(32000);
+        format(DISK_SIZE);
     }
 }
+
+void HardDisk::writeFile(Node* fileNode)
+{
+    //dividir el archivo en bloques (restante a cero)
+
+
+
+    //en un for, por cada bloque leer esa parte, mirar que disco está vacio, escribir
+
+
+
+}
+
+
 
 
 void HardDisk::formatDisk()

@@ -9,7 +9,6 @@
 #include <ctime>
 #include <vector>
 
-using namespace std;
 
 /*
 Entrega Parte 3:
@@ -23,9 +22,9 @@ class Node
 {
 	Tree* tree;
 	Node* father;
-    vector<Node*> offsprings;
+    std::vector<Node*> offsprings;
 
-    string name = "";
+    std::string name = "";
     int Id; //It generates a new ID every time a node is created.
 	int numberOfOffsprings;
     int level;
@@ -43,16 +42,16 @@ public:
     static int idcont; //varaible to count number of nodes created
 
 	//constructor
-    Node(Tree* tree, Node* nodeFather, string name,  string node_type);
+    Node(Tree* tree, Node* nodeFather, std::string name, std::string node_type);
 	Node();
 	~Node(void);
 
 	//getters
-	string getType();
+    std::string getType();
 	Node* getNodeFather();
 	int getId();
-    vector<Node*>* getOffsprings();
-    string getName();
+    std::vector<Node*>* getOffsprings();
+    std::string getName();
 	off_t getByteSize();
 	time_t getDateLastModif();
 	int getLevel();
@@ -60,10 +59,10 @@ public:
     bool getIsDirectory();
 
 	//seters
-	void setType(string type);
+    void setType(std::string type);
 	void setFather(Node* father);
     void setNewOffSpring(Node* son);
-    void setName(string name);
+    void setName(std::string name);
     void setByteSize(off_t t);
 	void setDateLastModif(time_t m);
 	void setLevel(int l);
@@ -73,6 +72,6 @@ public:
     void setID(int id);
 
     //Utilities
-    bool isFolder(string name);
+    bool isFolder(std::string name);
 };
 

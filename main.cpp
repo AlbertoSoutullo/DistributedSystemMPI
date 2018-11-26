@@ -9,11 +9,11 @@ int Node::idcont = 0;
 
 int main(int argc, char *argv[]) 
 {
-    string options = "";
-    string command = "";
-    string firstParameter = "";
-    string secondParameter = "";
-    vector<string> tokens;
+    std::string options = "";
+    std::string command = "";
+    std::string firstParameter = "";
+    std::string secondParameter = "";
+    std::vector<std::string> tokens;
     Tree* tree = new Tree();
     Terminal* terminal = new Terminal(tree);
 

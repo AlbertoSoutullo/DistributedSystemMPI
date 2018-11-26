@@ -57,7 +57,7 @@ bool Tree::isAlreadyOnFather(Node* father, Node* son)
 {
     if (father->getNumberOfOffsprings() == 0) return 0;
 
-    vector<Node*>* offsprings = father->getOffsprings();
+    std::vector<Node*>* offsprings = father->getOffsprings();
 
     for (Node* node: *offsprings)
     {
@@ -107,7 +107,7 @@ Node* Tree::findNode(Node* father, int id)
 {
     if (father->getNumberOfOffsprings() == 0) return NULL;
 
-    vector<Node*>* offsprings = father->getOffsprings();
+    std::vector<Node*>* offsprings = father->getOffsprings();
 
     for (Node* node: *offsprings)
     {
@@ -120,9 +120,9 @@ Node* Tree::findNode(Node* father, int id)
 //update node information
 void Tree :: updateChild(Node* node)
 {
-    string option;
+    std::string option;
     off_t bytes;
-    string name;
+    std::string name;
     bool changed = false;
 
     std::cout << "Do you want to modify the name? y/n" << std::endl;
@@ -185,11 +185,11 @@ void Tree::removeChild(Node* node)
     }
 }
 
-Node* Tree::findNodeByName(string name)
+Node* Tree::findNodeByName(std::string name)
 {
     if (this->getCurrentDir()->getNumberOfOffsprings() == 0) return NULL;
 
-    vector<Node*>* offsprings = this->getCurrentDir()->getOffsprings();
+    std::vector<Node*>* offsprings = this->getCurrentDir()->getOffsprings();
 
     for (Node* node: *offsprings)
     {
@@ -203,29 +203,29 @@ Node* Tree::findNodeByName(string name)
 
 void Tree::WriteBinaryFile()
 {
-    ofstream fs;
-    string string_cwd = string(this->cwd);
+    std::ofstream fs;
+    std::string string_cwd = std::string(this->cwd);
     string_cwd += "/tree.dat";
 
-    fs.open(string_cwd, ios::out | ios::binary | ios::trunc);
+    fs.open(string_cwd, std::ios::out | std::ios::binary | std::ios::trunc);
     if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
     else saveTree(fs);
     fs.close();
 }
 
 
-void Tree::saveTreeRecursive(Node* nodeToSave, ofstream &of)
+void Tree::saveTreeRecursive(Node* nodeToSave, std::ofstream &of)
 {
     int id = nodeToSave->getId();
     int idFather = nodeToSave->getNodeFather()->getId();
 
-    string name = nodeToSave->getName();
+    std::string name = nodeToSave->getName();
     char nameChar[20];
     strcpy(nameChar, name.c_str());
     nameChar[19] = '\0';
 
     char node_type_char[20];
-    string node_type = "";
+    std::string node_type = "";
     if (nodeToSave->getIsDirectory())
     {
         node_type = "Folder";
@@ -247,7 +247,7 @@ void Tree::saveTreeRecursive(Node* nodeToSave, ofstream &of)
     of.write((char*)&size, sizeof(size));
     of.write((char*)&lastModification, sizeof(lastModification));
 
-    vector<Node*>* elements = nodeToSave->getOffsprings();
+    std::vector<Node*>* elements = nodeToSave->getOffsprings();
     for (int i = 0; i < nodeToSave->getNumberOfOffsprings(); i++)
     {
         Node* nodeToSave = elements->at(i);
@@ -265,7 +265,7 @@ Node* Tree::searchByIdRecursive(Node* nodeToSearch, int id)
     else
     {
         Node* result = NULL;
-        vector<Node*>* elements = nodeToSearch->getOffsprings();
+        std::vector<Node*>* elements = nodeToSearch->getOffsprings();
         for (int i = 0; i < nodeToSearch->getNumberOfOffsprings(); i++)
         {
             Node* nodeToSearch = elements->at(i);
@@ -286,14 +286,14 @@ Node* Tree::searchById(int id)
 
 
 //do save after upload, cp, mv, mdkir, rmdir and rm
-void Tree::saveTree(ofstream &of)
+void Tree::saveTree(std::ofstream &of)
 {
     int totalNodes = this->numberOfNodes;
     int lastNodeAdded = this->lastNodeAdded;
     of.write((char*)&totalNodes, sizeof(totalNodes));
     of.write((char*)&lastNodeAdded, sizeof(lastNodeAdded));
 
-    vector<Node*>* elements = this->getRoot()->getOffsprings();
+    std::vector<Node*>* elements = this->getRoot()->getOffsprings();
     for (int i = 0; i < this->getRoot()->getNumberOfOffsprings(); i++)
     {
         Node* nodeToSave = elements->at(i);
@@ -306,13 +306,13 @@ void Tree::saveTree(ofstream &of)
 
 void Tree::loadTree()
 {
-    ifstream binaryFile;
+    std::ifstream binaryFile;
     int size = 0;
 
-    binaryFile.open("tree.dat", ios::in | ios::binary);
-    binaryFile.seekg(0, ios::end);
+    binaryFile.open("tree.dat", std::ios::in | std::ios::binary);
+    binaryFile.seekg(0, std::ios::end);
     size = (int)binaryFile.tellg();
-    binaryFile.seekg(0, ios::beg);
+    binaryFile.seekg(0, std::ios::beg);
 
     int numberNodes = 0;
     int lastNode = -1;
@@ -330,10 +330,10 @@ void Tree::loadTree()
         binaryFile.read((char*)&id, sizeof(id));
         char name [20];
         binaryFile.read((char*)&name, sizeof(name));
-        string nameString = string(name);
+        std::string nameString = std::string(name);
         char node_type [20];
         binaryFile.read((char*)&node_type, sizeof(node_type));
-        string node_typeString = string(node_type);
+        std::string node_typeString = std::string(node_type);
         off_t size = -1;
         binaryFile.read((char*)&size, sizeof(size));
         time_t lastModification;
