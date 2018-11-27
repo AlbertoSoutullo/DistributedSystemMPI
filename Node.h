@@ -8,6 +8,7 @@
 #include "Tree.h"
 #include <ctime>
 #include <vector>
+#include <list>
 
 
 /*
@@ -36,8 +37,8 @@ class Node
     ///Segunda Iteracion///
     //Vector de bloques que tenga identificadores de sectores del disco donde está guardado. Tan largo como el fichero, pero no más que el tamaó total del disco.
     //numBLoques: Cuantos bloques se han usado.
-    std::vector<std::vector<int>> sectorsOccupied;
-    int numSectorsOccupied = 0;
+    std::vector<std::list<int>> blockOccupied;
+    int numBlocksOccupied = 0;
 	
 public:
     static int idcont; //varaible to count number of nodes created
@@ -71,6 +72,8 @@ public:
     void setTree(Tree* tree);
     void setIsDirectory(bool isDirectory);
     void setID(int id);
+    void setBlocksOccupied(int block);
+    void setNumBlocksOccupied();
 
     //Utilities
     bool isFolder(std::string name);

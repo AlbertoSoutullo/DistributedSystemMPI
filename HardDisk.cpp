@@ -69,9 +69,6 @@ int HardDisk::getBlock(int HDD)
 
 void HardDisk::writeBlock(char* data)
 {
-    int HDD = getEmptyHdd();
-    int block = getBlock();
-
     //Escribimos ahi
     std::string fileName = "disk" + std::to_string(HDD) + ".dat";
     std::ifstream binaryFile;
@@ -100,8 +97,12 @@ void HardDisk::writeFile(Node* fileNode)
 
         fs.read((char*)&binaryData, sizeof(binaryData));
 
-        writeBlock(data);
+        int HDD = getEmptyHdd();
+        int block = getBlock();
+
+        writeBlock(data, HDD, block);
         //Escribir en nodo
+        (*fileNode).setBlocksOccupied(block, HDD);
 
         fs.close();
         free(binaryData);

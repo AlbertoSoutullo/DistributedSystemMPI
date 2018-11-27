@@ -229,3 +229,19 @@ void Node::setID(int id)
     this->idcont = id + 1;
 }
 
+void Node::setBlocksOccupied(int block, int HDD)
+{
+    this->blockOccupied[HDD].push_back(block);
+}
+
+void Node::setNumBlocksOccupied()
+{
+    int blocks = 0;
+    for (int i = 0; i < this->blockOccupied.size(); i++)
+    {
+        int HDDSize = this->blockOccupied[i].size();
+        blocks += HDDSize;
+    }
+    this->numBlocksOccupied = blocks;
+}
+
