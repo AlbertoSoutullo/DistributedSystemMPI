@@ -18,6 +18,7 @@ class HardDisk
 {
     char cwd[PATH_MAX];
     //Los sectores libres se guardan en "freeSectors1.dat".
+    std::vector<std::vector<int>> sectors;
 
 public:
     HardDisk();
@@ -29,6 +30,8 @@ public:
     void readFile(Node* fileNode);
 
 private:
+    void readSectors(int HDD);
+    void initializeSectors();
     int getEmptyHdd();
     //función que escribe un bloque de datos en formato binario en un sector libre del disco.
     void writeBlock(char* data);

@@ -1,17 +1,49 @@
 #include "HardDisk.h"
 #include "Node.h"
 
+
+void HardDisk::readSectors(HDD)
+{
+    std::string fileName = "freeSectors" + std::to_string(HDD) + ".dat";
+    std::ifstream binaryFile;
+    int size = 0;
+
+    binaryFile.open(fileName, std::ios::in | std::ios::binary);
+    binaryFile.seekg(0, std::ios::end);
+    size = (int)binaryFile.tellg();
+    binaryFile.seekg(0, std::ios::beg);
+
+    while(binaryFile.tellg() < size)
+    {
+        int sector = -1;
+        binaryFile.read((char*)&sector, sizeof(sector));
+        this->sectors[i].push_back(sector);
+    }
+}
+
+void HardDisk::initializeSectors()
+{
+    for(int i = 0; i < NUMBER_DISKS; i++)
+    {
+        this->sectors.push_back(std::vector<int>());
+        readSectors(i);
+    }
+}
+
 HardDisk::HardDisk()
 {
     getcwd(this->cwd, sizeof(cwd));
     if (FILE *file = fopen("disk0.dat", "r"))
     {
         std::cout << "Loading Hard Drives..." << std::endl;
+        initializeSectors();
     }
     else
     {
+        std::cout << "Creating Hard Drives..." << std::endl;
         format(DISK_SIZE);
-    }
+        initializeSectors();
+    }    
 }
 
 int getEmptyHdd()

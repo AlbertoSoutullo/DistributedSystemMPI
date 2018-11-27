@@ -11,6 +11,7 @@ class Terminal
     char cwd[PATH_MAX];
     Tree* tree;
     Commands* commandManager;
+
 public:
     Terminal();
     Terminal(Tree* tree);
