@@ -46,9 +46,19 @@ HardDisk::HardDisk()
     }    
 }
 
-int getEmptyHdd()
+int HardDisk::getEmptyHdd()
 {
-
+    //We assume that the first one is the first empty
+    int emptyHDD = 0;
+    for (int i = 0; i < this->sectors.size(); i++)
+    {
+        int actualHDD = this->sectors[i].size();
+        if (actualHDD < emptyHDD)
+        {
+            emptyHDD = actualHDD;
+        }
+    }
+    return emptyHDD;
 }
 
 void HardDisk::writeBlock(char* data)
