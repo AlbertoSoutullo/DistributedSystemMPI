@@ -36,7 +36,8 @@ class Node
     ///Segunda Iteracion///
     //Vector de bloques que tenga identificadores de sectores del disco donde está guardado. Tan largo como el fichero, pero no más que el tamaó total del disco.
     //numBLoques: Cuantos bloques se han usado.
-
+    std::vector<std::vector<int>> sectorsOccupied;
+    int numSectorsOccupied = 0;
 	
 public:
     static int idcont; //varaible to count number of nodes created

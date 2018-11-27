@@ -19,6 +19,7 @@ void HardDisk::readSectors(HDD)
         binaryFile.read((char*)&sector, sizeof(sector));
         this->sectors[i].push_back(sector);
     }
+    binaryFile.close();
 }
 
 void HardDisk::initializeSectors()
@@ -61,23 +62,38 @@ int HardDisk::getEmptyHdd()
     return emptyHDD;
 }
 
-void HardDisk::writeBlock(char* data)
+int HardDisk::getBlock(int HDD)
 {
-
-
+    int block = this->sectors[HDD].pop_front();
 }
 
+void HardDisk::writeBlock(char* data)
+{
+    int HDD = getEmptyHdd();
+    int block = getBlock();
+
+    //Escribimos ahi
+    std::string fileName = "disk" + std::to_string(HDD) + ".dat";
+    std::ifstream binaryFile;
+    int size = 0;
+
+    binaryFile.open(fileName, std::ios::out | std::ios::binary);
+    binaryFile.seekg(0, BLOCK_SIZE*block);
+    binaryFile.write((char*)data, sizeof(char)*BLOCK_SIZE);
+}
+
+/*Subir*/
 void HardDisk::writeFile(Node* fileNode)
 {
     //dividir el archivo en bloques (restante a cero)
     off_t fileSize = fileNode->getByteSize();
-    int numberOfBlocks = (fileSize % static_cast<off_t>(1024)) + 1;
+    int numberOfBlocks = (fileSize % static_cast<off_t>(BLOCK_SIZE)) + 1;
 
     //en un for, por cada bloque leer esa parte, mirar que disco está vacio, escribir
     for (int i = 0; i < numberOfBlocks; i++)
     {
         std::ofstream fs;
-        char* binaryData = (char*)malloc(sizeof(char)*1024);
+        char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
         //Open File and Check size
         fs.open(string_cwd, std::ios::in | std::ios::binary);
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
@@ -85,11 +101,13 @@ void HardDisk::writeFile(Node* fileNode)
         fs.read((char*)&binaryData, sizeof(binaryData));
 
         writeBlock(data);
-
+        //Escribir en nodo
 
         fs.close();
         free(binaryData);
     }
+    //Actualizar el fichero de sectores
+
 }
 
 void HardDisk::readBlock()

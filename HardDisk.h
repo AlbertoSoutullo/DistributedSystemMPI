@@ -12,13 +12,14 @@ Tener en cuenta borrar.
 
 #define NUMBER_DISKS 4
 #define DISK_SIZE 320000
+#define BLOCK_SIZE 1024
 
 class Node;
 class HardDisk
 {
     char cwd[PATH_MAX];
     //Los sectores libres se guardan en "freeSectors1.dat".
-    std::vector<std::vector<int>> sectors;
+    std::vector<std::list<int>> sectors;
 
 public:
     HardDisk();
@@ -33,6 +34,8 @@ private:
     void readSectors(int HDD);
     void initializeSectors();
     int getEmptyHdd();
+    int getBlock(int HDD);
+
     //función que escribe un bloque de datos en formato binario en un sector libre del disco.
     void writeBlock(char* data);
 
