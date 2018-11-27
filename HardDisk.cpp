@@ -14,9 +14,14 @@ HardDisk::HardDisk()
     }
 }
 
+int getEmptyHdd()
+{
+
+}
 
 void HardDisk::writeBlock(char* data)
 {
+
 
 }
 
@@ -43,11 +48,15 @@ void HardDisk::writeFile(Node* fileNode)
         fs.close();
         free(binaryData);
     }
+}
 
+void HardDisk::readBlock()
+{
 
 }
 
-
+void HardDisk::readFile()
+{}
 
 
 void HardDisk::formatDisk()
