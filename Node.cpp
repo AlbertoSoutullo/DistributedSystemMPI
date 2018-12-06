@@ -62,6 +62,10 @@ Node::Node(Tree* tree, Node* nodeFather, std::string name,  std::string node_typ
         }
         this->dateLastModif = std::time(0);
     }
+    for(int i = 0; i < NUMBER_DISKS; i++)
+    {
+        this->blockOccupied.push_back(std::list<int>());
+    }
 }
 
 //destructor

@@ -343,8 +343,8 @@ void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat 
     newFile->setByteSize(fileInfo.st_size);
     newFile->setDateLastModif(fileInfo.st_mtime);
     Node* result = tree->addChild(newFile, node);
-    this->HDDs->writeFile(node);
     if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
+    else this->HDDs->writeFile(newFile);
 }
 
 void Commands::uploadFolder(Tree* tree, Node* node, std::string name, struct stat fileInfo)

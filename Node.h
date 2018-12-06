@@ -18,6 +18,11 @@ Entrega Parte 3:
 -Tamaño bloques usados.
 */
 
+#define NUMBER_DISKS 4
+#define DISK_SIZE 320000
+#define BLOCK_SIZE 1024
+
+
 class Tree;
 class Node
 {

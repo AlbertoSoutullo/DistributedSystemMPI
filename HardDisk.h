@@ -9,6 +9,8 @@ Tener en cuenta borrar.
 #include <bits/stdc++.h>
 #include <string>
 #include <unistd.h>
+#include <list>
+#include <tuple>
 
 #define NUMBER_DISKS 4
 #define DISK_SIZE 320000
@@ -20,6 +22,7 @@ class HardDisk
     char cwd[PATH_MAX];
     //Los sectores libres se guardan en "freeSectors1.dat".
     std::vector<std::list<int>> sectors;
+    //std::vector<std::tuple<int, int>> sectors;
 
 public:
     HardDisk();

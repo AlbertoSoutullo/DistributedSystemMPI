@@ -6,6 +6,7 @@ void HardDisk::readSectors(int HDD)
     std::string fileName = "freeSectors" + std::to_string(HDD) + ".dat";
     std::ifstream binaryFile;
     int size = 0;
+    int sector = -1;
 
     binaryFile.open(fileName, std::ios::in | std::ios::binary);
     binaryFile.seekg(0, std::ios::end);
@@ -14,9 +15,9 @@ void HardDisk::readSectors(int HDD)
 
     while(binaryFile.tellg() < size)
     {
-        int sector = -1;
         binaryFile.read((char*)&sector, sizeof(sector));
-        this->sectors[i].push_back(sector);
+        //std::tuple<int,int> tupleData (HDD,sector);
+        this->sectors[HDD].push_back(sector);
     }
     binaryFile.close();
 }
@@ -25,7 +26,7 @@ void HardDisk::initializeSectors()
 {
     for(int i = 0; i < NUMBER_DISKS; i++)
     {
-        this->sectors.push_back(std::vector<int>());
+        this->sectors.push_back(std::list<int>());
         readSectors(i);
     }
 }
@@ -50,6 +51,7 @@ int HardDisk::getEmptyHdd()
 {
     //We assume that the first one is the first empty
     int emptyHDD = 0;
+
     for (int i = 0; i < this->sectors.size(); i++)
     {
         int actualHDD = this->sectors[i].size();
@@ -63,7 +65,8 @@ int HardDisk::getEmptyHdd()
 
 int HardDisk::getBlock(int HDD)
 {
-    int block = this->sectors[HDD].pop_front();
+    int block = this->sectors[HDD].front();
+    this->sectors[HDD].pop_front();
     return block;
 }
 
@@ -71,17 +74,17 @@ void HardDisk::writeBlock(char* data, int HDD, int block)
 {
     //Escribimos ahi
     std::string fileName = "disk" + std::to_string(HDD) + ".dat";
-    std::ifstream binaryFile;
-    int size = 0;
+    std::ofstream binaryFile;
 
     binaryFile.open(fileName, std::ios::out | std::ios::binary);
-    binaryFile.seekg(0, BLOCK_SIZE*block);
+    binaryFile.seekp(BLOCK_SIZE*block);
     binaryFile.write((char*)data, sizeof(char)*BLOCK_SIZE);
+    binaryFile.close();
 }
 
 void HardDisk::overrideSectors()
 {
-    std:ofstream sectorsFile;
+    std::ofstream sectorsFile;
     for (int i = 0; i < NUMBER_DISKS; i++)
     {
         std::string string_cwd = std::string(this->cwd);
@@ -89,9 +92,10 @@ void HardDisk::overrideSectors()
         string_cwd += std::to_string(i);
         string_cwd += ".dat";
         sectorsFile.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
-        for (std::list<int>::iterator it = this->sectors[i].begin(); it != this->sectors[i].end(); ++it)
+        for (std::list<int>::iterator it = this->sectors[i].begin(); it != this->sectors[i].end(); it++)
         {
-            sectorsFile.write((char*)*it., sizeof(int));
+            int number = *it;
+            sectorsFile.write((char*)&number, sizeof(int));
         }
         sectorsFile.close();
     }
@@ -102,27 +106,28 @@ void HardDisk::writeFile(Node* fileNode)
 {
     //dividir el archivo en bloques (restante a cero)
     off_t fileSize = fileNode->getByteSize();
-    int numberOfBlocks = (fileSize % static_cast<off_t>(BLOCK_SIZE)) + 1;
-    long pos = 0; //Last position of reader
+    std::cout << BLOCK_SIZE << std::endl;
+    int numberOfBlocks = (fileSize % BLOCK_SIZE) + 1;
+    int pos = 0; //Last position of reader
 
     //en un for, por cada bloque leer esa parte, mirar que disco está vacio, escribir
     for (int i = 0; i < numberOfBlocks; i++)
     {
-        std::ofstream fs;
+        std::ifstream fs;
         char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
         //Open File and Check size
         fs.open(fileNode->getName(), std::ios::in | std::ios::binary);
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
-        fs.seekp(pos);
+        fs.seekg(pos, fs.beg);
         fs.read((char*)&binaryData, sizeof(binaryData));
-        pos = fs.tellp();
+        pos = fs.tellg();
 
         int HDD = getEmptyHdd();
         int block = getBlock(HDD);
 
         writeBlock(binaryData, HDD, block);
         //Escribir en nodo
-        (*fileNode).setBlocksOccupied(block, HDD);
+        fileNode->setBlocksOccupied(block, HDD);
 
         fs.close();
         free(binaryData);
@@ -137,7 +142,7 @@ void HardDisk::readBlock()
 
 }
 
-void HardDisk::readFile()
+void HardDisk::readFile(Node* fileNode)
 {}
 
 
