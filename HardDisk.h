@@ -25,7 +25,7 @@ public:
     HardDisk();
 
     //función que escribe todos los bloques de un fichero y su bloque índice en sectores libres del disco usando para cada uno de ellos writeBlock.
-    void writeFile();
+    void writeFile(Node* fileNode);
 
     //readFile: función que lee con readBlock todos los bloques de un fichero mediante su bloque índice y lo reconstruye en el orden adecuado.
     void readFile(Node* fileNode);
@@ -35,9 +35,10 @@ private:
     void initializeSectors();
     int getEmptyHdd();
     int getBlock(int HDD);
+    void overrideSectors();
 
     //función que escribe un bloque de datos en formato binario en un sector libre del disco.
-    void writeBlock(char* data);
+    void writeBlock(char* data, int HDD, int block);
 
     //función que lee un bloque de datos de un sector del disco duro.
     void readBlock();

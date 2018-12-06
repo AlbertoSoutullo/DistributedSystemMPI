@@ -72,7 +72,7 @@ public:
     void setTree(Tree* tree);
     void setIsDirectory(bool isDirectory);
     void setID(int id);
-    void setBlocksOccupied(int block);
+    void setBlocksOccupied(int block, int HDD);
     void setNumBlocksOccupied();
 
     //Utilities

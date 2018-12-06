@@ -1,8 +1,7 @@
 #include "HardDisk.h"
 #include "Node.h"
 
-
-void HardDisk::readSectors(HDD)
+void HardDisk::readSectors(int HDD)
 {
     std::string fileName = "freeSectors" + std::to_string(HDD) + ".dat";
     std::ifstream binaryFile;
@@ -65,9 +64,10 @@ int HardDisk::getEmptyHdd()
 int HardDisk::getBlock(int HDD)
 {
     int block = this->sectors[HDD].pop_front();
+    return block;
 }
 
-void HardDisk::writeBlock(char* data)
+void HardDisk::writeBlock(char* data, int HDD, int block)
 {
     //Escribimos ahi
     std::string fileName = "disk" + std::to_string(HDD) + ".dat";
@@ -79,12 +79,31 @@ void HardDisk::writeBlock(char* data)
     binaryFile.write((char*)data, sizeof(char)*BLOCK_SIZE);
 }
 
+void HardDisk::overrideSectors()
+{
+    std:ofstream sectorsFile;
+    for (int i = 0; i < NUMBER_DISKS; i++)
+    {
+        std::string string_cwd = std::string(this->cwd);
+        string_cwd += "/freeSectors";
+        string_cwd += std::to_string(i);
+        string_cwd += ".dat";
+        sectorsFile.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
+        for (std::list<int>::iterator it = this->sectors[i].begin(); it != this->sectors[i].end(); ++it)
+        {
+            sectorsFile.write((char*)*it., sizeof(int));
+        }
+        sectorsFile.close();
+    }
+}
+
 /*Subir*/
 void HardDisk::writeFile(Node* fileNode)
 {
     //dividir el archivo en bloques (restante a cero)
     off_t fileSize = fileNode->getByteSize();
     int numberOfBlocks = (fileSize % static_cast<off_t>(BLOCK_SIZE)) + 1;
+    long pos = 0; //Last position of reader
 
     //en un for, por cada bloque leer esa parte, mirar que disco está vacio, escribir
     for (int i = 0; i < numberOfBlocks; i++)
@@ -92,15 +111,16 @@ void HardDisk::writeFile(Node* fileNode)
         std::ofstream fs;
         char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
         //Open File and Check size
-        fs.open(string_cwd, std::ios::in | std::ios::binary);
+        fs.open(fileNode->getName(), std::ios::in | std::ios::binary);
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
-
+        fs.seekp(pos);
         fs.read((char*)&binaryData, sizeof(binaryData));
+        pos = fs.tellp();
 
         int HDD = getEmptyHdd();
-        int block = getBlock();
+        int block = getBlock(HDD);
 
-        writeBlock(data, HDD, block);
+        writeBlock(binaryData, HDD, block);
         //Escribir en nodo
         (*fileNode).setBlocksOccupied(block, HDD);
 
@@ -108,6 +128,7 @@ void HardDisk::writeFile(Node* fileNode)
         free(binaryData);
     }
     //Actualizar el fichero de sectores
+    overrideSectors();
 
 }
 

@@ -23,15 +23,6 @@ public:
     std::string filterSecondParam(std::vector<std::string> tokens);
     void executeCommand(Tree* tree, std::string command, std::string firstParam, std::string secondParam);
 
-    //Part 3:
-    //crea archivos de sectores y disco inicializados a vacio.
-    //size is size of hdd in sectors.
-    bool checkIfExistsHDD(int numberOfDisks);
-    void format(int numberOfDisks, int size);
-
-private:
-    void formatDisk(int size);
-    void formatSectors(int numberOfDisks, int size);
 };
 
 
