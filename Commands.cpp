@@ -127,14 +127,10 @@ void Commands::cpCloneFile(Tree* tree, std::string original, std::string copy)
     if (copy == "")
     {
         copy = original + "_copy";
-        Node* node = new Node(tree, tree->getCurrentDir(), copy, "File");
-        tree->addChild(node, tree->getCurrentDir());
     }
-    else
-    {
-        Node* node = new Node(tree, tree->getCurrentDir(), copy, "File");
-        tree->addChild(node, tree->getCurrentDir());
-    }
+    Node* node = new Node(tree, tree->getCurrentDir(), copy, "File");
+    tree->addChild(node, tree->getCurrentDir());
+    this->HDDs->writeFile(node);
 }
 
 void Commands::cpCloneFileInFolder(Tree* tree, Node* father, std::string original, off_t byteSize)
@@ -142,6 +138,7 @@ void Commands::cpCloneFileInFolder(Tree* tree, Node* father, std::string origina
     Node* node = new Node(tree, tree->getCurrentDir(), original, "File");
     node->setByteSize(byteSize);
     tree->addChild(node, father);
+    this->HDDs->writeFile(node);
 }
 
 void Commands::cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
@@ -343,7 +340,10 @@ void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat 
     newFile->setByteSize(fileInfo.st_size);
     newFile->setDateLastModif(fileInfo.st_mtime);
     Node* result = tree->addChild(newFile, node);
-    if (result == NULL) std::cout << "Error while uploading the file" << std::endl;
+    if (result == NULL)
+    {
+        std::cout << "Error while uploading the file" << std::endl;
+    }
     else this->HDDs->writeFile(newFile);
 }
 
@@ -394,11 +394,19 @@ void Commands::upload(Tree* tree, std::string name)
         struct stat fileInfo = getFileInfo(name);
         if (uploadIsDirectory(fileInfo))  //Upload recursivo
         {
-            Node* newFolder = new Node(tree, tree->getCurrentDir(), name, "Folder");
-            Node* result = tree->addChild(newFolder, tree->getCurrentDir());
-            if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
-            uploadFolder(tree, newFolder, name, fileInfo);
-            tree->WriteBinaryFile();
+            std::ifstream fin(name);
+            if(fin)
+            {
+                Node* newFolder = new Node(tree, tree->getCurrentDir(), name, "Folder");
+                Node* result = tree->addChild(newFolder, tree->getCurrentDir());
+                if (result == NULL) std::cout << "Couldn't add Folder." << std::endl;
+                else
+                {
+                    uploadFolder(tree, newFolder, name, fileInfo);
+                    tree->WriteBinaryFile();
+                }
+            }
+            else std::cout << "File " << name << " not found." << std::endl;
         }
         else //Upload a file
         {
