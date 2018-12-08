@@ -2,7 +2,6 @@
 #include "Tree.h"
 #include "Commands.h"
 
-
 #define PATH_MAX        4096    /* chars in a path name including nul */
 
 class Tree;

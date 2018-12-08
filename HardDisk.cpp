@@ -51,13 +51,15 @@ int HardDisk::getEmptyHdd()
 {
     //We assume that the first one is the first empty
     int emptyHDD = 0;
+    int emptyHDDSize = this->sectors[emptyHDD].size();
 
     for (int i = 0; i < this->sectors.size(); i++)
     {
-        int actualHDD = this->sectors[i].size();
-        if (actualHDD < emptyHDD)
+        int actualHDDSize = this->sectors[i].size();
+        if (actualHDDSize > emptyHDDSize)
         {
-            emptyHDD = actualHDD;
+            emptyHDD = i;
+            emptyHDDSize = this->sectors[emptyHDD].size();
         }
     }
     return emptyHDD;
@@ -106,8 +108,9 @@ void HardDisk::writeFile(Node* fileNode)
 {
     //dividir el archivo en bloques (restante a cero)
     off_t fileSize = fileNode->getByteSize();
-    std::cout << BLOCK_SIZE << std::endl;
-    int numberOfBlocks = (fileSize % BLOCK_SIZE) + 1;
+    const off_t blockSize = BLOCK_SIZE;
+    //int numberOfBlocks = (fileSize / static_cast<off_t>(BLOCK_SIZE)) + 1;
+    int numberOfBlocks = (fileSize / blockSize) + 1;
     int pos = 0; //Last position of reader
 
     //en un for, por cada bloque leer esa parte, mirar que disco está vacio, escribir
@@ -119,7 +122,7 @@ void HardDisk::writeFile(Node* fileNode)
         fs.open(fileNode->getName(), std::ios::in | std::ios::binary);
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
         fs.seekg(pos, fs.beg);
-        fs.read((char*)&binaryData, sizeof(binaryData));
+        fs.read((char*)binaryData, sizeof(binaryData));
         pos = fs.tellg();
 
         int HDD = getEmptyHdd();
@@ -130,7 +133,7 @@ void HardDisk::writeFile(Node* fileNode)
         fileNode->setBlocksOccupied(block, HDD);
 
         fs.close();
-        free(binaryData);
+        //free(binaryData);
     }
     //Actualizar el fichero de sectores
     overrideSectors();
