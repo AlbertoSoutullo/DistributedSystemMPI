@@ -437,31 +437,9 @@ void Commands::upload(Tree* tree, std::string name)
 
 void Commands::download(Tree* tree, std::string fileName)
 {
-    std::ofstream file;
-    std::ifstream disk;
-
     Node* fileNode = tree->findNodeByName(fileName);
-    std::string string_cwd = std::string(this->cwd);
-    string_cwd += fileNode->getName();
-    file.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
 
-    std::vector<std::list<int>> locations = fileNode->getBlockLocations();
-
-    for (int i = 0; i < this->HDDs->getNumberOfDisks(); i++)
-    {
-        disk.open(string_cwd + "/disk" + std::to_string(i) + ".dat", std::ios::in | std::ios::binary);
-        //buscar los blockes de cada disco
-        for (int j = 0; j < locations[i].size(); j++)
-        {
-
-        }
-        disk.close();
-        //escribir donde corresponda
-    }
-
-
-
-
+    //Llamada a readfile que dentro llama a readblock
 }
 
 void Commands::format()

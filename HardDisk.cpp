@@ -162,14 +162,38 @@ void HardDisk::writeFile(Node* fileNode)
 
 }
 
-void HardDisk::readBlock()
+void HardDisk::readBlock(/*file*/, int HDD, int block)
 {
+
+
+
 
 }
 
 void HardDisk::readFile(Node* fileNode)
 {
+    std::ofstream file;
+    std::ifstream disk;
 
+    std::string string_cwd = std::string(this->cwd);
+    string_cwd += fileNode->getName();
+    file.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
+
+    std::vector<std::list<int>> locations = fileNode->getBlockLocations();
+
+    for (int i = 0; i < this->HDDs->getNumberOfDisks(); i++)
+    {
+        disk.open(string_cwd + "/disk" + std::to_string(i) + ".dat", std::ios::in | std::ios::binary);
+        //buscar los blockes de cada disco
+        for (int j = 0; j < locations[i].size(); j++)
+        {
+            int block = locations[i].front();
+            readBlock(&disk, i, block);
+            locations[i].pop_front();
+        }
+        disk.close();
+        //escribir donde corresponda
+    }
 }
 
 
