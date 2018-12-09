@@ -18,8 +18,6 @@ Entrega Parte 3:
 -Tamaño bloques usados.
 */
 
-#define NUMBER_DISKS 4
-#define DISK_SIZE 320000
 #define BLOCK_SIZE 1024
 
 
@@ -64,6 +62,7 @@ public:
 	int getLevel();
 	int getNumberOfOffsprings();
     bool getIsDirectory();
+    std::vector<std::list<int>> getBlockLocations();
 
 	//seters
     void setType(std::string type);
@@ -79,6 +78,7 @@ public:
     void setID(int id);
     void setBlocksOccupied(int block, int HDD);
     void setNumBlocksOccupied();
+    void setBlockList();
 
     //Utilities
     bool isFolder(std::string name);

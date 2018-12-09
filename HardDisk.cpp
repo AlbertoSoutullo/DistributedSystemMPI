@@ -24,7 +24,7 @@ void HardDisk::readSectors(int HDD)
 
 void HardDisk::initializeSectors()
 {
-    for(int i = 0; i < NUMBER_DISKS; i++)
+    for(int i = 0; i < this->numberDisks; i++)
     {
         this->sectors.push_back(std::list<int>());
         readSectors(i);
@@ -41,8 +41,7 @@ HardDisk::HardDisk()
     }
     else
     {
-        std::cout << "Creating Hard Drives..." << std::endl;
-        format(DISK_SIZE);
+        format();
         initializeSectors();
     }    
 }
@@ -52,17 +51,29 @@ int HardDisk::getEmptyHdd()
     //We assume that the first one is the first empty
     int emptyHDD = 0;
     int emptyHDDSize = this->sectors[emptyHDD].size();
+    bool full = false;
 
     for (int i = 0; i < this->sectors.size(); i++)
     {
         int actualHDDSize = this->sectors[i].size();
-        if (actualHDDSize > emptyHDDSize)
+
+        if(actualHDDSize == 0)
         {
-            emptyHDD = i;
-            emptyHDDSize = this->sectors[emptyHDD].size();
+            full = true;
+        }
+        else
+        {
+            full = false;
+
+            if (actualHDDSize > emptyHDDSize)
+            {
+                emptyHDD = i;
+                emptyHDDSize = this->sectors[emptyHDD].size();
+            }
         }
     }
-    return emptyHDD;
+    if (full) return -1;
+    else return emptyHDD;
 }
 
 int HardDisk::getBlock(int HDD)
@@ -87,7 +98,7 @@ void HardDisk::writeBlock(char* data, int HDD, int block)
 void HardDisk::overrideSectors()
 {
     std::ofstream sectorsFile;
-    for (int i = 0; i < NUMBER_DISKS; i++)
+    for (int i = 0; i < this->numberDisks; i++)
     {
         std::string string_cwd = std::string(this->cwd);
         string_cwd += "/freeSectors";
@@ -106,6 +117,8 @@ void HardDisk::overrideSectors()
 /*Subir*/
 void HardDisk::writeFile(Node* fileNode)
 {
+    std::string string_cwd = std::string(this->cwd);
+
     //dividir el archivo en bloques (restante a cero)
     off_t fileSize = fileNode->getByteSize();
     const off_t blockSize = BLOCK_SIZE;
@@ -119,21 +132,30 @@ void HardDisk::writeFile(Node* fileNode)
         std::ifstream fs;
         char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
         //Open File and Check size
-        fs.open(fileNode->getName(), std::ios::in | std::ios::binary);
+        fs.open(string_cwd + fileNode->getName(), std::ios::in | std::ios::binary);
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
         fs.seekg(pos, fs.beg);
         fs.read((char*)binaryData, sizeof(binaryData));
         pos = fs.tellg();
 
         int HDD = getEmptyHdd();
-        int block = getBlock(HDD);
 
-        writeBlock(binaryData, HDD, block);
-        //Escribir en nodo
-        fileNode->setBlocksOccupied(block, HDD);
+        if (HDD == -1)
+        {
+            std::cout << "Disks ran out of space." << std::endl;
+            fs.close();
+        }
+        else
+        {
+            int block = getBlock(HDD);
 
-        fs.close();
-        //free(binaryData);
+            writeBlock(binaryData, HDD, block);
+            //Escribir en nodo
+            fileNode->setBlocksOccupied(block, HDD);
+
+            fs.close();
+            //free(binaryData);
+        }
     }
     //Actualizar el fichero de sectores
     overrideSectors();
@@ -146,13 +168,15 @@ void HardDisk::readBlock()
 }
 
 void HardDisk::readFile(Node* fileNode)
-{}
+{
+
+}
 
 
 void HardDisk::formatDisk()
 {
     std::ofstream diskFile;
-    for (int i = 0; i < NUMBER_DISKS; i++)
+    for (int i = 0; i < this->numberDisks; i++)
     {
         std::string string_cwd = std::string(this->cwd);
         string_cwd += "/disk";
@@ -163,17 +187,17 @@ void HardDisk::formatDisk()
     }
 }
 
-void HardDisk::formatSectors(int size)
+void HardDisk::formatSectors()
 {
     std::ofstream sectorsFile;
-    for (int i = 0; i < NUMBER_DISKS; i++)
+    for (int i = 0; i < this->numberDisks; i++)
     {
         std::string string_cwd = std::string(this->cwd);
         string_cwd += "/freeSectors";
         string_cwd += std::to_string(i);
         string_cwd += ".dat";
         sectorsFile.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < this->diskSize; j++)
         {
             sectorsFile.write((char*)&j, sizeof(j));
         }
@@ -183,7 +207,7 @@ void HardDisk::formatSectors(int size)
 
 bool HardDisk::checkIfExistsHDD()
 {
-    for(int i = 0; i < NUMBER_DISKS; i++)
+    for(int i = 0; i < this->numberDisks; i++)
     {
         std::string string_cwd = std::string(this->cwd);
         string_cwd += "/disk";
@@ -198,9 +222,22 @@ bool HardDisk::checkIfExistsHDD()
     return true;
 }
 
-void HardDisk::format(int size)
+
+void HardDisk::format()
 {
-    std::cout << "Formatting Hard Drives..." << std::endl;
+    std::cout << "Creating Hard Drives..." << std::endl;
+    std::cout << "How many Drives do you want?" << std::endl;
+    std::cin >> this->numberDisks;
+    std::cout << "Select size for each disk: " << std::endl;
+    std::cin >> this->diskSize;
     formatDisk();
-    formatSectors(size);
+    formatSectors();
 }
+
+
+int HardDisk::getNumberOfDisks()
+{
+    return this->numberDisks;
+}
+
+

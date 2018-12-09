@@ -136,6 +136,11 @@ void Terminal::executeCommand(Tree* tree, std::string command, std::string first
         this->commandManager->upload(tree, firstParam);
         executed = true;
     }
+    if (command == "format")
+    {
+        this->commandManager->format();
+        executed = true;
+    }
     if(!executed) std::cout << "Command "<< command << " not found." << std::endl;
     else std::cout << std::endl;
 }

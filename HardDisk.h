@@ -12,14 +12,14 @@ Tener en cuenta borrar.
 #include <list>
 #include <tuple>
 
-#define NUMBER_DISKS 4
-#define DISK_SIZE 320000
 #define BLOCK_SIZE 1024
 
 class Node;
 class HardDisk
 {
     char cwd[PATH_MAX];
+    int numberDisks;
+    int diskSize;
     //Los sectores libres se guardan en "freeSectors1.dat".
     std::vector<std::list<int>> sectors;
     //std::vector<std::tuple<int, int>> sectors;
@@ -32,6 +32,12 @@ public:
 
     //readFile: función que lee con readBlock todos los bloques de un fichero mediante su bloque índice y lo reconstruye en el orden adecuado.
     void readFile(Node* fileNode);
+
+    void format();
+
+    bool checkIfFits();
+
+    int getNumberOfDisks();
 
 private:
     void readSectors(int HDD);
@@ -47,9 +53,8 @@ private:
     void readBlock();
 
     void formatDisk();
-    void formatSectors(int size);
+    void formatSectors();
     bool checkIfExistsHDD();
-    void format(int size);
     int checkHDDEmpy();
 };
 

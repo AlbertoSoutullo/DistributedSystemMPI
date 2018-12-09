@@ -64,4 +64,8 @@ public:
     void cpCloneFileInFolder(Tree* tree, Node* father, std::string original, off_t byteSize);
     void cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination);
 
+    ////New Aditions/////
+    void download(Tree* tree, std::string fileName);
+    void format();
+
 };

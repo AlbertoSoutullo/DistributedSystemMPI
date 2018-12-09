@@ -130,7 +130,7 @@ void Commands::cpCloneFile(Tree* tree, std::string original, std::string copy)
     }
     Node* node = new Node(tree, tree->getCurrentDir(), copy, "File");
     tree->addChild(node, tree->getCurrentDir());
-    this->HDDs->writeFile(node);
+    //this->HDDs->writeFile(node);
 }
 
 void Commands::cpCloneFileInFolder(Tree* tree, Node* father, std::string original, off_t byteSize)
@@ -138,7 +138,7 @@ void Commands::cpCloneFileInFolder(Tree* tree, Node* father, std::string origina
     Node* node = new Node(tree, tree->getCurrentDir(), original, "File");
     node->setByteSize(byteSize);
     tree->addChild(node, father);
-    this->HDDs->writeFile(node);
+    //this->HDDs->writeFile(node);
 }
 
 void Commands::cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
@@ -339,12 +339,24 @@ void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat 
     Node* newFile = new Node(tree, node, name, "File");
     newFile->setByteSize(fileInfo.st_size);
     newFile->setDateLastModif(fileInfo.st_mtime);
+
+    for(int i = 0; i < this->HDDs->getNumberOfDisks(); i++)
+    {
+        newFile->setBlockList();
+    }
+    newFile->setNumBlocksOccupied();
+
     Node* result = tree->addChild(newFile, node);
+
     if (result == NULL)
     {
         std::cout << "Error while uploading the file" << std::endl;
     }
-    else this->HDDs->writeFile(newFile);
+    else
+    {
+
+        this->HDDs->writeFile(newFile);
+    }
 }
 
 void Commands::uploadFolder(Tree* tree, Node* node, std::string name, struct stat fileInfo)
@@ -419,3 +431,40 @@ void Commands::upload(Tree* tree, std::string name)
 
 }
 ///////////////////////////UPLOADS METHODS///////////////////////////////////
+
+
+///////////////////////////NEW ADITIONS///////////////////////////////////
+
+void Commands::download(Tree* tree, std::string fileName)
+{
+    std::ofstream file;
+    std::ifstream disk;
+
+    Node* fileNode = tree->findNodeByName(fileName);
+    std::string string_cwd = std::string(this->cwd);
+    string_cwd += fileNode->getName();
+    file.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
+
+    std::vector<std::list<int>> locations = fileNode->getBlockLocations();
+
+    for (int i = 0; i < this->HDDs->getNumberOfDisks(); i++)
+    {
+        disk.open(string_cwd + "/disk" + std::to_string(i) + ".dat", std::ios::in | std::ios::binary);
+        //buscar los blockes de cada disco
+        for (int j = 0; j < locations[i].size(); j++)
+        {
+
+        }
+        disk.close();
+        //escribir donde corresponda
+    }
+
+
+
+
+}
+
+void Commands::format()
+{
+    this->HDDs->format();
+}

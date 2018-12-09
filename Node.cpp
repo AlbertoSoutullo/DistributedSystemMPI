@@ -62,10 +62,6 @@ Node::Node(Tree* tree, Node* nodeFather, std::string name,  std::string node_typ
         }
         this->dateLastModif = std::time(0);
     }
-    for(int i = 0; i < NUMBER_DISKS; i++)
-    {
-        this->blockOccupied.push_back(std::list<int>());
-    }
 }
 
 //destructor
@@ -140,6 +136,11 @@ bool Node::getIsDirectory()
 int Node::getNumberOfOffsprings()
 {
 	return this->numberOfOffsprings;
+}
+
+std::vector<std::list<int>> Node::getBlockLocations()
+{
+    return this->blockOccupied;
 }
 
 ////SETTERS/////
@@ -249,3 +250,7 @@ void Node::setNumBlocksOccupied()
     this->numBlocksOccupied = blocks;
 }
 
+void Node::setBlockList()
+{
+    this->blockOccupied.push_back(std::list<int>());
+}
