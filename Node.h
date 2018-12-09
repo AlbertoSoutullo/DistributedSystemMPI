@@ -40,7 +40,7 @@ class Node
     ///Segunda Iteracion///
     //Vector de bloques que tenga identificadores de sectores del disco donde está guardado. Tan largo como el fichero, pero no más que el tamaó total del disco.
     //numBLoques: Cuantos bloques se han usado.
-    std::vector<std::list<int>> blockOccupied;
+    std::vector<std::vector<int>> blockOccupied;
     int numBlocksOccupied = 0;
 	
 public:
@@ -62,7 +62,7 @@ public:
 	int getLevel();
 	int getNumberOfOffsprings();
     bool getIsDirectory();
-    std::vector<std::list<int>> getBlockLocations();
+    std::vector<std::vector<int>> getBlockLocations();
 
 	//seters
     void setType(std::string type);
@@ -76,7 +76,8 @@ public:
     void setTree(Tree* tree);
     void setIsDirectory(bool isDirectory);
     void setID(int id);
-    void setBlocksOccupied(int block, int HDD);
+    void setBlockOccupied(std::vector<std::vector<int>> &blocks);
+    void setBlock(int block, int HDD);
     void setNumBlocksOccupied();
     void setBlockList();
 

@@ -141,6 +141,11 @@ void Terminal::executeCommand(Tree* tree, std::string command, std::string first
         this->commandManager->format();
         executed = true;
     }
+    if (command == "download")
+    {
+        this->commandManager->download(tree, firstParam);
+        executed = true;
+    }
     if(!executed) std::cout << "Command "<< command << " not found." << std::endl;
     else std::cout << std::endl;
 }

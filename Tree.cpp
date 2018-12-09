@@ -240,12 +240,26 @@ void Tree::saveTreeRecursive(Node* nodeToSave, std::ofstream &of)
     off_t size = nodeToSave->getByteSize();
     time_t lastModification = nodeToSave->getDateLastModif();
 
+    ////New Adition////
+    std::vector<std::vector<int>> blockOcuppied = nodeToSave->getBlockLocations();
+    int numberHDDs = blockOcuppied.size();
+
+    ////New Adition////
+
     of.write((char*)&idFather, sizeof(idFather));
     of.write((char*)&id, sizeof(id));
     of.write((char*)&nameChar, sizeof(nameChar));
     of.write((char*)&node_type_char, sizeof(node_type_char));
     of.write((char*)&size, sizeof(size));
     of.write((char*)&lastModification, sizeof(lastModification));
+    of.write((char*)&numberHDDs, sizeof(numberHDDs));
+    for (int i = 0; i < numberHDDs; i++)
+    {
+        std::vector<int> blocks = blockOcuppied[i];
+        int blockSize = blocks.size();
+        of.write((char*)&blockSize, sizeof(int));
+        of.write((char*)&blocks[0], blocks.size() * sizeof(int));
+    }
 
     std::vector<Node*>* elements = nodeToSave->getOffsprings();
     for (int i = 0; i < nodeToSave->getNumberOfOffsprings(); i++)
@@ -338,6 +352,19 @@ void Tree::loadTree()
         binaryFile.read((char*)&size, sizeof(size));
         time_t lastModification;
         binaryFile.read((char*)&lastModification, sizeof(lastModification));
+        int numberHDDs = -1;
+        binaryFile.read((char*)&numberHDDs, sizeof(numberHDDs));
+        std::vector<std::vector<int>> blocks;
+        for(int i = 0; i < numberHDDs; i++)
+        {
+            blocks.push_back(std::vector<int>());;
+        }
+        for(int i = 0; i < numberHDDs; i++)
+        {
+            int listSize = -1;
+            binaryFile.read((char*)&listSize, sizeof(int));
+            binaryFile.read((char*)&blocks[i], sizeof(int)*listSize);
+        }
 
         //busco padre
         Node* father = searchById(idFather);
@@ -349,6 +376,9 @@ void Tree::loadTree()
             nodeToInsert->setID(id);
             nodeToInsert->setByteSize(size);
             nodeToInsert->setDateLastModif(lastModification);
+            //asignar cosas
+            nodeToInsert->setBlockOccupied(blocks);
+            nodeToInsert->setNumBlocksOccupied();
         }
     }
     binaryFile.close();

@@ -26,7 +26,7 @@ void HardDisk::initializeSectors()
 {
     for(int i = 0; i < this->numberDisks; i++)
     {
-        this->sectors.push_back(std::list<int>());
+        this->sectors.push_back(std::vector<int>());
         readSectors(i);
     }
 }
@@ -79,7 +79,7 @@ int HardDisk::getEmptyHdd()
 int HardDisk::getBlock(int HDD)
 {
     int block = this->sectors[HDD].front();
-    this->sectors[HDD].pop_front();
+    this->sectors[HDD].erase(this->sectors[HDD].begin());
     return block;
 }
 
@@ -105,7 +105,7 @@ void HardDisk::overrideSectors()
         string_cwd += std::to_string(i);
         string_cwd += ".dat";
         sectorsFile.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
-        for (std::list<int>::iterator it = this->sectors[i].begin(); it != this->sectors[i].end(); it++)
+        for (std::vector<int>::iterator it = this->sectors[i].begin(); it != this->sectors[i].end(); it++)
         {
             int number = *it;
             sectorsFile.write((char*)&number, sizeof(int));
@@ -132,7 +132,7 @@ void HardDisk::writeFile(Node* fileNode)
         std::ifstream fs;
         char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
         //Open File and Check size
-        fs.open(string_cwd + fileNode->getName(), std::ios::in | std::ios::binary);
+        fs.open(string_cwd + "/" + fileNode->getName(), std::ios::in | std::ios::binary);
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
         fs.seekg(pos, fs.beg);
         fs.read((char*)binaryData, sizeof(binaryData));
@@ -151,23 +151,26 @@ void HardDisk::writeFile(Node* fileNode)
 
             writeBlock(binaryData, HDD, block);
             //Escribir en nodo
-            fileNode->setBlocksOccupied(block, HDD);
+            (*fileNode).setBlock(block, HDD);
 
             fs.close();
             //free(binaryData);
         }
     }
     //Actualizar el fichero de sectores
+    (*fileNode).setNumBlocksOccupied();
     overrideSectors();
 
 }
 
-void HardDisk::readBlock(/*file*/, int HDD, int block)
+void HardDisk::readBlock(std::ifstream &disk, std::ofstream &file, int block)
 {
+    char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
+    disk.read((char*)binaryData, sizeof(binaryData));
 
-
-
-
+    file.seekp(BLOCK_SIZE*block);
+    file.write((char*)binaryData, sizeof(char)*BLOCK_SIZE);
+    //free(binaryData);
 }
 
 void HardDisk::readFile(Node* fileNode)
@@ -176,24 +179,25 @@ void HardDisk::readFile(Node* fileNode)
     std::ifstream disk;
 
     std::string string_cwd = std::string(this->cwd);
+    string_cwd += "/";
     string_cwd += fileNode->getName();
     file.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
 
-    std::vector<std::list<int>> locations = fileNode->getBlockLocations();
+    std::vector<std::vector<int>> locations = fileNode->getBlockLocations();
 
-    for (int i = 0; i < this->HDDs->getNumberOfDisks(); i++)
+    for (int i = 0; i < this->getNumberOfDisks(); i++)
     {
         disk.open(string_cwd + "/disk" + std::to_string(i) + ".dat", std::ios::in | std::ios::binary);
         //buscar los blockes de cada disco
         for (int j = 0; j < locations[i].size(); j++)
         {
             int block = locations[i].front();
-            readBlock(&disk, i, block);
-            locations[i].pop_front();
+            readBlock(disk, file, block);
+            locations[i].erase(locations[i].begin());
         }
         disk.close();
-        //escribir donde corresponda
     }
+    file.close();
 }
 
 

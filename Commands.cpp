@@ -344,7 +344,6 @@ void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat 
     {
         newFile->setBlockList();
     }
-    newFile->setNumBlocksOccupied();
 
     Node* result = tree->addChild(newFile, node);
 
@@ -354,7 +353,6 @@ void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat 
     }
     else
     {
-
         this->HDDs->writeFile(newFile);
     }
 }
@@ -439,7 +437,14 @@ void Commands::download(Tree* tree, std::string fileName)
 {
     Node* fileNode = tree->findNodeByName(fileName);
 
-    //Llamada a readfile que dentro llama a readblock
+    if (fileNode == NULL)
+    {
+        std::cout << "That file does not exist" << std::endl;
+    }
+    else
+    {
+        this->HDDs->readFile(fileNode);
+    }
 }
 
 void Commands::format()

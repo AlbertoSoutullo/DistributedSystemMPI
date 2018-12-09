@@ -21,7 +21,7 @@ class HardDisk
     int numberDisks;
     int diskSize;
     //Los sectores libres se guardan en "freeSectors1.dat".
-    std::vector<std::list<int>> sectors;
+    std::vector<std::vector<int>> sectors;
     //std::vector<std::tuple<int, int>> sectors;
 
 public:
@@ -50,7 +50,7 @@ private:
     void writeBlock(char* data, int HDD, int block);
 
     //función que lee un bloque de datos de un sector del disco duro.
-    void readBlock();
+    void readBlock(std::ifstream &disk, std::ofstream &file, int block);
 
     void formatDisk();
     void formatSectors();
