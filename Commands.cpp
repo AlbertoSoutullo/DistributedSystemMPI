@@ -340,11 +340,6 @@ void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat 
     newFile->setByteSize(fileInfo.st_size);
     newFile->setDateLastModif(fileInfo.st_mtime);
 
-    for(int i = 0; i < this->HDDs->getNumberOfDisks(); i++)
-    {
-        newFile->setBlockList();
-    }
-
     Node* result = tree->addChild(newFile, node);
 
     if (result == NULL)

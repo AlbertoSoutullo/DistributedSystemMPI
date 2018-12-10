@@ -50,7 +50,7 @@ private:
     void writeBlock(char* data, int HDD, int block);
 
     //función que lee un bloque de datos de un sector del disco duro.
-    void readBlock(std::ifstream &disk, std::ofstream &file, int block);
+    void readBlock(std::ifstream &disk, std::ofstream &file, int position, int block);
 
     void formatDisk();
     void formatSectors();

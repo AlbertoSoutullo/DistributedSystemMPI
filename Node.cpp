@@ -138,9 +138,14 @@ int Node::getNumberOfOffsprings()
 	return this->numberOfOffsprings;
 }
 
-std::vector<std::vector<int>> Node::getBlockLocations()
+std::vector<location_t> Node::getBlockLocations()
 {
     return this->blockOccupied;
+}
+
+int Node::getNumBlocksOccupied()
+{
+    return this->numBlocksOccupied;
 }
 
 ////SETTERS/////
@@ -236,26 +241,29 @@ void Node::setID(int id)
 
 void Node::setBlock(int block, int HDD)
 {
-    this->blockOccupied[HDD].push_back(block);
+    location_t location;
+    location.HDD = HDD;
+    location.block = block;
+    this->blockOccupied.push_back(location);
 }
 
 void Node::setNumBlocksOccupied()
 {
-    int blocks = 0;
-    for (int i = 0; i < this->blockOccupied.size(); i++)
-    {
-        int HDDSize = this->blockOccupied[i].size();
-        blocks += HDDSize;
-    }
-    this->numBlocksOccupied = blocks;
+//    int blocks = 0;
+//    for (int i = 0; i < this->blockOccupied.size(); i++)
+//    {
+//        int HDDSize = this->blockOccupied[i].size();
+//        blocks += HDDSize;
+//    }
+    this->numBlocksOccupied = blockOccupied.size();
 }
 
-void Node::setBlockList()
-{
-    this->blockOccupied.push_back(std::vector<int>());
-}
+//void Node::setBlockList()
+//{
+//    this->blockOccupied.push_back(std::vector<int>());
+//}
 
-void Node::setBlockOccupied(std::vector<std::vector<int>> &blocks)
+void Node::setBlockOccupied(std::vector<location_t> &blocks)
 {
     this->blockOccupied = blocks;
 }

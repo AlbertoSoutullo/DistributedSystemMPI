@@ -8,7 +8,8 @@
 #include "Tree.h"
 #include <ctime>
 #include <vector>
-#include <list>
+//#include <list>
+#include <tuple>
 
 
 /*
@@ -20,6 +21,10 @@ Entrega Parte 3:
 
 #define BLOCK_SIZE 1024
 
+struct location_t{
+    int HDD;
+    int block;
+};
 
 class Tree;
 class Node
@@ -40,7 +45,7 @@ class Node
     ///Segunda Iteracion///
     //Vector de bloques que tenga identificadores de sectores del disco donde está guardado. Tan largo como el fichero, pero no más que el tamaó total del disco.
     //numBLoques: Cuantos bloques se han usado.
-    std::vector<std::vector<int>> blockOccupied;
+    std::vector<location_t> blockOccupied;
     int numBlocksOccupied = 0;
 	
 public:
@@ -62,7 +67,8 @@ public:
 	int getLevel();
 	int getNumberOfOffsprings();
     bool getIsDirectory();
-    std::vector<std::vector<int>> getBlockLocations();
+    std::vector<location_t> getBlockLocations();
+    int getNumBlocksOccupied();
 
 	//seters
     void setType(std::string type);
@@ -76,10 +82,10 @@ public:
     void setTree(Tree* tree);
     void setIsDirectory(bool isDirectory);
     void setID(int id);
-    void setBlockOccupied(std::vector<std::vector<int>> &blocks);
+    void setBlockOccupied(std::vector<location_t> &blocks);
     void setBlock(int block, int HDD);
     void setNumBlocksOccupied();
-    void setBlockList();
+    //void setBlockList();
 
     //Utilities
     bool isFolder(std::string name);

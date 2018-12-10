@@ -122,7 +122,6 @@ void HardDisk::writeFile(Node* fileNode)
     //dividir el archivo en bloques (restante a cero)
     off_t fileSize = fileNode->getByteSize();
     const off_t blockSize = BLOCK_SIZE;
-    //int numberOfBlocks = (fileSize / static_cast<off_t>(BLOCK_SIZE)) + 1;
     int numberOfBlocks = (fileSize / blockSize) + 1;
     int pos = 0; //Last position of reader
 
@@ -144,6 +143,7 @@ void HardDisk::writeFile(Node* fileNode)
         {
             std::cout << "Disks ran out of space." << std::endl;
             fs.close();
+            break;
         }
         else
         {
@@ -163,12 +163,13 @@ void HardDisk::writeFile(Node* fileNode)
 
 }
 
-void HardDisk::readBlock(std::ifstream &disk, std::ofstream &file, int block)
+void HardDisk::readBlock(std::ifstream &disk, std::ofstream &file, int position, int block)
 {
     char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
+    disk.seekg(block*BLOCK_SIZE);
     disk.read((char*)binaryData, sizeof(binaryData));
 
-    file.seekp(BLOCK_SIZE*block);
+    file.seekp(BLOCK_SIZE*position);
     file.write((char*)binaryData, sizeof(char)*BLOCK_SIZE);
     //free(binaryData);
 }
@@ -183,18 +184,19 @@ void HardDisk::readFile(Node* fileNode)
     string_cwd += fileNode->getName();
     file.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
 
-    std::vector<std::vector<int>> locations = fileNode->getBlockLocations();
+    std::vector<location_t> locations = fileNode->getBlockLocations();
 
-    for (int i = 0; i < this->getNumberOfDisks(); i++)
+    for (int i = 0; i < fileNode->getNumBlocksOccupied(); i++)
     {
-        disk.open(string_cwd + "/disk" + std::to_string(i) + ".dat", std::ios::in | std::ios::binary);
-        //buscar los blockes de cada disco
-        for (int j = 0; j < locations[i].size(); j++)
-        {
-            int block = locations[i].front();
-            readBlock(disk, file, block);
-            locations[i].erase(locations[i].begin());
-        }
+        //saco hdd
+        int hdd = locations[i].HDD;
+        //saco bloque
+        int block = locations[i].block;
+        //leo datos
+        disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
+
+        //escribo en el archivo en posicion i*blocksize
+        readBlock(disk, file, i, block);
         disk.close();
     }
     file.close();
