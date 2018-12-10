@@ -169,14 +169,14 @@ void HardDisk::writeFile(Node* fileNode)
     if(flagRest)
     {
         std::ifstream fs;
-        char* binaryData = (char*)malloc(sizeof(char)*restSize);
+        char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
         //Open File and Check size
         fs.open(string_cwd + "/" + fileNode->getName(), std::ios::in | std::ios::binary);
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
         fs.seekg(pos, fs.beg);
-        fs.read((char*)binaryData, sizeof(char)*restSize);
+        fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
         pos = fs.tellg();
-
+        memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
         int HDD = getEmptyHdd();
 
         if (HDD == -1)
@@ -204,15 +204,12 @@ void HardDisk::writeFile(Node* fileNode)
 
 }
 
-void HardDisk::readBlock(std::ifstream &disk, std::ofstream &file, int position, int block)
+char* HardDisk::readBlock(std::ifstream &disk, int block)
 {
     char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
     disk.seekg(block*BLOCK_SIZE);
     disk.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
-
-    //sacar
-    file.seekp(BLOCK_SIZE*position);
-    file.write((char*)binaryData, sizeof(char)*BLOCK_SIZE);
+    return binaryData;
     //free(binaryData);
 }
 
@@ -230,7 +227,7 @@ void HardDisk::readFile(Node* fileNode)
 
     std::vector<location_t> locations = fileNode->getBlockLocations();
 
-    for (int i = 0; i < fileNode->getNumBlocksOccupied(); i++)
+    for (int i = 0; i < fileNode->getNumBlocksOccupied()-1; i++)
     {
         //saco hdd
         int hdd = locations[i].HDD;
@@ -240,9 +237,23 @@ void HardDisk::readFile(Node* fileNode)
         disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
 
         //escribo en el archivo en posicion i*blocksize
-        readBlock(disk, file, i, block);
+        char* binaryData = readBlock(disk, block);
+
+        file.seekp(BLOCK_SIZE*i);
+        file.write((char*)binaryData, sizeof(char)*BLOCK_SIZE);
+        //free
         disk.close();
     }
+
+    int hdd = locations[fileNode->getNumBlocksOccupied()-1].HDD;
+    int block = locations[fileNode->getNumBlocksOccupied()-1].block;
+    int rest = fileNode->getByteSize() - ((fileNode->getNumBlocksOccupied()-1)*BLOCK_SIZE);
+    disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
+    char* binaryData = readBlock(disk, block);
+    file.seekp(BLOCK_SIZE*(fileNode->getNumBlocksOccupied() - 1));
+    file.write((char*)binaryData, sizeof(char)*rest);
+
+    disk.close();
     file.close();
 }
 
