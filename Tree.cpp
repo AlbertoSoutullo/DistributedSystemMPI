@@ -181,6 +181,7 @@ void Tree::removeChild(Node* node)
             node->setFather(NULL);
             father->setNumberOffsprings(-1);
             this->numberOfNodes--;
+            //node->blockOccupied.clear();
         }
     }
 }
@@ -241,8 +242,8 @@ void Tree::saveTreeRecursive(Node* nodeToSave, std::ofstream &of)
     time_t lastModification = nodeToSave->getDateLastModif();
 
     ////New Adition////
-    std::vector<location_t> blockOcuppied = nodeToSave->getBlockLocations();
-    typename std::vector<location_t>::size_type vectorSize = blockOcuppied.size();
+    std::vector<location_t>* blockOcuppied = nodeToSave->getBlockLocations();
+    typename std::vector<location_t>::size_type vectorSize = blockOcuppied->size();
 
     ////New Adition////
 
@@ -254,7 +255,7 @@ void Tree::saveTreeRecursive(Node* nodeToSave, std::ofstream &of)
     of.write((char*)&lastModification, sizeof(lastModification));
 
     of.write((char*)&vectorSize, sizeof(vectorSize)); //tamaño del vector de structs
-    of.write((char*)&blockOcuppied[0], blockOcuppied.size() * sizeof(location_t));
+    of.write((char*)&blockOcuppied[0], blockOcuppied->size() * sizeof(location_t));
 
     std::vector<Node*>* elements = nodeToSave->getOffsprings();
     for (int i = 0; i < nodeToSave->getNumberOfOffsprings(); i++)

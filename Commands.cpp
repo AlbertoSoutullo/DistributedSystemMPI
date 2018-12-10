@@ -130,7 +130,7 @@ void Commands::cpCloneFile(Tree* tree, std::string original, std::string copy)
     }
     Node* node = new Node(tree, tree->getCurrentDir(), copy, "File");
     tree->addChild(node, tree->getCurrentDir());
-    //this->HDDs->writeFile(node);
+    this->HDDs->writeFile(node);
 }
 
 void Commands::cpCloneFileInFolder(Tree* tree, Node* father, std::string original, off_t byteSize)
@@ -138,7 +138,7 @@ void Commands::cpCloneFileInFolder(Tree* tree, Node* father, std::string origina
     Node* node = new Node(tree, tree->getCurrentDir(), original, "File");
     node->setByteSize(byteSize);
     tree->addChild(node, father);
-    //this->HDDs->writeFile(node);
+    this->HDDs->writeFile(node);
 }
 
 void Commands::cpCloneFolder(Tree* tree, Node* nodeToCopy, Node* nodeDestination)
@@ -270,6 +270,8 @@ void Commands::rm(Tree* tree, std::string name)
     {
         if (!nodeToDelete->getIsDirectory())
         {
+            this->HDDs->deleteNode(nodeToDelete);
+            this->HDDs->overrideSectors();
             tree->removeChild(nodeToDelete);
             tree->WriteBinaryFile();
         }

@@ -138,9 +138,9 @@ int Node::getNumberOfOffsprings()
 	return this->numberOfOffsprings;
 }
 
-std::vector<location_t> Node::getBlockLocations()
+std::vector<location_t>* Node::getBlockLocations()
 {
-    return this->blockOccupied;
+    return &this->blockOccupied;
 }
 
 int Node::getNumBlocksOccupied()

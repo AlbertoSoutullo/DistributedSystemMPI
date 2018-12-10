@@ -67,7 +67,7 @@ public:
 	int getLevel();
 	int getNumberOfOffsprings();
     bool getIsDirectory();
-    std::vector<location_t> getBlockLocations();
+    std::vector<location_t>* getBlockLocations();
     int getNumBlocksOccupied();
 
 	//seters
@@ -85,7 +85,6 @@ public:
     void setBlockOccupied(std::vector<location_t> &blocks);
     void setBlock(int block, int HDD);
     void setNumBlocksOccupied();
-    //void setBlockList();
 
     //Utilities
     bool isFolder(std::string name);

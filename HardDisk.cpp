@@ -225,14 +225,14 @@ void HardDisk::readFile(Node* fileNode)
 
     string_cwd = std::string(this->cwd);
 
-    std::vector<location_t> locations = fileNode->getBlockLocations();
+    std::vector<location_t>* locations = fileNode->getBlockLocations();
 
     for (int i = 0; i < fileNode->getNumBlocksOccupied()-1; i++)
     {
         //saco hdd
-        int hdd = locations[i].HDD;
+        int hdd = locations->at(i).HDD;
         //saco bloque
-        int block = locations[i].block;
+        int block = locations->at(i).block;
         //leo datos
         disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
 
@@ -245,8 +245,8 @@ void HardDisk::readFile(Node* fileNode)
         disk.close();
     }
 
-    int hdd = locations[fileNode->getNumBlocksOccupied()-1].HDD;
-    int block = locations[fileNode->getNumBlocksOccupied()-1].block;
+    int hdd = locations->at(fileNode->getNumBlocksOccupied()-1).HDD;
+    int block = locations->at(fileNode->getNumBlocksOccupied()-1).block;
     int rest = fileNode->getByteSize() - ((fileNode->getNumBlocksOccupied()-1)*BLOCK_SIZE);
     disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
     char* binaryData = readBlock(disk, block);
@@ -323,6 +323,17 @@ void HardDisk::format()
 int HardDisk::getNumberOfDisks()
 {
     return this->numberDisks;
+}
+
+void HardDisk::deleteNode(Node* fileNode)
+{
+    std::vector<location_t>* locations = fileNode->getBlockLocations();
+
+    for(int i = locations->size()-1; i >= 0; i--)
+    {
+        location_t loc = locations->at(i);
+        this->sectors[loc.HDD].insert(this->sectors[loc.HDD].begin(), loc.block);
+    }
 }
 
 
