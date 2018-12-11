@@ -45,11 +45,11 @@ HardDisk::HardDisk()
     //Create slaves
     for (int i = 0; i < this->numberDisks; i++)
     {
-        MPI_Comm communicator = new MPI_Comm[1];
-        MPI_Comm_spawn("slave", MPI_ARGV_NULL, 1, MPI_INFO_NULL, 0, MPI_COMM_SELF, &communicator, MPI_ERRCODES_IGNORE);
+        MPI_Comm* communicator = new MPI_Comm[1];
+        MPI_Comm_spawn("slave", MPI_ARGV_NULL, 1, MPI_INFO_NULL, 0, MPI_COMM_SELF, communicator, MPI_ERRCODES_IGNORE);
         this->comm.push_back(communicator);
         int newID = this->comm.size();
-        MPI_Send(&newID, 1, MPI_INT, 0, 0, communicator);
+        MPI_Send(&newID, 1, MPI_INT, 0, 0, *communicator);
     }
 }
 

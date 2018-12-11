@@ -1,4 +1,4 @@
-
+#include <iostream>
 
 
 void writeBlock(int rank, MPI_Comm parent, MPI_Status status)
@@ -21,19 +21,23 @@ void writeBlock(int rank, MPI_Comm parent, MPI_Status status)
     binaryFile.close();
 }
 
-void readBlock()
+void readBlock(int rank, MPI_Comm parent, MPI_Status status)
 {
     int block = -1;
     int size = -1;
     char* binaryData = NULL;
 
     std::string fileName = "disk" + std::to_string(rank) + ".dat";
-    std::ofstream binaryFile;
+    std::ifstream binaryFile;
     binaryFile.open(fileName, std::ios::out | std::ios::binary | std::ios::in);
 
-    MPI_Recv(&block, 1, MPI_INT, 0, 0, parent, &status);MPI_Recv(&block, 1, MPI_INT, 0, 0, parent, &status);
-
-
+    MPI_Recv(&block, 1, MPI_INT, 0, 0, parent, &status);
+    MPI_Recv(&size, 1, MPI_INT, 0, 0, parent, &status);
+    //lee disco
+    disk.seekg(block*BLOCK_SIZE);
+    disk.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
+    //manda data
+    MPI_Send(&binaryData, size, MPI_CHAR, 0, 0, parent);
 }
 
 int recv_ID()
@@ -50,8 +54,9 @@ int recv_ID()
 
 int main(int argc, char** argv)
 {
-    int rank = 0;
+    int rank = -1;
     int quit = 0;
+    int option = -1;
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -61,17 +66,27 @@ int main(int argc, char** argv)
     MPI_Comm_get_parent(&parent);
     MPI_Status status;
 
-
-
     while(!quit)
     {
-
-
-
-
+        MPI_Recv(&option, 1, MPI_INT, 0, MPI_ANY_TAG, parent, &status);
+        if (option==10) //write
+        {
+            writeBlock(rank, parent, status);
+        }
+        else if (option == 11) //read
+        {
+            readBlock(rank, parent, status);
+        }
+        else if (option == 12) //quit
+        {
+            quit = 1;
+        }
+        else
+        {
+            std::cout << "Option not found" << std::endl;
+        }
     }
 
-
-
+    std::cout << "Closing slave " << std::to_string(rank) << "..." << std::endl;
 
 }

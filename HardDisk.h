@@ -23,7 +23,7 @@ class HardDisk
     int diskSize;
     //Los sectores libres se guardan en "freeSectors1.dat".
     std::vector<int> sectors;
-    std::vector<MPI_Comm> comm;
+    std::vector<MPI_Comm*> comm;
 
 public:
     HardDisk();
