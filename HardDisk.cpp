@@ -16,8 +16,7 @@ void HardDisk::readSectors(int HDD)
     while(binaryFile.tellg() < size)
     {
         binaryFile.read((char*)&sector, sizeof(sector));
-        //std::tuple<int,int> tupleData (HDD,sector);
-        this->sectors[HDD].push_back(sector);
+        this->sectors.push_back(sector);
     }
     binaryFile.close();
 }
@@ -26,7 +25,6 @@ void HardDisk::initializeSectors()
 {
     for(int i = 0; i < this->numberDisks; i++)
     {
-        this->sectors.push_back(std::vector<int>());
         readSectors(i);
     }
 }
@@ -283,19 +281,15 @@ void HardDisk::formatDisk()
 void HardDisk::formatSectors()
 {
     std::ofstream sectorsFile;
-    for (int i = 0; i < this->numberDisks; i++)
+
+    std::string string_cwd = std::string(this->cwd);
+    string_cwd += "/freeSectors.dat";
+    sectorsFile.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
+    for (int i = 0; i < this->diskSize; i++)
     {
-        std::string string_cwd = std::string(this->cwd);
-        string_cwd += "/freeSectors";
-        string_cwd += std::to_string(i);
-        string_cwd += ".dat";
-        sectorsFile.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
-        for (int j = 0; j < this->diskSize; j++)
-        {
-            sectorsFile.write((char*)&j, sizeof(j));
-        }
-        sectorsFile.close();
+        sectorsFile.write((char*)&i, sizeof(i));
     }
+    sectorsFile.close();
 }
 
 bool HardDisk::checkIfExistsHDD()
@@ -321,7 +315,7 @@ void HardDisk::format()
     std::cout << "Creating Hard Drives..." << std::endl;
     std::cout << "How many Drives do you want?" << std::endl;
     std::cin >> this->numberDisks;
-    std::cout << "Select size for each disk: " << std::endl;
+    std::cout << "Select total size: " << std::endl;
     std::cin >> this->diskSize;
     formatDisk();
     formatSectors();
