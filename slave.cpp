@@ -66,7 +66,6 @@ int main(int argc, char** argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     rank = recv_ID();
-    std::cout << "Slave " << std::to_string(rank) << " created" << std::endl;
 
     MPI_Comm parent;
     MPI_Comm_get_parent(&parent);
