@@ -47,14 +47,7 @@ public:
 private:
     void readSectors(int HDD);
     void initializeSectors();
-    int getEmptyHdd();
-    int getBlock(int HDD);
-
-    //función que escribe un bloque de datos en formato binario en un sector libre del disco.
-    //void writeBlock(char* data, int HDD, int block);
-
-    //función que lee un bloque de datos de un sector del disco duro.
-    char* readBlock(std::ifstream &disk, int block);
+    int getEmptyHdd(int block);
 
     void formatDisk();
     void formatSectors();

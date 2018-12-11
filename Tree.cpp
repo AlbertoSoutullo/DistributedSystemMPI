@@ -242,8 +242,8 @@ void Tree::saveTreeRecursive(Node* nodeToSave, std::ofstream &of)
     time_t lastModification = nodeToSave->getDateLastModif();
 
     ////New Adition////
-    std::vector<location_t>* blockOcuppied = nodeToSave->getBlockLocations();
-    typename std::vector<location_t>::size_type vectorSize = blockOcuppied->size();
+    std::vector<int>* blockOcuppied = nodeToSave->getBlockLocations();
+    typename std::vector<int>::size_type vectorSize = blockOcuppied->size();
 
     ////New Adition////
 
@@ -255,7 +255,7 @@ void Tree::saveTreeRecursive(Node* nodeToSave, std::ofstream &of)
     of.write((char*)&lastModification, sizeof(lastModification));
 
     of.write((char*)&vectorSize, sizeof(vectorSize)); //tamaño del vector de structs
-    of.write((char*)&blockOcuppied[0], blockOcuppied->size() * sizeof(location_t));
+    of.write((char*)&blockOcuppied[0], blockOcuppied->size() * sizeof(int));
 
     std::vector<Node*>* elements = nodeToSave->getOffsprings();
     for (int i = 0; i < nodeToSave->getNumberOfOffsprings(); i++)
@@ -349,11 +349,11 @@ void Tree::loadTree()
         time_t lastModification;
         binaryFile.read((char*)&lastModification, sizeof(lastModification));
 
-        typename std::vector<location_t>::size_type vectorSize = -1;
+        typename std::vector<int>::size_type vectorSize = -1;
         binaryFile.read((char*)&vectorSize, sizeof(vectorSize));
-        std::vector<location_t> blockOccupied;
+        std::vector<int> blockOccupied;
         blockOccupied.resize(vectorSize);
-        binaryFile.read((char*)&blockOccupied[0], blockOccupied.size()*sizeof(location_t));
+        binaryFile.read((char*)&blockOccupied[0], blockOccupied.size()*sizeof(int));
 
         //busco padre
         Node* father = searchById(idFather);

@@ -58,70 +58,21 @@ int HardDisk::getEmptyHdd(int block)
     int result = block % this->numberDisks;
 
     return result;
-    //We assume that the first one is the first empty
-//    int emptyHDD = 0;
-//    int emptyHDDSize = this->sectors[emptyHDD].size();
-//    bool full = false;
-
-//    for (int i = 0; i < this->sectors.size(); i++)
-//    {
-//        int actualHDDSize = this->sectors[i].size();
-
-//        if(actualHDDSize == 0)
-//        {
-//            full = true;
-//        }
-//        else
-//        {
-//            full = false;
-
-//            if (actualHDDSize > emptyHDDSize)
-//            {
-//                emptyHDD = i;
-//                emptyHDDSize = this->sectors[emptyHDD].size();
-//            }
-//        }
-//    }
-//    if (full) return -1;
-//    else return emptyHDD;
 }
 
-int HardDisk::getBlock(int HDD)
-{
-    int block = this->sectors[HDD].front();
-    this->sectors[HDD].erase(this->sectors[HDD].begin());
-    return block;
-}
-
-//void HardDisk::writeBlock(char* data, int HDD, int block)
-//{
-//    //Escribimos ahi
-//    std::string fileName = "disk" + std::to_string(HDD) + ".dat";
-//    std::ofstream binaryFile;
-
-//    binaryFile.open(fileName, std::ios::out | std::ios::binary | std::ios::in);
-//    binaryFile.seekp(BLOCK_SIZE*block);
-//    binaryFile.write((char*)data, sizeof(char)*BLOCK_SIZE);
-//    binaryFile.close();
-//}
 
 void HardDisk::overrideSectors()
 {
     std::ofstream sectorsFile;
-    for (int i = 0; i < this->numberDisks; i++)
+    std::string string_cwd = std::string(this->cwd);
+    string_cwd += "/freeSectors.dat";
+
+    for (std::vector<int>::iterator it = this->sectors.begin(); it != this->sectors.end(); it++)
     {
-        std::string string_cwd = std::string(this->cwd);
-        string_cwd += "/freeSectors";
-        string_cwd += std::to_string(i);
-        string_cwd += ".dat";
-        sectorsFile.open(string_cwd, std::ios::in | std::ios::binary | std::ios::trunc);
-        for (std::vector<int>::iterator it = this->sectors[i].begin(); it != this->sectors[i].end(); it++)
-        {
-            int number = *it;
-            sectorsFile.write((char*)&number, sizeof(int));
-        }
-        sectorsFile.close();
+        int number = *it;
+        sectorsFile.write((char*)&number, sizeof(int));
     }
+    sectorsFile.close();
 }
 
 /*Subir*/
@@ -185,8 +136,8 @@ void HardDisk::writeFile(Node* fileNode)
         pos = fs.tellg();
         memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
 
-        int HDD = getEmptyHdd(i);
-        int block = i / this->numberDisks;
+        int HDD = getEmptyHdd(numberOfBlocks);
+        int block = numberOfBlocks / this->numberDisks;
         int option = 10;
         int size = sizeof(char)*restSize;
         MPI_Send(&option, 1, MPI_INT, 0, 0, this->comm[HDD]);
@@ -205,17 +156,10 @@ void HardDisk::writeFile(Node* fileNode)
 
 }
 
-char* HardDisk::readBlock(std::ifstream &disk, int block)
-{
-    char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
-    disk.seekg(block*BLOCK_SIZE);
-    disk.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
-    return binaryData;
-    //free(binaryData);
-}
 
 void HardDisk::readFile(Node* fileNode)
 {
+    MPI_Status status;
     std::ofstream file;
     std::ifstream disk;
 
@@ -226,19 +170,25 @@ void HardDisk::readFile(Node* fileNode)
 
     string_cwd = std::string(this->cwd);
 
-    std::vector<location_t>* locations = fileNode->getBlockLocations();
+    std::vector<int>* blocks = fileNode->getBlockLocations();
 
     for (int i = 0; i < fileNode->getNumBlocksOccupied()-1; i++)
     {
-        //saco hdd
-        int hdd = locations->at(i).HDD;
+        int hdd = i% this->numberDisks;
         //saco bloque
-        int block = locations->at(i).block;
+        int block = blocks->at(i);
+        int size = BLOCK_SIZE;
+        char* binaryData = NULL;
+
         //leo datos
         disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
+        MPI_Send(&11, 1, MPI_INT, 0, 0, this->comm[hdd]);
+        MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[hdd]);
+        MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[hdd]);
 
-        //escribo en el archivo en posicion i*blocksize
-        char* binaryData = readBlock(disk, block);
+        binaryData = (char*)malloc(sizeof(char)*size);
+
+        MPI_Recv(binaryData, size, MPI_CHAR, 0, 0, this->comm[hdd], &status);
 
         file.seekp(BLOCK_SIZE*i);
         file.write((char*)binaryData, sizeof(char)*BLOCK_SIZE);
@@ -246,14 +196,25 @@ void HardDisk::readFile(Node* fileNode)
         disk.close();
     }
 
-    int hdd = locations->at(fileNode->getNumBlocksOccupied()-1).HDD;
-    int block = locations->at(fileNode->getNumBlocksOccupied()-1).block;
-    int rest = fileNode->getByteSize() - ((fileNode->getNumBlocksOccupied()-1)*BLOCK_SIZE);
-    disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
-    char* binaryData = readBlock(disk, block);
-    file.seekp(BLOCK_SIZE*(fileNode->getNumBlocksOccupied() - 1));
-    file.write((char*)binaryData, sizeof(char)*rest);
+    int hdd = i% this->numberDisks;
+    //saco bloque
+    int block = blocks->at(i);
+    int size = fileNode->getByteSize() - ((fileNode->getNumBlocksOccupied()-1)*BLOCK_SIZE);;
+    char* binaryData = NULL;
 
+    //leo datos
+    disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
+    MPI_Send(&11, 1, MPI_INT, 0, 0, this->comm[hdd]);
+    MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[hdd]);
+    MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[hdd]);
+
+    binaryData = (char*)malloc(sizeof(char)*size);
+
+    MPI_Recv(binaryData, size, MPI_CHAR, 0, 0, this->comm[hdd], &status);
+
+    file.seekp(BLOCK_SIZE*(fileNode->getNumBlocksOccupied() - 1));
+    file.write((char*)binaryData, sizeof(char)*size);
+    //free
     disk.close();
     file.close();
 }
@@ -324,12 +285,12 @@ int HardDisk::getNumberOfDisks()
 
 void HardDisk::deleteNode(Node* fileNode)
 {
-    std::vector<location_t>* locations = fileNode->getBlockLocations();
+    std::vector<int>* locations = fileNode->getBlockLocations();
 
     for(int i = locations->size()-1; i >= 0; i--)
     {
-        location_t loc = locations->at(i);
-        this->sectors[loc.HDD].insert(this->sectors[loc.HDD].begin(), loc.block);
+        int loc = locations->at(i);
+        this->sectors[loc].insert(this->sectors[loc].begin(), loc);
     }
 }
 

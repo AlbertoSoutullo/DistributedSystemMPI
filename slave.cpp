@@ -9,6 +9,9 @@ void writeBlock(int rank, MPI_Comm parent, MPI_Status status)
 
     MPI_Recv(&block, 1, MPI_INT, 0, 0, parent, &status);
     MPI_Recv(&size, 1, MPI_INT, 0, 0, parent, &status);
+
+    binaryData = (char*)malloc(sizeof(char)*size);
+
     MPI_Recv(binaryData, size, MPI_CHAR, 0, 0, parent, &status);
 
     std::string fileName = "disk" + std::to_string(rank) + ".dat";

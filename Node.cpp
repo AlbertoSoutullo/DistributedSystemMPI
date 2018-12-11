@@ -138,7 +138,7 @@ int Node::getNumberOfOffsprings()
 	return this->numberOfOffsprings;
 }
 
-std::vector<location_t>* Node::getBlockLocations()
+std::vector<int>* Node::getBlockLocations()
 {
     return &this->blockOccupied;
 }
@@ -249,21 +249,10 @@ void Node::setBlock(int block)
 
 void Node::setNumBlocksOccupied()
 {
-//    int blocks = 0;
-//    for (int i = 0; i < this->blockOccupied.size(); i++)
-//    {
-//        int HDDSize = this->blockOccupied[i].size();
-//        blocks += HDDSize;
-//    }
     this->numBlocksOccupied = blockOccupied.size();
 }
 
-//void Node::setBlockList()
-//{
-//    this->blockOccupied.push_back(std::vector<int>());
-//}
-
-void Node::setBlockOccupied(std::vector<location_t> &blocks)
+void Node::setBlockOccupied(std::vector<int> &blocks)
 {
     this->blockOccupied = blocks;
 }

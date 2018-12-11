@@ -5,10 +5,12 @@
 #include "Terminal.h"
 #include <bits/stdc++.h>
 
+
 int Node::idcont = 0;
 
 int main(int argc, char *argv[]) 
 {
+    MPI_Init(&argc, &argv);
     std::string options = "";
     std::string command = "";
     std::string firstParameter = "";

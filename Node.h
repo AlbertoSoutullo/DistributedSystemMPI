@@ -62,7 +62,7 @@ public:
 	int getLevel();
 	int getNumberOfOffsprings();
     bool getIsDirectory();
-    std::vector<location_t>* getBlockLocations();
+    std::vector<int>* getBlockLocations();
     int getNumBlocksOccupied();
 
 	//seters
@@ -77,7 +77,7 @@ public:
     void setTree(Tree* tree);
     void setIsDirectory(bool isDirectory);
     void setID(int id);
-    void setBlockOccupied(std::vector<location_t> &blocks);
+    void setBlockOccupied(std::vector<int> &blocks);
     void setBlock(int block);
     void setNumBlocksOccupied();
 
