@@ -41,15 +41,17 @@ HardDisk::HardDisk()
         format();
     }
     initializeSectors();
-
+    this->numberDisks = 4;
     //Create slaves
     for (int i = 0; i < this->numberDisks; i++)
     {
+        std::cout << "FOR" << std::endl;
         MPI_Comm* communicator = new MPI_Comm[1];
         MPI_Comm_spawn("slave", MPI_ARGV_NULL, 1, MPI_INFO_NULL, 0, MPI_COMM_SELF, communicator, MPI_ERRCODES_IGNORE);
         this->comm.push_back(communicator);
         int newID = this->comm.size();
         MPI_Send(&newID, 1, MPI_INT, 0, 0, *communicator);
+        std::cout << "ID SENDED" << std::endl;
     }
 }
 
@@ -112,10 +114,10 @@ void HardDisk::writeFile(Node* fileNode)
         int block = i / this->numberDisks;
         int option = 10;
         int size = sizeof(char)*BLOCK_SIZE;
-        MPI_Send(&option, 1, MPI_INT, 0, 0, this->comm[HDD]);
-        MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[HDD]);
-        MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[HDD]);
-        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, this->comm[HDD]);
+        MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+        MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+        MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
 
         (*fileNode).setBlock(block);
 
@@ -140,10 +142,10 @@ void HardDisk::writeFile(Node* fileNode)
         int block = numberOfBlocks / this->numberDisks;
         int option = 10;
         int size = sizeof(char)*restSize;
-        MPI_Send(&option, 1, MPI_INT, 0, 0, this->comm[HDD]);
-        MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[HDD]);
-        MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[HDD]);
-        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, this->comm[HDD]);
+        MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+        MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+        MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
 
         (*fileNode).setBlock(block);
 
@@ -181,14 +183,15 @@ void HardDisk::readFile(Node* fileNode)
         char* binaryData = NULL;
 
         //leo datos
+        int option = 11;
         disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
-        MPI_Send(&11, 1, MPI_INT, 0, 0, this->comm[hdd]);
-        MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[hdd]);
-        MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[hdd]);
+        MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[hdd]);
+        MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[hdd]);
+        MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[hdd]);
 
         binaryData = (char*)malloc(sizeof(char)*size);
 
-        MPI_Recv(binaryData, size, MPI_CHAR, 0, 0, this->comm[hdd], &status);
+        MPI_Recv(binaryData, size, MPI_CHAR, 0, 0, *this->comm[hdd], &status);
 
         file.seekp(BLOCK_SIZE*i);
         file.write((char*)binaryData, sizeof(char)*BLOCK_SIZE);
@@ -196,21 +199,22 @@ void HardDisk::readFile(Node* fileNode)
         disk.close();
     }
 
-    int hdd = i% this->numberDisks;
+    int hdd = (fileNode->getNumBlocksOccupied()-1) % this->numberDisks;
     //saco bloque
-    int block = blocks->at(i);
+    int block = blocks->at(fileNode->getNumBlocksOccupied()-1);
     int size = fileNode->getByteSize() - ((fileNode->getNumBlocksOccupied()-1)*BLOCK_SIZE);;
     char* binaryData = NULL;
 
     //leo datos
     disk.open(string_cwd + "/disk" + std::to_string(hdd) + ".dat", std::ios::in | std::ios::binary);
-    MPI_Send(&11, 1, MPI_INT, 0, 0, this->comm[hdd]);
-    MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[hdd]);
-    MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[hdd]);
+    int option = 11;
+    MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[hdd]);
+    MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[hdd]);
+    MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[hdd]);
 
     binaryData = (char*)malloc(sizeof(char)*size);
 
-    MPI_Recv(binaryData, size, MPI_CHAR, 0, 0, this->comm[hdd], &status);
+    MPI_Recv(binaryData, size, MPI_CHAR, 0, 0, *this->comm[hdd], &status);
 
     file.seekp(BLOCK_SIZE*(fileNode->getNumBlocksOccupied() - 1));
     file.write((char*)binaryData, sizeof(char)*size);
@@ -290,7 +294,7 @@ void HardDisk::deleteNode(Node* fileNode)
     for(int i = locations->size()-1; i >= 0; i--)
     {
         int loc = locations->at(i);
-        this->sectors[loc].insert(this->sectors[loc].begin(), loc);
+        this->sectors.insert(this->sectors.begin(), loc);
     }
 }
 

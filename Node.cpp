@@ -241,15 +241,12 @@ void Node::setID(int id)
 
 void Node::setBlock(int block)
 {
-//    location_t location;
-//    location.HDD = HDD;
-//    location.block = block;
     this->blockOccupied.push_back(block);
 }
 
 void Node::setNumBlocksOccupied()
 {
-    this->numBlocksOccupied = blockOccupied.size();
+    this->numBlocksOccupied = this->blockOccupied.size();
 }
 
 void Node::setBlockOccupied(std::vector<int> &blocks)

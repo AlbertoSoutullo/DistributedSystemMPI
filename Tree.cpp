@@ -10,11 +10,12 @@ Tree::Tree()
 
     std::string root = "ROOT";
     std::string type = "dir";
-    Node nodo(this, NULL, root , type);
-	this->root =(Node*)malloc(sizeof(Node));
+    //Node* nodo(this, NULL, root , type);
+    //this->root =(Node*)malloc(sizeof(Node));
 
     //Probar si sin esto funciona igual
-    *this->root = nodo;
+
+    this->root = new Node(this, NULL, root , type);
 	//current Dir root
     this->current_Dir = this->root;
 	//size
@@ -369,6 +370,7 @@ void Tree::loadTree()
             nodeToInsert->setBlockOccupied(blockOccupied); /////
             nodeToInsert->setNumBlocksOccupied();
         }
+
     }
     binaryFile.close();
 }

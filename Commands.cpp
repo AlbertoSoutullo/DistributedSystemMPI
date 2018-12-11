@@ -320,8 +320,6 @@ void Commands::lpwd()
 struct stat Commands::getFileInfo(std::string name)
 {
     struct stat fileInfo;
-    //char fileName[name.size()];
-    //strncpy(fileName, name.c_str(), name.size());
     stat(name.c_str(), &fileInfo);
     return fileInfo;
 }

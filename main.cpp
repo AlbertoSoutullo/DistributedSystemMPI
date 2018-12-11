@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
     std::string firstParameter = "";
     std::string secondParameter = "";
     std::vector<std::string> tokens;
+
     Tree* tree = new Tree();
+
     Terminal* terminal = new Terminal(tree);
 
     tree->loadTree();

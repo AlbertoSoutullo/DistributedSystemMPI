@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <mpi.h>
 
 
 void writeBlock(int rank, MPI_Comm parent, MPI_Status status)
@@ -31,14 +33,14 @@ void readBlock(int rank, MPI_Comm parent, MPI_Status status)
     char* binaryData = NULL;
 
     std::string fileName = "disk" + std::to_string(rank) + ".dat";
-    std::ifstream binaryFile;
-    binaryFile.open(fileName, std::ios::out | std::ios::binary | std::ios::in);
+    std::ifstream disk;
+    disk.open(fileName, std::ios::out | std::ios::binary | std::ios::in);
 
     MPI_Recv(&block, 1, MPI_INT, 0, 0, parent, &status);
     MPI_Recv(&size, 1, MPI_INT, 0, 0, parent, &status);
     //lee disco
-    disk.seekg(block*BLOCK_SIZE);
-    disk.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
+    disk.seekg(block*size);
+    disk.read((char*)binaryData, sizeof(char)*size);
     //manda data
     MPI_Send(&binaryData, size, MPI_CHAR, 0, 0, parent);
 }
@@ -64,6 +66,7 @@ int main(int argc, char** argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     rank = recv_ID();
+    std::cout << "Slave " << std::to_string(rank) << " created" << std::endl;
 
     MPI_Comm parent;
     MPI_Comm_get_parent(&parent);
