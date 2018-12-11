@@ -53,34 +53,37 @@ HardDisk::HardDisk()
     }
 }
 
-int HardDisk::getEmptyHdd()
+int HardDisk::getEmptyHdd(int block)
 {
+    int result = block % this->numberDisks;
+
+    return result;
     //We assume that the first one is the first empty
-    int emptyHDD = 0;
-    int emptyHDDSize = this->sectors[emptyHDD].size();
-    bool full = false;
+//    int emptyHDD = 0;
+//    int emptyHDDSize = this->sectors[emptyHDD].size();
+//    bool full = false;
 
-    for (int i = 0; i < this->sectors.size(); i++)
-    {
-        int actualHDDSize = this->sectors[i].size();
+//    for (int i = 0; i < this->sectors.size(); i++)
+//    {
+//        int actualHDDSize = this->sectors[i].size();
 
-        if(actualHDDSize == 0)
-        {
-            full = true;
-        }
-        else
-        {
-            full = false;
+//        if(actualHDDSize == 0)
+//        {
+//            full = true;
+//        }
+//        else
+//        {
+//            full = false;
 
-            if (actualHDDSize > emptyHDDSize)
-            {
-                emptyHDD = i;
-                emptyHDDSize = this->sectors[emptyHDD].size();
-            }
-        }
-    }
-    if (full) return -1;
-    else return emptyHDD;
+//            if (actualHDDSize > emptyHDDSize)
+//            {
+//                emptyHDD = i;
+//                emptyHDDSize = this->sectors[emptyHDD].size();
+//            }
+//        }
+//    }
+//    if (full) return -1;
+//    else return emptyHDD;
 }
 
 int HardDisk::getBlock(int HDD)
@@ -90,17 +93,17 @@ int HardDisk::getBlock(int HDD)
     return block;
 }
 
-void HardDisk::writeBlock(char* data, int HDD, int block)
-{
-    //Escribimos ahi
-    std::string fileName = "disk" + std::to_string(HDD) + ".dat";
-    std::ofstream binaryFile;
+//void HardDisk::writeBlock(char* data, int HDD, int block)
+//{
+//    //Escribimos ahi
+//    std::string fileName = "disk" + std::to_string(HDD) + ".dat";
+//    std::ofstream binaryFile;
 
-    binaryFile.open(fileName, std::ios::out | std::ios::binary | std::ios::in);
-    binaryFile.seekp(BLOCK_SIZE*block);
-    binaryFile.write((char*)data, sizeof(char)*BLOCK_SIZE);
-    binaryFile.close();
-}
+//    binaryFile.open(fileName, std::ios::out | std::ios::binary | std::ios::in);
+//    binaryFile.seekp(BLOCK_SIZE*block);
+//    binaryFile.write((char*)data, sizeof(char)*BLOCK_SIZE);
+//    binaryFile.close();
+//}
 
 void HardDisk::overrideSectors()
 {
@@ -142,6 +145,7 @@ void HardDisk::writeFile(Node* fileNode)
     int pos = 0; //Last position of reader
 
     //en un for, por cada bloque leer esa parte, mirar que disco está vacio, escribir
+    //se puede enviar el array de blocks y el array de datos
     for (int i = 0; i < numberOfBlocks; i++)
     {
         std::ifstream fs;
@@ -153,25 +157,21 @@ void HardDisk::writeFile(Node* fileNode)
         fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
         pos += BLOCK_SIZE;
 
-        int HDD = getEmptyHdd();
+        int HDD = getEmptyHdd(i);
+        int block = i / this->numberDisks;
+        int option = 10;
+        int size = sizeof(char)*BLOCK_SIZE;
+        MPI_Send(&option, 1, MPI_INT, 0, 0, this->comm[HDD]);
+        MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[HDD]);
+        MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[HDD]);
+        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, this->comm[HDD]);
 
-        if (HDD == -1)
-        {
-            std::cout << "Disks ran out of space." << std::endl;
-            fs.close();
-            break;
-        }
-        else
-        {
-            int block = getBlock(HDD);
+        (*fileNode).setBlock(block);
 
-            writeBlock(binaryData, HDD, block);
-            //Escribir en nodo
-            (*fileNode).setBlock(block, HDD);
+        fs.close();
+        //free
 
-            fs.close();
-            //free(binaryData);
-        }
+        //out os space?
     }
     if(flagRest)
     {
@@ -184,24 +184,19 @@ void HardDisk::writeFile(Node* fileNode)
         fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
         pos = fs.tellg();
         memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
-        int HDD = getEmptyHdd();
 
-        if (HDD == -1)
-        {
-            std::cout << "Disks ran out of space." << std::endl;
-            fs.close();
-        }
-        else
-        {
-            int block = getBlock(HDD);
+        int HDD = getEmptyHdd(i);
+        int block = i / this->numberDisks;
+        int option = 10;
+        int size = sizeof(char)*restSize;
+        MPI_Send(&option, 1, MPI_INT, 0, 0, this->comm[HDD]);
+        MPI_Send(&block, 1, MPI_INT, 0, 0, this->comm[HDD]);
+        MPI_Send(&size, 1, MPI_INT, 0, 0, this->comm[HDD]);
+        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, this->comm[HDD]);
 
-            writeBlock(binaryData, HDD, block);
-            //Escribir en nodo
-            (*fileNode).setBlock(block, HDD);
+        (*fileNode).setBlock(block);
 
-            fs.close();
-            //free(binaryData);
-        }
+        fs.close();
     }
 
     //Actualizar el fichero de sectores

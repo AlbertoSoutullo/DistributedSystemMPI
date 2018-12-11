@@ -239,12 +239,12 @@ void Node::setID(int id)
     this->idcont = id + 1;
 }
 
-void Node::setBlock(int block, int HDD)
+void Node::setBlock(int block)
 {
-    location_t location;
-    location.HDD = HDD;
-    location.block = block;
-    this->blockOccupied.push_back(location);
+//    location_t location;
+//    location.HDD = HDD;
+//    location.block = block;
+    this->blockOccupied.push_back(block);
 }
 
 void Node::setNumBlocksOccupied()

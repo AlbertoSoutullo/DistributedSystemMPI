@@ -21,11 +21,6 @@ Entrega Parte 3:
 
 #define BLOCK_SIZE 1024
 
-struct location_t{
-    int HDD;
-    int block;
-};
-
 class Tree;
 class Node
 {
@@ -45,7 +40,7 @@ class Node
     ///Segunda Iteracion///
     //Vector de bloques que tenga identificadores de sectores del disco donde está guardado. Tan largo como el fichero, pero no más que el tamaó total del disco.
     //numBLoques: Cuantos bloques se han usado.
-    std::vector<location_t> blockOccupied;
+    std::vector<int> blockOccupied;
     int numBlocksOccupied = 0;
 	
 public:
@@ -83,7 +78,7 @@ public:
     void setIsDirectory(bool isDirectory);
     void setID(int id);
     void setBlockOccupied(std::vector<location_t> &blocks);
-    void setBlock(int block, int HDD);
+    void setBlock(int block);
     void setNumBlocksOccupied();
 
     //Utilities
