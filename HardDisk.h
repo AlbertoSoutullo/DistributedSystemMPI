@@ -45,7 +45,7 @@ public:
     void overrideSectors();
 
 private:
-    void readSectors(int HDD);
+    void readSectors();
     void initializeSectors();
     int getEmptyHdd(int block);
 

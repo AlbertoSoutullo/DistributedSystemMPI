@@ -1,9 +1,9 @@
 #include "HardDisk.h"
 #include "Node.h"
 
-void HardDisk::readSectors(int HDD)
+void HardDisk::readSectors()
 {
-    std::string fileName = "freeSectors" + std::to_string(HDD) + ".dat";
+    std::string fileName = "freeSectors.dat";
     std::ifstream binaryFile;
     int size = 0;
     int sector = -1;
@@ -23,10 +23,11 @@ void HardDisk::readSectors(int HDD)
 
 void HardDisk::initializeSectors()
 {
-    for(int i = 0; i < this->numberDisks; i++)
-    {
-        readSectors(i);
-    }
+    readSectors();
+//    for(int i = 0; i < this->numberDisks; i++)
+//    {
+//        readSectors(i);
+//    }
 }
 
 HardDisk::HardDisk()
@@ -40,18 +41,17 @@ HardDisk::HardDisk()
     {
         format();
     }
+    this->numberDisks = 4; //REVISAR
+    this->diskSize = 120000;
     initializeSectors();
-    this->numberDisks = 4;
     //Create slaves
     for (int i = 0; i < this->numberDisks; i++)
     {
-        std::cout << "FOR" << std::endl;
         MPI_Comm* communicator = new MPI_Comm[1];
         MPI_Comm_spawn("slave", MPI_ARGV_NULL, 1, MPI_INFO_NULL, 0, MPI_COMM_SELF, communicator, MPI_ERRCODES_IGNORE);
         int newID = this->comm.size();
         this->comm.push_back(communicator);
         MPI_Send(&newID, 1, MPI_INT, 0, 0, *communicator);
-        std::cout << "ID SENDED" << std::endl;
     }
 }
 
@@ -113,7 +113,7 @@ void HardDisk::writeFile(Node* fileNode)
         int HDD = getEmptyHdd(this->sectors.at(0));
         int block = this->sectors.at(0) / this->numberDisks;
         (*fileNode).setBlock(this->sectors.at(0));
-        this->sectors.erase(this->sectors.begin(), this->sectors.begin());
+        this->sectors.erase(this->sectors.begin());
         int option = 10;
         int size = sizeof(char)*BLOCK_SIZE;
         MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
@@ -141,7 +141,7 @@ void HardDisk::writeFile(Node* fileNode)
         int HDD = getEmptyHdd(this->sectors.at(0));
         int block = this->sectors.at(0) / this->numberDisks;
         (*fileNode).setBlock(this->sectors.at(0));
-        this->sectors.erase(this->sectors.begin(), this->sectors.begin());
+        this->sectors.erase(this->sectors.begin());
         int option = 10;
         int size = sizeof(char)*restSize;
         MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);

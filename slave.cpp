@@ -40,6 +40,7 @@ void readBlock(int rank, MPI_Comm parent, MPI_Status status)
     MPI_Recv(&size, 1, MPI_INT, 0, 0, parent, &status);
     //lee disco
     disk.seekg(block*size);
+    binaryData = (char*)malloc(sizeof(char)*size);
     disk.read((char*)binaryData, sizeof(char)*size);
     //manda data
     MPI_Send(&binaryData, size, MPI_CHAR, 0, 0, parent);
