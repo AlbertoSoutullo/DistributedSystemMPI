@@ -393,9 +393,6 @@ void Commands::uploadFolder(Tree* tree, Node* node, std::string name, struct sta
 
 void Commands::upload(Tree* tree, std::string name)
 {
-    //fileInfo.st_size para el tama?o
-    //fileInfo.st_mtime para la fecha de modificacion
-
     if ((name != "") && (name != ".") && (name != "..") && (name != "/"))
     {
         struct stat fileInfo = getFileInfo(name);
@@ -418,7 +415,7 @@ void Commands::upload(Tree* tree, std::string name)
         else //Upload a file
         {
             std::cout << "Uploading " << name << std::endl;
-            uploadFile(tree, tree->getCurrentDir(), name, fileInfo);
+            uploadFile(tree, tree->getCurrentDir(), name, fileInfo);            
             tree->WriteBinaryFile();
         }
     }

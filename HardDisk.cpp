@@ -37,13 +37,22 @@ HardDisk::HardDisk()
     if (FILE *file = fopen("disk0.dat", "r"))
     {
         std::cout << "Loading Hard Drives..." << std::endl;
-        initializeSectors();
     }
     else
     {
         format();
-        initializeSectors();
-    }    
+    }
+    initializeSectors();
+
+    //Create slaves
+    for (int i = 0; i < this->numberDisks; i++)
+    {
+        MPI_Comm communicator = new MPI_Comm[1];
+        MPI_Comm_spawn("slave", MPI_ARGV_NULL, 1, MPI_INFO_NULL, 0, MPI_COMM_SELF, &communicator, MPI_ERRCODES_IGNORE);
+        this->comm.push_back(communicator);
+        int newID = this->comm.size();
+        MPI_Send(&newID, 1, MPI_INT, 0, 0, communicator);
+    }
 }
 
 int HardDisk::getEmptyHdd()
@@ -196,7 +205,6 @@ void HardDisk::writeFile(Node* fileNode)
             //free(binaryData);
         }
     }
-
 
     //Actualizar el fichero de sectores
     (*fileNode).setNumBlocksOccupied();

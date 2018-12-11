@@ -1,5 +1,6 @@
 HardDisk.cpp
 HardDisk.h
+slave.cpp
 treebackup.h
 Commands.cpp
 Commands.h

@@ -11,6 +11,7 @@ Tener en cuenta borrar.
 #include <unistd.h>
 #include <list>
 #include <tuple>
+#include <mpi.h>
 
 #define BLOCK_SIZE 1024
 
@@ -21,7 +22,8 @@ class HardDisk
     int numberDisks;
     int diskSize;
     //Los sectores libres se guardan en "freeSectors1.dat".
-    std::vector<std::vector<int>> sectors;
+    std::vector<int> sectors;
+    std::vector<MPI_Comm> comm;
 
 public:
     HardDisk();
