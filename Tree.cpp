@@ -256,7 +256,7 @@ void Tree::saveTreeRecursive(Node* nodeToSave, std::ofstream &of)
     of.write((char*)&lastModification, sizeof(lastModification));
 
     of.write((char*)&vectorSize, sizeof(vectorSize)); //tamaño del vector de structs
-    of.write((char*)&blockOcuppied[0], blockOcuppied->size() * sizeof(int));
+    of.write((char*)blockOcuppied->data(), blockOcuppied->size() * sizeof(int));
 
     std::vector<Node*>* elements = nodeToSave->getOffsprings();
     for (int i = 0; i < nodeToSave->getNumberOfOffsprings(); i++)
@@ -354,7 +354,7 @@ void Tree::loadTree()
         binaryFile.read((char*)&vectorSize, sizeof(vectorSize));
         std::vector<int> blockOccupied;
         blockOccupied.resize(vectorSize);
-        binaryFile.read((char*)&blockOccupied[0], blockOccupied.size()*sizeof(int));
+        binaryFile.read((char*)blockOccupied.data(), blockOccupied.size()*sizeof(int));
 
         //busco padre
         Node* father = searchById(idFather);

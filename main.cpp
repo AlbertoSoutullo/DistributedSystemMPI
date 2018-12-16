@@ -10,12 +10,18 @@ int Node::idcont = 0;
 
 int main(int argc, char *argv[]) 
 {
+    bool flag = true;
     MPI_Init(&argc, &argv);
     std::string options = "";
     std::string command = "";
     std::string firstParameter = "";
     std::string secondParameter = "";
     std::vector<std::string> tokens;
+
+//    while(flag)
+//    {
+//        ;
+//    }
 
     Tree* tree = new Tree();
 

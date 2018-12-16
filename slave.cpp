@@ -43,7 +43,7 @@ void readBlock(int rank, MPI_Comm parent, MPI_Status status)
     binaryData = (char*)malloc(sizeof(char)*size);
     disk.read((char*)binaryData, sizeof(char)*size);
     //manda data
-    MPI_Send(&binaryData, size, MPI_CHAR, 0, 0, parent);
+    MPI_Send(binaryData, size, MPI_CHAR, 0, 0, parent);
 }
 
 int recv_ID()
@@ -60,6 +60,12 @@ int recv_ID()
 
 int main(int argc, char** argv)
 {
+//    bool flag = true;
+//    while(flag)
+//    {
+//        ;
+//    }
+    
     int rank = -1;
     int quit = 0;
     int option = -1;
