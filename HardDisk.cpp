@@ -93,7 +93,8 @@ void HardDisk::writeFile(Node* fileNode)
 
     if ((fileSize % blockSize) != 0)
     {
-        restSize = fileSize - (numberOfBlocks*BLOCK_SIZE);
+        numberOfBlocks++;
+        restSize = (numberOfBlocks*BLOCK_SIZE) - fileSize;
         flagRest = true;
     }
 
@@ -110,11 +111,16 @@ void HardDisk::writeFile(Node* fileNode)
         if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
         fs.seekg(pos, fs.beg);
         fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
+        if (i == numberOfBlocks -1)
+        {
+            memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
+        }
+
         pos += BLOCK_SIZE;
 
         if (this->sectors.empty())
         {
-            std::cout << "Disk is empty, deleting " << (*fileNode->getName()) << "..." << std::endl;
+            std::cout << "Disk is empty, deleting " << fileNode->getName() << "..." << std::endl;
             this->deleteNode(fileNode);
             diskFull = true;
             fs.close();
@@ -135,37 +141,32 @@ void HardDisk::writeFile(Node* fileNode)
 
             fs.close();
             //free
-
-            //out os space?
         }
-
-
     }
-    if(flagRest && !diskFull)
-    {
-        std::ifstream fs;
-        char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
-        //Open File and Check size
-        fs.open(string_cwd + "/" + fileNode->getName(), std::ios::in | std::ios::binary);
-        if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
-        fs.seekg(pos, fs.beg);
-        fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
-        pos = fs.tellg();
-        memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
+//    if(flagRest && !diskFull)
+//    {
+//        std::ifstream fs;
+//        char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
+//        //Open File and Check size
+//        fs.open(string_cwd + "/" + fileNode->getName(), std::ios::in | std::ios::binary);
+//        if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
+//        fs.seekg(pos, fs.beg);
+//        fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
+//        memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
 
-        int HDD = getHddInCharge(this->sectors.at(0));
-        int block = this->sectors.at(0) / this->numberDisks;
-        (*fileNode).setBlock(this->sectors.at(0));
-        this->sectors.erase(this->sectors.begin());
-        int option = 10;
-        int size = sizeof(char)*restSize;
-        MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-        MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-        MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
+//        int HDD = getHddInCharge(this->sectors.at(0));
+//        int block = this->sectors.at(0) / this->numberDisks;
+//        (*fileNode).setBlock(this->sectors.at(0));
+//        this->sectors.erase(this->sectors.begin());
+//        int option = 10;
+//        int size = sizeof(char)*restSize;
+//        MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+//        MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+//        MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+//        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
 
-        fs.close();
-    }
+//        fs.close();
+//    }
     if(!diskFull)
     {
         //Actualizar el fichero de sectores
@@ -186,6 +187,7 @@ void HardDisk::readFile(Node* fileNode)
     string_cwd += "/";
     string_cwd += fileNode->getName();
     file.open(string_cwd, std::ios::out | std::ios::binary | std::ios::trunc);
+    if (!file.is_open()) std::cout << "Cannot open file." << std::endl;
 
     string_cwd = std::string(this->cwd);
 
