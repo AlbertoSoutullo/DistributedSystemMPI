@@ -47,7 +47,7 @@ public:
 private:
     void readSectors();
     void initializeSectors();
-    int getEmptyHdd(int block);
+    int getHddInCharge(int block);
 
     void formatDisk();
     void formatSectors();

@@ -55,7 +55,7 @@ HardDisk::HardDisk()
     }
 }
 
-int HardDisk::getEmptyHdd(int block)
+int HardDisk::getHddInCharge(int block)
 {
     int result = block % this->numberDisks;
 
@@ -77,11 +77,13 @@ void HardDisk::overrideSectors()
     sectorsFile.close();
 }
 
+
 /*Subir*/
 void HardDisk::writeFile(Node* fileNode)
 {
     int restSize = -1;
     bool flagRest = false;
+    bool diskFull = false;
     std::string string_cwd = std::string(this->cwd);
 
     //dividir el archivo en bloques (restante a cero)
@@ -110,23 +112,36 @@ void HardDisk::writeFile(Node* fileNode)
         fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
         pos += BLOCK_SIZE;
 
-        int HDD = getEmptyHdd(this->sectors.at(0));
-        int block = this->sectors.at(0) / this->numberDisks;
-        (*fileNode).setBlock(this->sectors.at(0));
-        this->sectors.erase(this->sectors.begin());
-        int option = 10;
-        int size = sizeof(char)*BLOCK_SIZE;
-        MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-        MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-        MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
+        if (this->sectors.empty())
+        {
+            std::cout << "Disk is empty, deleting " << (*fileNode->getName()) << "..." << std::endl;
+            this->deleteNode(fileNode);
+            diskFull = true;
+            fs.close();
+            break;
+        }
+        else
+        {
+            int HDD = getHddInCharge(this->sectors.at(0));
+            int block = this->sectors.at(0) / this->numberDisks;
+            (*fileNode).setBlock(this->sectors.at(0));
+            this->sectors.erase(this->sectors.begin());
+            int option = 10;
+            int size = sizeof(char)*BLOCK_SIZE;
+            MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+            MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+            MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[HDD]);
+            MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
 
-        fs.close();
-        //free
+            fs.close();
+            //free
 
-        //out os space?
+            //out os space?
+        }
+
+
     }
-    if(flagRest)
+    if(flagRest && !diskFull)
     {
         std::ifstream fs;
         char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
@@ -138,7 +153,7 @@ void HardDisk::writeFile(Node* fileNode)
         pos = fs.tellg();
         memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
 
-        int HDD = getEmptyHdd(this->sectors.at(0));
+        int HDD = getHddInCharge(this->sectors.at(0));
         int block = this->sectors.at(0) / this->numberDisks;
         (*fileNode).setBlock(this->sectors.at(0));
         this->sectors.erase(this->sectors.begin());
@@ -151,10 +166,12 @@ void HardDisk::writeFile(Node* fileNode)
 
         fs.close();
     }
-
-    //Actualizar el fichero de sectores
-    (*fileNode).setNumBlocksOccupied();
-    overrideSectors();
+    if(!diskFull)
+    {
+        //Actualizar el fichero de sectores
+        (*fileNode).setNumBlocksOccupied();
+        overrideSectors();
+    }
 
 }
 
