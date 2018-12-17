@@ -24,14 +24,11 @@ void HardDisk::readSectors()
 void HardDisk::initializeSectors()
 {
     readSectors();
-//    for(int i = 0; i < this->numberDisks; i++)
-//    {
-//        readSectors(i);
-//    }
 }
 
 HardDisk::HardDisk()
 {
+    this->numberDisks = 4;
     getcwd(this->cwd, sizeof(cwd));
     if (FILE *file = fopen("disk0.dat", "r"))
     {
@@ -41,9 +38,9 @@ HardDisk::HardDisk()
     {
         format();
     }
-    this->numberDisks = 4; //REVISAR
-    this->diskSize = 120000;
+
     initializeSectors();
+
     //Create slaves
     for (int i = 0; i < this->numberDisks; i++)
     {
@@ -79,7 +76,7 @@ void HardDisk::overrideSectors()
 
 
 /*Subir*/
-void HardDisk::writeFile(Node* fileNode)
+bool HardDisk::writeFile(Node* fileNode)
 {
     int restSize = -1;
     bool flagRest = false;
@@ -124,7 +121,7 @@ void HardDisk::writeFile(Node* fileNode)
             this->deleteNode(fileNode);
             diskFull = true;
             fs.close();
-            break;
+            return false;
         }
         else
         {
@@ -143,30 +140,6 @@ void HardDisk::writeFile(Node* fileNode)
             //free
         }
     }
-//    if(flagRest && !diskFull)
-//    {
-//        std::ifstream fs;
-//        char* binaryData = (char*)malloc(sizeof(char)*BLOCK_SIZE);
-//        //Open File and Check size
-//        fs.open(string_cwd + "/" + fileNode->getName(), std::ios::in | std::ios::binary);
-//        if (!fs.is_open()) std::cout << "Cannot open file." << std::endl;
-//        fs.seekg(pos, fs.beg);
-//        fs.read((char*)binaryData, sizeof(char)*BLOCK_SIZE);
-//        memset(binaryData+restSize, 0, (BLOCK_SIZE-restSize)*sizeof(char));
-
-//        int HDD = getHddInCharge(this->sectors.at(0));
-//        int block = this->sectors.at(0) / this->numberDisks;
-//        (*fileNode).setBlock(this->sectors.at(0));
-//        this->sectors.erase(this->sectors.begin());
-//        int option = 10;
-//        int size = sizeof(char)*restSize;
-//        MPI_Send(&option, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-//        MPI_Send(&block, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-//        MPI_Send(&size, 1, MPI_INT, 0, 0, *this->comm[HDD]);
-//        MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
-
-//        fs.close();
-//    }
     if(!diskFull)
     {
         //Actualizar el fichero de sectores
@@ -292,12 +265,11 @@ bool HardDisk::checkIfExistsHDD()
 void HardDisk::format()
 {
     std::cout << "Creating Hard Drives..." << std::endl;
-    std::cout << "How many Drives do you want?" << std::endl;
-    std::cin >> this->numberDisks;
     std::cout << "Select total size: " << std::endl;
     std::cin >> this->diskSize;
     formatDisk();
     formatSectors();
+    remove("tree.dat");
 }
 
 

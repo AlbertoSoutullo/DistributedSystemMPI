@@ -29,7 +29,7 @@ public:
     HardDisk();
 
     //función que escribe todos los bloques de un fichero y su bloque índice en sectores libres del disco usando para cada uno de ellos writeBlock.
-    void writeFile(Node* fileNode);
+    bool writeFile(Node* fileNode);
 
     //readFile: función que lee con readBlock todos los bloques de un fichero mediante su bloque índice y lo reconstruye en el orden adecuado.
     void readFile(Node* fileNode);

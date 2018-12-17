@@ -10,10 +10,6 @@ Tree::Tree()
 
     std::string root = "ROOT";
     std::string type = "dir";
-    //Node* nodo(this, NULL, root , type);
-    //this->root =(Node*)malloc(sizeof(Node));
-
-    //Probar si sin esto funciona igual
 
     this->root = new Node(this, NULL, root , type);
 	//current Dir root
@@ -296,7 +292,6 @@ Node* Tree::searchById(int id)
 }
 
 
-//do save after upload, cp, mv, mdkir, rmdir and rm
 void Tree::saveTree(std::ofstream &of)
 {
     int totalNodes = this->numberOfNodes;

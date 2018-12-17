@@ -12,7 +12,7 @@ Terminal::Terminal(Tree* tree)
 
 void Terminal::Initiate(Tree* tree)
 {
-    //std::system("clear");
+    std::system("clear");
     std::cout << "Welcome to the Distribute File System" << std::endl;
     std::cout << "Actual remote directory is: " << std::endl;
     this->commandManager->pwd(tree);
@@ -139,6 +139,9 @@ void Terminal::executeCommand(Tree* tree, std::string command, std::string first
     if (command == "format")
     {
         this->commandManager->format();
+        //free
+        this->tree->loadTree();
+
         executed = true;
     }
     if (command == "download")

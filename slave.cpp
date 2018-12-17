@@ -22,7 +22,7 @@ void writeBlock(int rank, MPI_Comm parent, MPI_Status status)
     binaryFile.open(fileName, std::ios::out | std::ios::binary | std::ios::in);
     binaryFile.seekp(size*block);
     binaryFile.write((char*)binaryData, sizeof(char)*size);
-    std::cout << "wrote on disk " << rank << " with block " << block << std::endl;
+
     binaryFile.close();
 }
 

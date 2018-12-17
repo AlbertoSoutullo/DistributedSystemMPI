@@ -65,7 +65,7 @@ Node::Node(Tree* tree, Node* nodeFather, std::string name,  std::string node_typ
 }
 
 //destructor
-Node :: ~Node(void)
+Node :: ~Node()
 {
 }
 
@@ -203,8 +203,6 @@ void Node :: setNumberOffsprings(int number)
 //set the new id Name of the node, max 25 characters
 void Node::setName(std::string name)
 {
-     //strncpy(this->name, name.c_str(), name.size());
-     //this->name[sizeof(name)] = '\0';
     this->name = name;
 }
 

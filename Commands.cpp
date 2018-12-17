@@ -348,7 +348,10 @@ void Commands::uploadFile(Tree* tree, Node* node, std::string name, struct stat 
     }
     else
     {
-        this->HDDs->writeFile(newFile);
+        if(!this->HDDs->writeFile(newFile))
+        {
+            tree->removeChild(newFile);
+        }
     }
 }
 
@@ -442,4 +445,5 @@ void Commands::download(Tree* tree, std::string fileName)
 void Commands::format()
 {
     this->HDDs->format();
+
 }
