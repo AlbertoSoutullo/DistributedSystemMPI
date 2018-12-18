@@ -12,6 +12,7 @@ class Commands
 
 public:
     Commands();
+    ~Commands();
 
     //Print nodes in current directory
     void ls(Tree* tree);

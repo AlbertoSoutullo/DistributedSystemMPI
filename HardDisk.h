@@ -1,9 +1,3 @@
-/*
-disco1.dat
-Cada vez que se haga upload o cp se pone en el disco duro también.
-Tener en cuenta borrar.
-*/
-
 #include <fstream>
 #include <iostream>
 #include <bits/stdc++.h>
@@ -27,6 +21,7 @@ class HardDisk
 
 public:
     HardDisk();
+    ~HardDisk();
 
     //función que escribe todos los bloques de un fichero y su bloque índice en sectores libres del disco usando para cada uno de ellos writeBlock.
     bool writeFile(Node* fileNode);
@@ -54,18 +49,3 @@ private:
     bool checkIfExistsHDD();
     int checkHDDEmpy();
 };
-
-
-/*
-/**
- * Los nodos tienen un array de indices que guardan los sectores del disco.
- *
- * Disco duro de Capacidad de 32 megas
- *
- * Sectores de 1Kb. Identificador único (posición). Tamaño de bloques de fichero 1 Kb también.
- *
- * El disco duro solo almacena bloques de datos.
- *
- * Los indices de los bloques se incorporan a los nodos.
- * /
-*/

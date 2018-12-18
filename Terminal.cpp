@@ -1,13 +1,19 @@
 #include "Terminal.h"
 #include <sstream>
 
-Terminal::Terminal(){}
 
 Terminal::Terminal(Tree* tree)
 {
     this->tree = tree;
     getcwd(this->cwd, sizeof(cwd));
     this->commandManager = new Commands();
+}
+
+Terminal::~Terminal()
+{
+    //delete tree
+    delete this->commandManager;
+    std::cout << "Deleted Command Manager" << std::endl;
 }
 
 void Terminal::Initiate(Tree* tree)

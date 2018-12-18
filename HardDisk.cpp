@@ -52,6 +52,16 @@ HardDisk::HardDisk()
     }
 }
 
+HardDisk::~HardDisk()
+{
+    //Delete slaves
+    for (int i = 0; i < this->numberDisks; i++)
+    {
+        delete this->comm.at(i);
+        std::cout << "Deleted comm " << i << std::endl;
+    }
+}
+
 int HardDisk::getHddInCharge(int block)
 {
     int result = block % this->numberDisks;

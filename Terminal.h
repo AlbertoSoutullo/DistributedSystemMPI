@@ -12,8 +12,9 @@ class Terminal
     Commands* commandManager;
 
 public:
-    Terminal();
+
     Terminal(Tree* tree);
+    ~Terminal();
     void Initiate(Tree* tree);
     std::string ReadInput(Tree* tree);
     void Tokenize(std::vector<std::string>& tokens, std::string option);

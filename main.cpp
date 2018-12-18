@@ -49,4 +49,5 @@ int main(int argc, char *argv[])
         }
     }
     tree->WriteBinaryFile();
+    delete terminal;
 }

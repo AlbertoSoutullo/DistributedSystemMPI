@@ -8,6 +8,12 @@ Commands::Commands()
     this->HDDs = new HardDisk();
 }
 
+Commands::~Commands()
+{
+    delete this->HDDs;
+    std::cout << "Deleted HDD" << std::endl;
+}
+
 //permits view of files and folders of current_directory
 void Commands::ls(Tree* tree)
 {
