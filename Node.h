@@ -46,7 +46,6 @@ public:
 
 	//constructor
     Node(Tree* tree, Node* nodeFather, std::string name, std::string node_type);
-	Node();
     ~Node();
 
 	//getters

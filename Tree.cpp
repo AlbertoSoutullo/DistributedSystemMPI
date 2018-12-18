@@ -22,7 +22,10 @@ Tree::Tree()
 
 //destructor
 Tree :: ~Tree()
-{}
+{
+    delete this->root;
+    std::cout << "Deleted root" << std::endl;
+}
 
 
 ////SETTERS////

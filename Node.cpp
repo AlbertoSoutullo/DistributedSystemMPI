@@ -1,11 +1,5 @@
 #include "Node.h"
 
-
-//Constructors
-
-Node::Node()
-{}
-
 bool Node::isFolder(std::string name)
 {
     if (name.compare("fichero") == 0 || name.compare("f") == 0 || name.compare("file") == 0 || name.compare("File") == 0)
@@ -44,7 +38,6 @@ Node::Node(Tree* tree, Node* nodeFather, std::string name,  std::string node_typ
     {
         this->tree = tree;
         this->father = nodeFather;
-        //strncpy(this->name, name.c_str(), name.size());
         this->name = name;
         this->Id = this->idcont;
         this->idcont += 1;
@@ -67,6 +60,11 @@ Node::Node(Tree* tree, Node* nodeFather, std::string name,  std::string node_typ
 //destructor
 Node :: ~Node()
 {
+    for (int i = 0; i < numberOfOffsprings; i++)
+    {
+        std::cout << "Deleted node " << offsprings.at(i)->getName() << std::endl;
+        delete offsprings.at(i);
+    }
 }
 
 

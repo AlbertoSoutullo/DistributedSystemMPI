@@ -12,7 +12,8 @@ Terminal::Terminal()
 
 Terminal::~Terminal()
 {
-    //delete tree
+    delete this->tree;
+    std::cout << "Deleted Tree" << std::endl;
     delete this->commandManager;
     std::cout << "Deleted Command Manager" << std::endl;
 }
