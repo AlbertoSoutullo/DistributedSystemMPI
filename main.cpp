@@ -17,17 +17,13 @@ int main(int argc, char *argv[])
     std::string secondParameter = "";
     std::vector<std::string> tokens;
 
-    Tree* tree = new Tree();
+    Terminal* terminal = new Terminal();
 
-    Terminal* terminal = new Terminal(tree);
-
-    tree->loadTree();
-
-    terminal->Initiate(tree);
+    terminal->Initiate();
 
     while(options != "exit")
     {
-        options = terminal->ReadInput(tree);
+        options = terminal->ReadInput();
 
         if (options != "exit")
         {
@@ -43,11 +39,11 @@ int main(int argc, char *argv[])
                 {
                     secondParameter = terminal->filterSecondParam(tokens);
                 }
-                terminal->executeCommand(tree, command, firstParameter, secondParameter);
+                terminal->executeCommand(command, firstParameter, secondParameter);
                 tokens.clear();
             }
         }
     }
-    tree->WriteBinaryFile();
+    terminal->getTree()->WriteBinaryFile();
     delete terminal;
 }

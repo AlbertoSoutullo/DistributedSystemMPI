@@ -2,11 +2,12 @@
 #include <sstream>
 
 
-Terminal::Terminal(Tree* tree)
+Terminal::Terminal()
 {
-    this->tree = tree;
+    this->tree = new Tree();
     getcwd(this->cwd, sizeof(cwd));
     this->commandManager = new Commands();
+    this->tree->loadTree();
 }
 
 Terminal::~Terminal()
@@ -16,12 +17,12 @@ Terminal::~Terminal()
     std::cout << "Deleted Command Manager" << std::endl;
 }
 
-void Terminal::Initiate(Tree* tree)
+void Terminal::Initiate()
 {
     std::system("clear");
     std::cout << "Welcome to the Distribute File System" << std::endl;
     std::cout << "Actual remote directory is: " << std::endl;
-    this->commandManager->pwd(tree);
+    this->commandManager->pwd(this->tree);
     std::cout << std::endl;
 
     std::cout << "Actual local directory is: " << std::endl;
@@ -31,10 +32,10 @@ void Terminal::Initiate(Tree* tree)
     std::cout << "If you want to leave, please write <exit>." << std::endl;
 }
 
-std::string Terminal::ReadInput(Tree* tree)
+std::string Terminal::ReadInput()
 {
     std::string input = "";
-    this->commandManager->pwd(tree);
+    this->commandManager->pwd(this->tree);
     std::cout << ">";
     std::getline (std::cin, input);
     return input;
@@ -79,47 +80,47 @@ std::string Terminal::filterSecondParam(std::vector<std::string> tokens)
 }
 
 
-void Terminal::executeCommand(Tree* tree, std::string command, std::string firstParam, std::string secondParam)
+void Terminal::executeCommand(std::string command, std::string firstParam, std::string secondParam)
 {
     bool executed = false;
     if (command == "ls")
     {
-        this->commandManager->ls(tree);
+        this->commandManager->ls(this->tree);
         executed = true;
     }
     if (command == "pwd")
     {
-        this->commandManager->pwd(tree);
+        this->commandManager->pwd(this->tree);
         executed = true;
     }
     if (command == "cd")
     {
-        this->commandManager->cd(tree, firstParam);
+        this->commandManager->cd(this->tree, firstParam);
         executed = true;
     }
     if (command == "mv")
     {
-        this->commandManager->mv(tree, firstParam, secondParam);
+        this->commandManager->mv(this->tree, firstParam, secondParam);
         executed = true;
     }
     if (command == "cp")
     {
-        this->commandManager->cp(tree, firstParam, secondParam);
+        this->commandManager->cp(this->tree, firstParam, secondParam);
         executed = true;
     }
     if (command == "mkdir")
     {
-        this->commandManager->mkdir(tree, firstParam);
+        this->commandManager->mkdir(this->tree, firstParam);
         executed = true;
     }
     if (command == "rmdir")
     {
-        this->commandManager->rmdir(tree, firstParam);
+        this->commandManager->rmdir(this->tree, firstParam);
         executed = true;
     }
     if (command == "rm")
     {
-        this->commandManager->rm(tree, firstParam);
+        this->commandManager->rm(this->tree, firstParam);
         executed = true;
     }
     if (command == "lls")
@@ -139,7 +140,7 @@ void Terminal::executeCommand(Tree* tree, std::string command, std::string first
     }
     if (command == "upload")
     {
-        this->commandManager->upload(tree, firstParam);
+        this->commandManager->upload(this->tree, firstParam);
         executed = true;
     }
     if (command == "format")
@@ -152,9 +153,14 @@ void Terminal::executeCommand(Tree* tree, std::string command, std::string first
     }
     if (command == "download")
     {
-        this->commandManager->download(tree, firstParam);
+        this->commandManager->download(this->tree, firstParam);
         executed = true;
     }
     if(!executed) std::cout << "Command "<< command << " not found." << std::endl;
     else std::cout << std::endl;
+}
+
+Tree* Terminal::getTree()
+{
+    return this->tree;
 }

@@ -13,16 +13,17 @@ class Terminal
 
 public:
 
-    Terminal(Tree* tree);
+    Terminal();
     ~Terminal();
-    void Initiate(Tree* tree);
-    std::string ReadInput(Tree* tree);
+    void Initiate();
+    std::string ReadInput();
     void Tokenize(std::vector<std::string>& tokens, std::string option);
     std::string filterCommand(std::vector<std::string> tokens);
     std::string filterFirstParam(std::vector<std::string> tokens);
     std::string filterSecondParam(std::vector<std::string> tokens);
-    void executeCommand(Tree* tree, std::string command, std::string firstParam, std::string secondParam);
+    void executeCommand(std::string command, std::string firstParam, std::string secondParam);
 
+    Tree* getTree();
 };
 
 
