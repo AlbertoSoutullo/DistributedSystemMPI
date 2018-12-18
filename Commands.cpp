@@ -11,7 +11,6 @@ Commands::Commands()
 Commands::~Commands()
 {
     delete this->HDDs;
-    std::cout << "Deleted HDD" << std::endl;
 }
 
 //permits view of files and folders of current_directory
@@ -451,5 +450,4 @@ void Commands::download(Tree* tree, std::string fileName)
 void Commands::format()
 {
     this->HDDs->format();
-
 }

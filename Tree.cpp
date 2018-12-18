@@ -24,14 +24,13 @@ Tree::Tree()
 Tree :: ~Tree()
 {
     delete this->root;
-    std::cout << "Deleted root" << std::endl;
 }
 
 
 ////SETTERS////
 
 //set new value in root
-void Tree::setRoot(Node * root)
+void Tree::setRoot(Node* root)
 {
 	this->root = root;
 }

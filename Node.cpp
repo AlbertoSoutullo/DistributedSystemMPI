@@ -62,7 +62,6 @@ Node :: ~Node()
 {
     for (int i = 0; i < numberOfOffsprings; i++)
     {
-        std::cout << "Deleted node " << offsprings.at(i)->getName() << std::endl;
         delete offsprings.at(i);
     }
 }

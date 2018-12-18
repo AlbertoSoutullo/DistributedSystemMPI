@@ -3,6 +3,7 @@
 
 void HardDisk::readSectors()
 {
+    this->sectors.clear();
     std::string fileName = "freeSectors.dat";
     std::ifstream binaryFile;
     int size = 0;
@@ -58,7 +59,6 @@ HardDisk::~HardDisk()
     for (int i = 0; i < this->numberDisks; i++)
     {
         delete this->comm.at(i);
-        std::cout << "Deleted comm " << i << std::endl;
     }
 }
 
@@ -156,6 +156,7 @@ bool HardDisk::writeFile(Node* fileNode)
         (*fileNode).setNumBlocksOccupied();
         overrideSectors();
     }
+    return true;
 
 }
 
@@ -279,6 +280,7 @@ void HardDisk::format()
     std::cin >> this->diskSize;
     formatDisk();
     formatSectors();
+    initializeSectors();
     remove("tree.dat");
 }
 

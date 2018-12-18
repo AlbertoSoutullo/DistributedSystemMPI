@@ -13,9 +13,7 @@ Terminal::Terminal()
 Terminal::~Terminal()
 {
     delete this->tree;
-    std::cout << "Deleted Tree" << std::endl;
     delete this->commandManager;
-    std::cout << "Deleted Command Manager" << std::endl;
 }
 
 void Terminal::Initiate()
@@ -147,7 +145,8 @@ void Terminal::executeCommand(std::string command, std::string firstParam, std::
     if (command == "format")
     {
         this->commandManager->format();
-        //free
+        delete this->tree;
+        this->tree = new Tree();
         this->tree->loadTree();
 
         executed = true;
