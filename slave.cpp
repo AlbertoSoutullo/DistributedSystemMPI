@@ -24,6 +24,7 @@ void writeBlock(int rank, MPI_Comm parent, MPI_Status status)
     binaryFile.write((char*)binaryData, sizeof(char)*size);
 
     binaryFile.close();
+    free(binaryData);
 }
 
 void readBlock(int rank, MPI_Comm parent, MPI_Status status)
@@ -44,6 +45,7 @@ void readBlock(int rank, MPI_Comm parent, MPI_Status status)
     disk.read((char*)binaryData, sizeof(char)*size);
     //manda data
     MPI_Send(binaryData, size, MPI_CHAR, 0, 0, parent);
+    free(binaryData);
 }
 
 int recv_ID()

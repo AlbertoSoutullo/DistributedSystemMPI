@@ -151,7 +151,7 @@ bool HardDisk::writeFile(Node* fileNode)
             MPI_Send(binaryData, size, MPI_CHAR, 0, 0, *this->comm[HDD]);
 
             fs.close();
-            //free
+            free(binaryData);
         }
     }
     if(!diskFull)
@@ -204,6 +204,7 @@ void HardDisk::readFile(Node* fileNode)
         file.write((char*)binaryData, sizeof(char)*BLOCK_SIZE);
         //free
         disk.close();
+        free(binaryData);
     }
 
     int hdd = (fileNode->getNumBlocksOccupied()-1) % this->numberDisks;
@@ -228,6 +229,7 @@ void HardDisk::readFile(Node* fileNode)
     //free
     disk.close();
     file.close();
+    free(binaryData);
 }
 
 
