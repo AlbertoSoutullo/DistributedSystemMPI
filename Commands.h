@@ -2,6 +2,7 @@
 #include "HardDisk.h"
 #include <unistd.h>
 #include <dirent.h>
+#include <stdexcept>
 
 class Tree;
 class HardDisk;
@@ -67,6 +68,6 @@ public:
 
     ////New Aditions/////
     void download(Tree* tree, std::string fileName);
-    void format();
+    bool format(std::string size);
 
 };

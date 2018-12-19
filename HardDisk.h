@@ -29,7 +29,7 @@ public:
     //readFile: función que lee con readBlock todos los bloques de un fichero mediante su bloque índice y lo reconstruye en el orden adecuado.
     void readFile(Node* fileNode);
 
-    void format();
+    void format(int size);
 
     bool checkIfFits();
 

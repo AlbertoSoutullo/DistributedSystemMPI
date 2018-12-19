@@ -36,7 +36,7 @@ std::string Terminal::ReadInput()
     std::string input = "";
     this->commandManager->pwd(this->tree);
     std::cout << ">";
-    std::getline (std::cin, input);
+    std::getline(std::cin, input);
     return input;
 }
 
@@ -144,10 +144,12 @@ void Terminal::executeCommand(std::string command, std::string firstParam, std::
     }
     if (command == "format")
     {
-        this->commandManager->format();
-        delete this->tree;
-        this->tree = new Tree();
-        this->tree->loadTree();
+        if (this->commandManager->format(firstParam))
+        {
+            delete this->tree;
+            this->tree = new Tree();
+            this->tree->loadTree();
+        }
 
         executed = true;
     }

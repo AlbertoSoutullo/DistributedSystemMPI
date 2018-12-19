@@ -37,7 +37,8 @@ HardDisk::HardDisk()
     }
     else
     {
-        format();
+        std::cout << "Hard Drive not found. Creating one with default size (120Kb)..." << std::endl;
+        format(120000);
     }
 
     initializeSectors();
@@ -279,11 +280,11 @@ bool HardDisk::checkIfExistsHDD()
 }
 
 
-void HardDisk::format()
+void HardDisk::format(int size)
 {
     std::cout << "Creating Hard Drives..." << std::endl;
-    std::cout << "Select total size: " << std::endl;
-    std::cin >> this->diskSize;
+    std::cout << "Selected total size is: " << size << std::endl;
+    this->diskSize = size;
     formatDisk();
     formatSectors();
     initializeSectors();

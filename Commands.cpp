@@ -439,7 +439,7 @@ void Commands::download(Tree* tree, std::string fileName)
 
     if (fileNode == NULL)
     {
-        std::cout << "That file does not exist" << std::endl;
+        std::cout << "That file does not exist." << std::endl;
     }
     else
     {
@@ -449,7 +449,27 @@ void Commands::download(Tree* tree, std::string fileName)
     }
 }
 
-void Commands::format()
+bool Commands::format(std::string size)
 {
-    this->HDDs->format();
+    if (size == "")
+    {
+        std::cout << "Please insert a size to format " << std::endl;
+        return false;
+    }
+    else
+    {
+        int sizeToFormat = -1;
+        try
+        {
+            sizeToFormat = std::stoi(size);
+        } catch (std::invalid_argument& e)
+        {
+            std::cout << "Please, insert a valid size." << std::endl;
+            return false;
+        }
+
+        this->HDDs->format(sizeToFormat);
+        return true;
+    }
+
 }

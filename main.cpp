@@ -40,6 +40,9 @@ int main(int argc, char *argv[])
                     secondParameter = terminal->filterSecondParam(tokens);
                 }
                 terminal->executeCommand(command, firstParameter, secondParameter);
+                command = "";
+                firstParameter = "";
+                secondParameter = "";
                 tokens.clear();
             }
         }
