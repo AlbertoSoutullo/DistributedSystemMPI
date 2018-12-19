@@ -441,9 +441,13 @@ void Commands::download(Tree* tree, std::string fileName)
     {
         std::cout << "That file does not exist." << std::endl;
     }
+    else if (fileNode->getIsDirectory())
+    {
+        std::cout << "This is a folder, current version does not support that." << std::endl;
+    }
     else
     {
-        std::cout << "Downling..." << std::endl;
+        std::cout << "Downloading..." << std::endl;
         this->HDDs->readFile(fileNode);
         std::cout << "Download completed." << std::endl;
     }
