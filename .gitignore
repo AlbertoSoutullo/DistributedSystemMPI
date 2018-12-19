@@ -28,6 +28,10 @@ ui_*.h
 *.jsc
 Makefile*
 *build-*
+*.config*
+*.creator*
+*.files
+*.includes
 
 # Qt unit tests
 target_wrapper.*
@@ -41,3 +45,11 @@ target_wrapper.*
 
 # QtCreator CMake
 CMakeLists.txt.user*
+
+#Data from project
+Debug/
+tree.dat
+freeSectors.dat
+disk*
+down
+asd.txt
