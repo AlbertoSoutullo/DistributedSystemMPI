@@ -1,5 +1,0 @@
-﻿  Commands.cpp
-c:\users\user\desktop\filessystem-master\commands.cpp(126): error C2084: la función 'void ls(Tree *)' ya tiene un cuerpo
-  c:\users\user\desktop\filessystem-master\commands.cpp(5): note: vea la definición anterior de 'ls'
-  main.cpp
-  Generando código...
