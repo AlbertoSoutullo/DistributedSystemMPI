@@ -443,7 +443,9 @@ void Commands::download(Tree* tree, std::string fileName)
     }
     else
     {
+        std::cout << "Downling..." << std::endl;
         this->HDDs->readFile(fileNode);
+        std::cout << "Download completed." << std::endl;
     }
 }
 

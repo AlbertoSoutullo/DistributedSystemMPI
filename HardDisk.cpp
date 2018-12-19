@@ -91,7 +91,11 @@ bool HardDisk::writeFile(Node* fileNode)
     int restSize = -1;
     bool flagRest = false;
     bool diskFull = false;
-    std::string string_cwd = std::string(this->cwd);
+    //std::string string_cwd = std::string(this->cwd);
+    char cwd[PATH_MAX];
+    getcwd(cwd, sizeof(cwd));
+    std::string string_cwd = std::string(cwd);
+
 
     //dividir el archivo en bloques (restante a cero)
     off_t fileSize = fileNode->getByteSize();
